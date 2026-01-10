@@ -67,8 +67,3 @@ export function getBlock(x,y,z) {
     return blockMap.get(key(x,y,z));
 }
 
-
-export function removeBlock(b) {
-    scene.remove(b);
-    blocks.splice(blocks.indexOf(b), 1);
-}
