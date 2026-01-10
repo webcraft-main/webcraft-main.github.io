@@ -85,6 +85,15 @@ function generateChunk(cx, cz) {
 
             const h = Math.floor(getHeight(biome, wx, wz));
 
+            addBlock(wx, h, wz, "grass");
+            addBlock(wx, h, wz, "sand");
+            addBlock(wx, h, wz, "snow");
+            addBlock(wx, h, wz, "deepslate");
+            addBlock(wx, h, wz, "water");
+            addBlock(wx, h, wz, "lava");
+            addBlock(wx, h, wz, "oak_log");
+            addBlock(wx, h, wz, "oak_leaves");
+
             // Ground
             let blockType = BlockType.GRASS;
 
