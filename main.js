@@ -8,6 +8,18 @@ import { saveWorld, loadWorld } from "./storage.js";
 
 let lastTime = performance.now();
 
+let volcanicTimer = 0;
+const VOLCANIC_ERUPTION_TIME = 40 * 60; // 40 minutes
+
+function updateVolcano(dt) {
+    volcanicTimer += dt;
+    if (volcanicTimer >= VOLCANIC_ERUPTION_TIME) {
+        volcanicTimer = 0;
+        console.log("🔥 VOLCANIC ERUPTION!");
+        // TODO: add lava flood, explosions, ash particles
+    }
+}
+
 const heartsEl = document.getElementById("hearts");
 const hungerEl = document.getElementById("hunger");
 
@@ -122,6 +134,7 @@ function loop(now) {
 
     tick(dt);
     renderer.render(scene, camera);
+    updateVolcano(dt);
     requestAnimationFrame(loop);
 }
 
