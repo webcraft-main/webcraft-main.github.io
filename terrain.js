@@ -82,47 +82,34 @@ function generateChunk(cx, cz) {
         for (let z = 0; z < CHUNK_SIZE; z++) {
             const wx = cx * CHUNK_SIZE + x;
             const wz = cz * CHUNK_SIZE + z;
-
             const h = Math.floor(getHeight(biome, wx, wz));
 
-            addBlock(wx, h, wz, "grass");
-            addBlock(wx, h, wz, "sand");
-            addBlock(wx, h, wz, "snow");
-            addBlock(wx, h, wz, "deepslate");
-            addBlock(wx, h, wz, "water");
-            addBlock(wx, h, wz, "lava");
-            addBlock(wx, h, wz, "oak_log");
-            addBlock(wx, h, wz, "oak_leaves");
-
-            // Ground
-            let blockType = BlockType.GRASS;
-
-            if (biome === "ICE_PLAINS") blockType = BlockType.SNOW ?? BlockType.GRASS;
-            if (biome === "OCEAN") blockType = BlockType.SAND;
-            if (biome === "VOLCANIC") blockType = BlockType.DEEPSLATE ?? BlockType.STONE;
-
-            addBlock(wx, h, wz, blockType);
-
-            // Ocean fill
-            if (biome === "OCEAN") {
+            // Ground block per biome
+            if (biome === "ICE_PLAINS") {
+                setBlock(wx, h, wz, "snow");
+            } else if (biome === "GRASSY_PLAINS") {
+                setBlock(wx, h, wz, "grass");
+            } else if (biome === "OAK_FOREST") {
+                setBlock(wx, h, wz, "grass");
+                if (Math.random() < 0.05) {
+                    setBlock(wx, h + 1, wz, "oak_log");
+                    setBlock(wx, h + 2, wz, "oak_leaves");
+                }
+            } else if (biome === "VOLCANIC") {
+                setBlock(wx, h, wz, "deepslate");
+                if (Math.random() < 0.03) {
+                    setBlock(wx, h + 1, wz, "lava");
+                }
+            } else if (biome === "OCEAN") {
+                setBlock(wx, h, wz, "sand");
                 for (let y = h + 1; y <= 0; y++) {
-                    addBlock(wx, y, wz, BlockType.WATER);
+                    setBlock(wx, y, wz, "water");
                 }
             }
 
-            // Ponds
-            if (maybePond(biome) && Math.random() < 0.01) {
-                addBlock(wx, h + 1, wz, BlockType.WATER);
-            }
-
-            // Trees
-            if (maybeTree(biome)) {
-                generateOakTree(wx, h + 1, wz);
-            }
-
-            // Volcanic cracks
-            if (maybeVolcanoCrack(biome)) {
-                addBlock(wx, h + 1, wz, BlockType.LAVA);
+            // Random pond in land biomes
+            if (biome !== "OCEAN" && Math.random() < 0.01) {
+                setBlock(wx, h + 1, wz, "water");
             }
         }
     }
