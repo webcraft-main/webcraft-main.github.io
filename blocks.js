@@ -9,6 +9,8 @@ export const mats = [
     new THREE.MeshStandardMaterial({color: 0xff4500}),
     new THREE.MeshStandardMaterial({color: 0xedc9af}),
     new THREE.MeshStandardMaterial({color: 0xff0000})
+    new THREE.MeshStandardMaterial({color: 0xffffff}), // SNOW
+    new THREE.MeshStandardMaterial({color: 0x2a2a2a})  // DEEPSLATE
 ];
 
 export const blocks = [];
