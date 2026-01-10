@@ -1,39 +1,128 @@
 import { scene, camera, renderer } from "./engine.js";
-import { addBlock } from "./blocks.js";
-import { updatePhysics } from "./physics.js";
+import { player, stepRemoteInterpolation, worldTime } from "./world.js";
 import { keys } from "./input.js";
+import { ensureChunksAround } from "./terrain.js";
+import { updatePhysics } from "./physics.js";
 import { sendMovement } from "./multiplayer.js";
-import { player } from "./world.js";
+import { saveWorld, loadWorld } from "./storage.js";
 
-// Build floor
-for (let x=-10; x<10; x++)
-for (let z=-10; z<10; z++)
-    addBlock(x, 0, z, 0);
+let lastTime = performance.now();
 
-camera.position.set(0, 5, 5);
+const heartsEl = document.getElementById("hearts");
+const hungerEl = document.getElementById("hunger");
 
-function animate() {
-    requestAnimationFrame(animate);
-    const dt = 0.016;
+document.addEventListener("keydown", e => {
+    if (e.code === "KeyR") {
+        loadWorld();
+    }
+    if (e.code === "KeyP") {
+        saveWorld();
+    }
+});
+
+function updateHUD() {
+    heartsEl.innerHTML = "";
+    hungerEl.innerHTML = "";
+
+    for (let i = 0; i < 10; i++) {
+        const heart = document.createElement("div");
+        heart.className = "heart " + (player.health > i * 2 ? "full" : "empty");
+        heartsEl.appendChild(heart);
+    }
+
+    for (let i = 0; i < 10; i++) {
+        const h = document.createElement("div");
+        h.className = "hunger-icon " + (player.hunger > i * 2 ? "full" : "empty");
+        hungerEl.appendChild(h);
+    }
+}
+
+function updateTime(dt) {
+    worldTime.timeOfDay = (worldTime.timeOfDay + dt) % worldTime.dayLength;
+    worldTime.seasonTime = (worldTime.seasonTime + dt) % worldTime.seasonLength;
+
+    if (worldTime.seasonTime < dt) {
+        worldTime.seasonIndex = (worldTime.seasonIndex + 1) % 4;
+        console.log("Season changed to", worldTime.seasonIndex);
+    }
+
+    const t = worldTime.timeOfDay / worldTime.dayLength;
+    const brightness = Math.max(0.1, Math.sin(t * Math.PI));
+    renderer.setClearColor(new THREE.Color(0x87ceeb).multiplyScalar(brightness));
+}
+
+function applyHungerAndHealth(dt, moving) {
+    if (moving) {
+        player.hunger = Math.max(0, player.hunger - dt * 0.5);
+    } else {
+        if (player.hunger > 16 && player.health < 20) {
+            player.health = Math.min(20, player.health + dt * 0.5);
+        }
+    }
+
+    if (player.hunger <= 0) {
+        player.health = Math.max(0, player.health - dt * 0.5);
+    }
+}
+
+camera.position.copy(player.pos);
+
+function tick(dt) {
+    let moveSpeed = 7;
+
+    const isSprinting = keys["ShiftLeft"] && player.hunger > 0;
+    const isSneaking  = keys["ControlLeft"];
+
+    if (isSprinting) moveSpeed *= 1.6;
+    if (isSneaking)  moveSpeed *= 0.4;
 
     const dir = new THREE.Vector3();
     const f = new THREE.Vector3(0,0,-1).applyQuaternion(camera.quaternion); f.y = 0;
     const s = new THREE.Vector3().crossVectors(camera.up, f);
+
+    const beforePos = player.pos.clone();
 
     if (keys["KeyW"]) dir.add(f);
     if (keys["KeyS"]) dir.sub(f);
     if (keys["KeyA"]) dir.add(s);
     if (keys["KeyD"]) dir.sub(s);
 
-    camera.position.add(dir.normalize().multiplyScalar(7 * dt));
+    let moving = false;
+    if (dir.lengthSq() > 0) {
+        dir.normalize().multiplyScalar(moveSpeed * dt);
+        player.pos.add(dir);
+        moving = true;
+    }
 
     player.vel.y -= 30 * dt;
-    camera.position.y += player.vel.y * dt;
+    player.pos.y += player.vel.y * dt;
 
-    updatePhysics();
-    renderer.render(scene, camera);
+    if (player.pos.y < 2) {
+        player.pos.y = 2;
+        player.vel.y = 0;
+    }
 
-    sendMovement(camera.position.x, camera.position.y, camera.position.z, camera.rotation.y);
+    camera.position.copy(player.pos);
+    player.yaw = camera.rotation.y;
+
+    ensureChunksAround(player.pos);
+    updatePhysics(dt);
+    stepRemoteInterpolation(dt);
+
+    updateTime(dt);
+    applyHungerAndHealth(dt, moving);
+    updateHUD();
+
+    sendMovement();
 }
 
-animate();
+function loop(now) {
+    const dt = Math.min(0.05, (now - lastTime) / 1000);
+    lastTime = now;
+
+    tick(dt);
+    renderer.render(scene, camera);
+    requestAnimationFrame(loop);
+}
+
+requestAnimationFrame(loop);
