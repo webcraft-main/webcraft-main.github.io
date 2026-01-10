@@ -1,3 +1,4 @@
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.158.0/+esm";
 import { scene, camera, renderer } from "./engine.js";
 import { player, stepRemoteInterpolation, worldTime } from "./world.js";
 import { keys } from "./input.js";
@@ -16,7 +17,6 @@ function updateVolcano(dt) {
     if (volcanicTimer >= VOLCANIC_ERUPTION_TIME) {
         volcanicTimer = 0;
         console.log("🔥 VOLCANIC ERUPTION!");
-        // TODO: add lava flood, explosions, ash particles
     }
 }
 
@@ -24,12 +24,8 @@ const heartsEl = document.getElementById("hearts");
 const hungerEl = document.getElementById("hunger");
 
 document.addEventListener("keydown", e => {
-    if (e.code === "KeyR") {
-        loadWorld();
-    }
-    if (e.code === "KeyP") {
-        saveWorld();
-    }
+    if (e.code === "KeyR") loadWorld();
+    if (e.code === "KeyP") saveWorld();
 });
 
 function updateHUD() {
@@ -66,10 +62,8 @@ function updateTime(dt) {
 function applyHungerAndHealth(dt, moving) {
     if (moving) {
         player.hunger = Math.max(0, player.hunger - dt * 0.5);
-    } else {
-        if (player.hunger > 16 && player.health < 20) {
-            player.health = Math.min(20, player.health + dt * 0.5);
-        }
+    } else if (player.hunger > 16 && player.health < 20) {
+        player.health = Math.min(20, player.health + dt * 0.5);
     }
 
     if (player.hunger <= 0) {
@@ -91,8 +85,6 @@ function tick(dt) {
     const dir = new THREE.Vector3();
     const f = new THREE.Vector3(0,0,-1).applyQuaternion(camera.quaternion); f.y = 0;
     const s = new THREE.Vector3().crossVectors(camera.up, f);
-
-    const beforePos = player.pos.clone();
 
     if (keys["KeyW"]) dir.add(f);
     if (keys["KeyS"]) dir.sub(f);
@@ -132,13 +124,12 @@ function loop(now) {
     const dt = Math.min(0.05, (now - lastTime) / 1000);
     lastTime = now;
 
-    player.pos.set(0, 2, 0);
-    camera.position.copy(player.pos);
-
     tick(dt);
-    renderer.render(scene, camera);
     updateVolcano(dt);
+    renderer.render(scene, camera);
+
     requestAnimationFrame(loop);
 }
 
 requestAnimationFrame(loop);
+
