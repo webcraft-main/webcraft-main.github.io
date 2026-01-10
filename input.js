@@ -1,5 +1,5 @@
 import { camera } from "./engine.js";
-import { blocks, addBlock, removeBlock } from "./blocks.js";
+import { blocks, addBlock, removeBlock, BlockType } from "./blocks.js";
 import { explode } from "./physics.js";
 
 export const keys = {};
@@ -16,7 +16,9 @@ document.addEventListener("keydown", e => {
     }
 });
 
-document.addEventListener("keyup", e => keys[e.code] = false);
+document.addEventListener("keyup", e => {
+    keys[e.code] = false;
+});
 
 window.addEventListener("mousedown", e => {
     if (!document.pointerLockElement) {
@@ -32,7 +34,7 @@ window.addEventListener("mousedown", e => {
         const obj = hits[0].object;
 
         if (e.button === 0) {
-            if (obj.userData.type === 7) explode(obj.position);
+            if (obj.userData.type === BlockType.TNT) explode(obj.position);
             removeBlock(obj);
         } else {
             const p = obj.position.clone().add(hits[0].face.normal);
@@ -43,6 +45,12 @@ window.addEventListener("mousedown", e => {
 
 document.addEventListener("mousemove", e => {
     if (document.pointerLockElement) {
+        camera.rotation.y -= e.movementX * 0.002;
+        camera.rotation.x -= e.movementY * 0.002;
+        camera.rotation.x = Math.max(-1.5, Math.min(1.5, camera.rotation.x));
+    }
+});
+
         camera.rotation.y -= e.movementX * 0.002;
         camera.rotation.x -= e.movementY * 0.002;
         camera.rotation.x = Math.max(-1.5, Math.min(1.5, camera.rotation.x));
