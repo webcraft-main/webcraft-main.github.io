@@ -16,6 +16,10 @@ document.addEventListener("keydown", e => {
     }
 });
 
+if (selectedSlot === BlockType.STONE && biomeAt(camera.position) === "VOLCANIC") {
+    addBlock(p.x, p.y, p.z, BlockType.LAVA);
+}
+
 document.addEventListener("keyup", e => {
     keys[e.code] = false;
 });
