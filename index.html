@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sixsevencraft</title>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: 'Courier New', sans-serif; background: #000; }
+        canvas { display: block; }
+        #ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+        #hotbar { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; background: rgba(0,0,0,0.8); padding: 8px; border: 2px solid #333; pointer-events: auto; }
+        .slot { width: 45px; height: 45px; border: 2px solid #777; display: flex; justify-content: center; align-items: center; color: white; font-size: 8px; background: #444; }
+        .slot.active { border-color: #fff; background: #666; box-shadow: 0 0 15px cyan; }
+        #instructions { position: absolute; top: 10px; right: 10px; color: white; background: rgba(0,0,0,0.5); padding: 10px; font-size: 12px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<div id="ui">
+    <div id="instructions">
+        WASD: Move | SPACE: Jump<br>
+        1-8: Select Block | Left Click: Mine/TNT<br>
+        Right Click: Place
+    </div>
+    <div id="hotbar">
+        <div class="slot active" id="s0">GRASS</div>
+        <div class="slot" id="s1">STONE</div>
+        <div class="slot" id="s2">WOOD</div>
+        <div class="slot" id="s3">LEAVES</div>
+        <div class="slot" id="s4">WATER</div>
+        <div class="slot" id="s5">LAVA</div>
+        <div class="slot" id="s6" style="color:yellow">SAND</div>
+        <div class="slot" id="s7" style="color:red">TNT</div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+<script>
+/* ===== ENGINE SETUP ===== */
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x87ceeb);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+camera.rotation.order = "YXZ";
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+document.body.appendChild(renderer.domElement);
+
+/* ===== LIGHTING ===== */
+scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+const sun = new THREE.DirectionalLight(0xffffff, 1);
+sun.position.set(10, 20, 10);
+sun.castShadow = true;
+scene.add(sun);
+
+/* ===== MATERIALS ===== */
+const mats = [
+    new THREE.MeshStandardMaterial({color: 0x55aa55}), // Grass
+    new THREE.MeshStandardMaterial({color: 0x808080}), // Stone
+    new THREE.MeshStandardMaterial({color: 0x4b2d13}), // Wood
+    new THREE.MeshStandardMaterial({color: 0x228b22}), // Leaves
+    new THREE.MeshStandardMaterial({color: 0x00aaff, transparent: true, opacity: 0.6}), // Water
+    new THREE.MeshStandardMaterial({color: 0xff4500}), // Lava
+    new THREE.MeshStandardMaterial({color: 0xedc9af}), // Sand
+    new THREE.MeshStandardMaterial({color: 0xff0000})  // TNT
+];
+
+/* ===== WORLD & PHYSICS ===== */
+const blocks = [];
+function addBlock(x, y, z, t) {
+    const b = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), mats[t]);
+    b.position.set(Math.round(x), Math.round(y), Math.round(z));
+    b.userData.type = t;
+    b.castShadow = true;
+    b.receiveShadow = true;
+    scene.add(b);
+    blocks.push(b);
+    return b;
+}
+
+// Initial Floor
+for(let x=-10; x<10; x++) for(let z=-10; z<10; z++) addBlock(x, 0, z, 0);
+
+/* ===== EXPLOSION & SAND PHYSICS ===== */
+function explode(pos) {
+    const radius = 4;
+    for (let i = blocks.length - 1; i >= 0; i--) {
+        if (blocks[i].position.distanceTo(pos) < radius) {
+            scene.remove(blocks[i]);
+            blocks.splice(i, 1);
+        }
+    }
+}
+
+function updatePhysics() {
+    blocks.forEach(b => {
+        // Sand Gravity (Type 6)
+        if (b.userData.type === 6) {
+            const below = blocks.find(other => 
+                other.position.x === b.position.x && 
+                other.position.y === b.position.y - 1 && 
+                other.position.z === b.position.z
+            );
+            if (!below && b.position.y > -10) b.position.y -= 0.1;
+            else b.position.y = Math.round(b.position.y);
+        }
+    });
+}
+
+/* ===== INPUTS ===== */
+let selectedSlot = 0;
+const keys = {};
+document.addEventListener("keydown", e => {
+    keys[e.code] = true;
+    if(e.key >= 1 && e.key <= 8) {
+        selectedSlot = e.key - 1;
+        document.querySelectorAll('.slot').forEach((s,i) => s.className = (i == selectedSlot) ? 'slot active' : 'slot');
+    }
+});
+document.addEventListener("keyup", e => keys[e.code] = false);
+
+window.addEventListener("mousedown", (e) => {
+    if(!document.pointerLockElement) { document.body.requestPointerLock(); return; }
+    const ray = new THREE.Raycaster();
+    ray.setFromCamera({x:0, y:0}, camera);
+    const hits = ray.intersectObjects(blocks);
+    
+    if(hits.length > 0) {
+        const obj = hits[0].object;
+        if(e.button === 0) { // Mine
+            if(obj.userData.type === 7) explode(obj.position);
+            scene.remove(obj);
+            blocks.splice(blocks.indexOf(obj), 1);
+        } else { // Place
+            const p = obj.position.clone().add(hits[0].face.normal);
+            addBlock(p.x, p.y, p.z, selectedSlot);
+        }
+    }
+});
+
+document.addEventListener("mousemove", e => {
+    if(document.pointerLockElement) {
+        camera.rotation.y -= e.movementX * 0.002;
+        camera.rotation.x -= e.movementY * 0.002;
+        camera.rotation.x = Math.max(-1.5, Math.min(1.5, camera.rotation.x));
+    }
+});
+
+/* ===== MAIN LOOP ===== */
+const player = { vel: new THREE.Vector3(), onGround: false };
+function animate() {
+    requestAnimationFrame(animate);
+    const dt = 0.016;
+
+    // Movement
+    const dir = new THREE.Vector3();
+    const f = new THREE.Vector3(0,0,-1).applyQuaternion(camera.quaternion); f.y = 0;
+    const s = new THREE.Vector3().crossVectors(camera.up, f);
+    if(keys["KeyW"]) dir.add(f); if(keys["KeyS"]) dir.sub(f);
+    if(keys["KeyA"]) dir.add(s); if(keys["KeyD"]) dir.sub(s);
+    camera.position.add(dir.normalize().multiplyScalar(7 * dt));
+
+    player.vel.y -= 30 * dt;
+    camera.position.y += player.vel.y * dt;
+
+    player.onGround = false;
+    blocks.forEach(b => {
+        if(Math.abs(camera.position.x-b.position.x)<0.7 && Math.abs(camera.position.z-b.position.z)<0.7) {
+            if(camera.position.y-b.position.y<=1.6 && camera.position.y-b.position.y>=1) {
+                player.onGround = true; player.vel.y = 0; camera.position.y = b.position.y+1.6;
+            }
+        }
+    });
+    if(keys["Space"] && player.onGround) player.vel.y = 10;
+
+    updatePhysics();
+    renderer.render(scene, camera);
+}
+camera.position.set(0, 5, 5);
+animate();
+</script>
+</body>
+</html>
