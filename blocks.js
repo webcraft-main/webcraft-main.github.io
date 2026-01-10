@@ -24,6 +24,19 @@ export function addBlock(x, y, z, t) {
     return b;
 }
 
+export const BlockType = {
+    GRASS: 0,
+    STONE: 1,
+    WOOD: 2,
+    LEAVES: 3,
+    WATER: 4,
+    LAVA: 5,
+    SAND: 6,
+    TNT: 7,
+    SNOW: 8,
+    DEEPSLATE: 9
+};
+
 export function removeBlock(b) {
     scene.remove(b);
     blocks.splice(blocks.indexOf(b), 1);
