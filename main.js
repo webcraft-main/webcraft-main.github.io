@@ -132,6 +132,9 @@ function loop(now) {
     const dt = Math.min(0.05, (now - lastTime) / 1000);
     lastTime = now;
 
+    player.pos.set(0, 2, 0);
+    camera.position.copy(player.pos);
+
     tick(dt);
     renderer.render(scene, camera);
     updateVolcano(dt);
