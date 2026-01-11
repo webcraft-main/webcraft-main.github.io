@@ -1,5 +1,5 @@
 import { camera } from "./engine.js";
-import { blocks, setBlock, removeBlock, getBlock } from "./blocks.js";
+import { blockMap, setBlock, removeBlock, getBlock } from "./blocks.js";
 import { explode } from "./physics.js";
 import { getBiomeAt } from "./terrain.js"; // you must export this
 
@@ -35,7 +35,7 @@ window.addEventListener("mousedown", e => {
 
     const ray = new THREE.Raycaster();
     ray.setFromCamera({x:0, y:0}, camera);
-    const hits = ray.intersectObjects(blocks);
+    const hits = ray.intersectObjects(Array.from(blockMap.values()).map(e => e.mesh));
 
     if (hits.length === 0) return;
 
