@@ -50,6 +50,7 @@ socket.addEventListener("message", e => {
 });
 
 
+
     if (data.type === "leave") {
         delete remotePlayers[data.id];
     }
