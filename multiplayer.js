@@ -47,4 +47,4 @@ socket.addEventListener("message", e => {
             removeRemote(data.id, scene);
         }
     }
-});
+;
