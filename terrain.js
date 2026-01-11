@@ -1,4 +1,4 @@
-import { addBlock, BlockType } from "./blocks.js";
+import { setBlock } from "./blocks.js";
 
 export const CHUNK_SIZE = 16;
 export const VIEW_DISTANCE = 3;
@@ -59,16 +59,8 @@ function getHeight(biome, wx, wz) {
    DECORATION HELPERS
    ============================================================ */
 
-function maybePond(biome) {
-    return biome !== "OCEAN" && Math.random() < 0.02;
-}
-
 function maybeTree(biome) {
     return biome === "OAK_FOREST" && Math.random() < 0.05;
-}
-
-function maybeVolcanoCrack(biome) {
-    return biome === "VOLCANIC" && Math.random() < 0.03;
 }
 
 /* ============================================================
@@ -84,16 +76,14 @@ function generateChunk(cx, cz) {
             const wz = cz * CHUNK_SIZE + z;
             const h = Math.floor(getHeight(biome, wx, wz));
 
-            // Ground block per biome
             if (biome === "ICE_PLAINS") {
                 setBlock(wx, h, wz, "snow");
             } else if (biome === "GRASSY_PLAINS") {
                 setBlock(wx, h, wz, "grass");
             } else if (biome === "OAK_FOREST") {
                 setBlock(wx, h, wz, "grass");
-                if (Math.random() < 0.05) {
-                    setBlock(wx, h + 1, wz, "oak_log");
-                    setBlock(wx, h + 2, wz, "oak_leaves");
+                if (maybeTree(biome)) {
+                    generateOakTree(wx, h + 1, wz);
                 }
             } else if (biome === "VOLCANIC") {
                 setBlock(wx, h, wz, "deepslate");
@@ -107,7 +97,6 @@ function generateChunk(cx, cz) {
                 }
             }
 
-            // Random pond in land biomes
             if (biome !== "OCEAN" && Math.random() < 0.01) {
                 setBlock(wx, h + 1, wz, "water");
             }
@@ -121,13 +110,14 @@ function generateChunk(cx, cz) {
 
 function generateOakTree(x, y, z) {
     for (let i = 0; i < 4; i++) {
-        addBlock(x, y + i, z, BlockType.WOOD);
+        setBlock(x, y + i, z, "oak_log");
     }
     for (let dx = -2; dx <= 2; dx++) {
         for (let dz = -2; dz <= 2; dz++) {
             if (Math.abs(dx) + Math.abs(dz) < 4) {
-                addBlock(x + dx, y + 4, z + dz, BlockType.LEAVES);
+                setBlock(x + dx, y + 4, z + dz, "oak_leaves");
             }
         }
     }
 }
+
