@@ -3,7 +3,7 @@ import { setBlock } from "./blocks.js";
 export const CHUNK_SIZE = 16;
 export const VIEW_DISTANCE = 3;
 
-const simplex = new SimplexNoise("sixseven-seed");
+const noise2D = createNoise2D();
 const loadedChunks = new Set();
 
 function key(cx, cz) {
