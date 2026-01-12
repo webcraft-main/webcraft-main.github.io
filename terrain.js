@@ -121,3 +121,10 @@ function generateOakTree(x, y, z) {
     }
 }
 
+export function getBiomeAt(x, z) {
+    const cx = Math.floor(x / CHUNK_SIZE);
+    const cz = Math.floor(z / CHUNK_SIZE);
+    return getBiome(cx, cz);
+}
+
+
