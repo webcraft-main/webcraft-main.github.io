@@ -45,4 +45,23 @@ export function removeRemote(id, scene) {
     delete remotes[id];
 }
 
+// Smoothly interpolate all remote players toward their target positions
+export function stepRemoteInterpolation() {
+    for (const id in remotes) {
+        const r = remotes[id];
+
+        // Smooth position interpolation
+        r.mesh.position.lerp(r.targetPos, 0.2);
+
+        // Smooth rotation interpolation
+        r.mesh.rotation.y += (r.targetYaw - r.mesh.rotation.y) * 0.2;
+    }
+}
+
+// Simple world time counter (ticks)
+export let worldTime = 0;
+
+export function stepWorldTime() {
+    worldTime++;
+}
 
