@@ -1,4 +1,4 @@
-# Mini Minecraft (sixsevencraft)
+# sixsevencraft
 
 An infinite, procedural, survival game built  in JavaScript using **Three.js**. This project features a fully functional sandbox environment running directly in the browser with advanced physics, crafting, and multiplayer simulation.
 
