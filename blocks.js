@@ -1,10 +1,12 @@
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.158.0/+esm";
 import { scene } from "./engine.js";
+import { createMeshForBlock } from "./blockMeshFromState.js";
 
 export const BlockRegistry = {};
 export const BlockID = {};
 export let nextBlockId = 1;
 
-// Register a block type
+// Optional registry for custom/simple blocks
 export function registerBlock(name, data) {
     BlockRegistry[name] = {
         id: nextBlockId,
@@ -23,7 +25,7 @@ export function registerBlock(name, data) {
     nextBlockId++;
 }
 
-// Create a mesh for a block
+// Legacy simple cube mesh (still usable for custom blocks)
 export function createBlockMesh(block, x, y, z) {
     const mat = new THREE.MeshStandardMaterial({
         color: block.color,
@@ -31,8 +33,8 @@ export function createBlockMesh(block, x, y, z) {
         opacity: block.transparent ? 0.6 : 1
     });
 
-    const mesh = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), mat);
-    mesh.position.set(x,y,z);
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), mat);
+    mesh.position.set(x, y, z);
     mesh.userData.block = block;
     mesh.castShadow = true;
     mesh.receiveShadow = true;
@@ -42,28 +44,52 @@ export function createBlockMesh(block, x, y, z) {
 
 // World storage
 export const blockMap = new Map();
-function key(x,y,z) { return `${x},${y},${z}`; }
+function key(x, y, z) { return `${x},${y},${z}`; }
 
-export function setBlock(x,y,z,blockName) {
-    const b = BlockRegistry[blockName];
-    if (!b) return;
+// NEW: setBlock now accepts either "name" or { id, state }
+export function setBlock(x, y, z, blockData) {
+    let id, state;
 
-    const k = key(x,y,z);
-    if (blockMap.has(k)) removeBlock(x,y,z);
+    if (typeof blockData === "string") {
+        id = blockData;
+        state = {};
+    } else if (blockData && typeof blockData === "object") {
+        id = blockData.id;
+        state = blockData.state || {};
+    } else {
+        return;
+    }
 
-    const mesh = createBlockMesh(b, x,y,z);
-    blockMap.set(k, { block: b, mesh });
+    const k = key(x, y, z);
+    if (blockMap.has(k)) removeBlock(x, y, z);
+
+    const entry = { id, state, mesh: null };
+    blockMap.set(k, entry);
+
+    // Use blockstate/model system for mesh
+    createMeshForBlock(id, state).then(mesh => {
+        if (!blockMap.has(k)) {
+            // Block was removed before mesh finished loading
+            if (mesh) scene.remove(mesh);
+            return;
+        }
+        if (!mesh) return;
+        mesh.position.set(x, y, z);
+        scene.add(mesh);
+        entry.mesh = mesh;
+    });
 }
 
-export function removeBlock(x,y,z) {
-    const k = key(x,y,z);
+export function removeBlock(x, y, z) {
+    const k = key(x, y, z);
     const entry = blockMap.get(k);
     if (!entry) return;
-    scene.remove(entry.mesh);
+    if (entry.mesh) scene.remove(entry.mesh);
     blockMap.delete(k);
 }
 
-export function getBlock(x,y,z) {
-    return blockMap.get(key(x,y,z));
+export function getBlock(x, y, z) {
+    return blockMap.get(key(x, y, z));
 }
+
 
