@@ -6,6 +6,7 @@ import { ensureChunksAround } from "./terrain.js";
 import { updatePhysics } from "./physics.js";
 import { sendMovement } from "./multiplayer.js";
 import { saveWorld, loadWorld } from "./storage.js";
+import { loadAllBlockstates } from "./loadAllBlockstates.js";
 
 let lastTime = performance.now();
 
@@ -131,5 +132,11 @@ function loop(now) {
     requestAnimationFrame(loop);
 }
 
-requestAnimationFrame(loop);
+async function init() {
+    await loadAllBlockstates(); // ← loads ALL blockstates before the game starts
+    requestAnimationFrame(loop);
+}
+
+init();
+
 
