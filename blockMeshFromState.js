@@ -5,6 +5,7 @@ import { loadBlockModel } from "./modelLoader.js";
 export async function createMeshForBlock(blockId, state = {}) {
     const bs = getBlockstate(blockId);
 
+    // No blockstate JSON → fallback to model with same name
     if (!bs) {
         return loadBlockModel("block/" + blockId);
     }
@@ -25,8 +26,8 @@ export async function createMeshForBlock(blockId, state = {}) {
             }
 
             if (matches) {
-                const modelName = part.apply.model.replace("minecraft:", "");
-                const mesh = await loadBlockModel(modelName.replace("minecraft:", ""));
+                const modelName = part.apply.model.replace("minecraft:", ""); // "block/oak_fence_side"
+                const mesh = await loadBlockModel(modelName);
                 group.add(mesh);
             }
         }
@@ -40,9 +41,10 @@ export async function createMeshForBlock(blockId, state = {}) {
         const key = entries.map(([k, v]) => `${k}=${v}`).join(",");
 
         const variant = bs.variants[key] || bs.variants[""];
-        const modelName = variant.model.replace("minecraft:", "");
-        return loadBlockModel(modelName.replace("minecraft:", ""));
+        const modelName = variant.model.replace("minecraft:", ""); // "block/grass_block"
+        return loadBlockModel(modelName);
     }
 
     return loadBlockModel("block/" + blockId);
 }
+
