@@ -48,7 +48,9 @@
 <!-- Simplex Noise -->
 <script type="module">
   import { createNoise2D } from 'https://cdn.jsdelivr.net/npm/simplex-noise@4.0.1/+esm';
+  window.createNoise2D = createNoise2D;
 </script>
+
 
 <!-- Main game script -->
 <script type="module" src="main.js"></script>
