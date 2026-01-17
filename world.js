@@ -59,9 +59,12 @@ export function stepRemoteInterpolation() {
 }
 
 // Simple world time counter (ticks)
-export let worldTime = 0;
+export let worldTime = {
+    timeOfDay: 0,
+    dayLength: 420,
+    seasonTime: 0,
+    seasonLength: 900,
+    seasonIndex: 0
+};
 
-export function stepWorldTime() {
-    worldTime++;
-}
 
