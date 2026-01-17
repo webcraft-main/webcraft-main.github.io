@@ -30,7 +30,7 @@ export function ensureChunksAround(playerPos) {
    ============================================================ */
 
 function getBiome(cx, cz) {
-    const n = simplex.noise2D(cx * 0.05, cz * 0.05);
+    const n = noise2D(cx * 0.05, cz * 0.05);
 
     if (n < -0.35) return "OCEAN";
     if (n < -0.1) return "ICE_PLAINS";
@@ -44,7 +44,7 @@ function getBiome(cx, cz) {
    ============================================================ */
 
 function getHeight(biome, wx, wz) {
-    const h = simplex.noise2D(wx * 0.05, wz * 0.05);
+    const h = noise2D(wx * 0.05, wz * 0.05);
 
     switch (biome) {
         case "OCEAN": return -2 + h * 1;
