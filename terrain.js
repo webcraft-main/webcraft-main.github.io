@@ -76,29 +76,35 @@ function generateChunk(cx, cz) {
             const wz = cz * CHUNK_SIZE + z;
             const h = Math.floor(getHeight(biome, wx, wz));
 
+            // --- BLOCKSTATE‑READY BLOCK PLACEMENT ---
             if (biome === "ICE_PLAINS") {
-                setBlock(wx, h, wz, "snow");
+                setBlock(wx, h, wz, { id: "snow", state: {} });
+
             } else if (biome === "GRASSY_PLAINS") {
-                setBlock(wx, h, wz, "grass");
+                setBlock(wx, h, wz, { id: "grass", state: {} });
+
             } else if (biome === "OAK_FOREST") {
-                setBlock(wx, h, wz, "grass");
+                setBlock(wx, h, wz, { id: "grass", state: {} });
                 if (maybeTree(biome)) {
                     generateOakTree(wx, h + 1, wz);
                 }
+
             } else if (biome === "VOLCANIC") {
-                setBlock(wx, h, wz, "deepslate");
+                setBlock(wx, h, wz, { id: "deepslate", state: {} });
                 if (Math.random() < 0.03) {
-                    setBlock(wx, h + 1, wz, "lava");
+                    setBlock(wx, h + 1, wz, { id: "lava", state: {} });
                 }
+
             } else if (biome === "OCEAN") {
-                setBlock(wx, h, wz, "sand");
+                setBlock(wx, h, wz, { id: "sand", state: {} });
                 for (let y = h + 1; y <= 0; y++) {
-                    setBlock(wx, y, wz, "water");
+                    setBlock(wx, y, wz, { id: "water", state: {} });
                 }
             }
 
+            // Random puddles
             if (biome !== "OCEAN" && Math.random() < 0.01) {
-                setBlock(wx, h + 1, wz, "water");
+                setBlock(wx, h + 1, wz, { id: "water", state: {} });
             }
         }
     }
@@ -109,13 +115,16 @@ function generateChunk(cx, cz) {
    ============================================================ */
 
 function generateOakTree(x, y, z) {
+    // Logs need axis=y for correct blockstate model
     for (let i = 0; i < 4; i++) {
-        setBlock(x, y + i, z, "oak_log");
+        setBlock(x, y + i, z, { id: "oak_log", state: { axis: "y" } });
     }
+
+    // Leaves don't need state
     for (let dx = -2; dx <= 2; dx++) {
         for (let dz = -2; dz <= 2; dz++) {
             if (Math.abs(dx) + Math.abs(dz) < 4) {
-                setBlock(x + dx, y + 4, z + dz, "oak_leaves");
+                setBlock(x + dx, y + 4, z + dz, { id: "oak_leaves", state: {} });
             }
         }
     }
