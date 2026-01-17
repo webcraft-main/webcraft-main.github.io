@@ -1,3 +1,5 @@
+import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.158.0/+esm";
+
 export const player = {
     pos: new THREE.Vector3(0, 2, 0),
     vel: new THREE.Vector3(),
@@ -50,10 +52,7 @@ export function stepRemoteInterpolation() {
     for (const id in remotes) {
         const r = remotes[id];
 
-        // Smooth position interpolation
         r.mesh.position.lerp(r.targetPos, 0.2);
-
-        // Smooth rotation interpolation
         r.mesh.rotation.y += (r.targetYaw - r.mesh.rotation.y) * 0.2;
     }
 }
@@ -66,5 +65,6 @@ export let worldTime = {
     seasonLength: 900,
     seasonIndex: 0
 };
+
 
 
