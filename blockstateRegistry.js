@@ -3,7 +3,7 @@
 export const blockstateRegistry = new Map();
 
 export async function loadBlockstate(name) {
-    const path = `assets/minecraft/blockstates/${name}.json`;
+    const path = `assets/sixsevencraft/blockstates/${name}.json`;
 
     const res = await fetch(path);
     if (!res.ok) return null;
@@ -16,4 +16,5 @@ export async function loadBlockstate(name) {
 export function getBlockstate(name) {
     return blockstateRegistry.get(name) || null;
 }
+
 
