@@ -1,77 +1,50 @@
-// main.js — game loop + chunk loading + meshing
+// main.js
 
-import { scene, camera, renderer } from './engine.js';
-import { World } from './world.js';
-import { generateChunk } from './terrain.js';
-import { meshChunk } from './chunkMesher.js';
-import { loadAllBlockstates } from './loadAllBlockstates.js';
-import { CHUNK_SIZE } from './config.js';
+const THREE = window.THREE;
 
-const world = new World();
+import { registerBlock, buildStatesFromBlockstates } from "./blocks.js";
+import { BlockstateDB, loadAllBlockstates, validateBlockstates } from "./blockstateDatabase.js";
+import { initDebugBlockstateUI } from "./debugBlockstates.js"; // new file
 
-// shared material for chunks (assign atlas later)
-world.material = new THREE.MeshStandardMaterial({
-    map: null,
-    side: THREE.FrontSide
-});
+// 1. Register all blocks (names must match blockstate filenames)
+const BLOCK_NAMES = [
+    "stone",
+    "grass_block",
+    "dirt",
+    "oak_log",
+    "oak_leaves",
+    // ...add all your block names here
+];
 
-// load blockstates + models
-await loadAllBlockstates();
-
-let lastPlayerChunk = { cx: 0, cz: 0 };
-
-function getPlayerChunk() {
-    const cx = Math.floor(camera.position.x / CHUNK_SIZE);
-    const cz = Math.floor(camera.position.z / CHUNK_SIZE);
-    return { cx, cz };
+for (const name of BLOCK_NAMES) {
+    registerBlock(name);
 }
 
-async function ensureChunk(cx, cz) {
-    if (!world.hasChunk(cx, cz)) {
-        const chunk = world.ensureChunk(cx, cz);
-        generateChunk(chunk);
-        await meshChunk(world, chunk);
-        scene.add(chunk.mesh);
-    }
-}
+async function init() {
+    // 2. Load all blockstates
+    await loadAllBlockstates(BLOCK_NAMES);
 
-async function updateChunks() {
-    const { cx, cz } = getPlayerChunk();
+    // 3. Build state registry from blockstates
+    buildStatesFromBlockstates();
 
-    if (cx === lastPlayerChunk.cx && cz === lastPlayerChunk.cz) return;
-    lastPlayerChunk = { cx, cz };
-
-    const radius = 4;
-
-    for (let dx = -radius; dx <= radius; dx++) {
-        for (let dz = -radius; dz <= radius; dz++) {
-            ensureChunk(cx + dx, cz + dz);
-        }
-    }
-}
-
-function animate() {
-    requestAnimationFrame(animate);
-
-    updateChunks();
-
-    for (const chunk of world.chunks.values()) {
-        if (chunk.needsRemesh) {
-            meshChunk(world, chunk).then(mesh => {
-                if (!scene.children.includes(mesh)) {
-                    scene.add(mesh);
-                }
-            });
-        }
+    // 4. Validate blockstates against models (simple check)
+    const issues = validateBlockstates(modelName => {
+        // naive check: assume all models exist; or plug into your model loader cache
+        return true;
+    });
+    if (issues.length > 0) {
+        console.warn("[Blockstate Validation] Issues:", issues);
     }
 
-    renderer.render(scene, camera);
+    // 5. Init debug UI
+    initDebugBlockstateUI();
+
+    // 6. Continue with your existing world/engine init...
+    // create world, start render loop, etc.
 }
 
-animate();
+init();
 
-
-animate();
 
 
 
