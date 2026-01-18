@@ -1,45 +1,61 @@
-// terrain.js — simple infinite terrain generator
+// modelLoader.js — loads model JSON, resolves parents, caches geometry
 
-import { registerBlock, registerBlockState } from './blocks.js';
+export const modelCache = new Map();
 
-const grass = registerBlock("grass");
-const dirt = registerBlock("dirt");
-const stone = registerBlock("stone");
+async function loadJSON(path) {
+    const res = await fetch(path);
+    return await res.json();
+}
 
-export function generateChunk(chunk) {
-    const { blocks, blockStates } = chunk;
+async function loadModelRecursive(path) {
+    if (modelCache.has(path)) return modelCache.get(path);
 
-    const CHUNK_SIZE = 16;
-    const WORLD_HEIGHT = 128;
+    const json = await loadJSON(path);
 
-    for (let x = 0; x < CHUNK_SIZE; x++) {
-        for (let z = 0; z < CHUNK_SIZE; z++) {
+    let parent = null;
+    if (json.parent) {
+        const parentPath = `assets/sixsevencraft/models/${json.parent}.json`;
+        parent = await loadModelRecursive(parentPath);
+    }
 
-            const worldX = chunk.cx * CHUNK_SIZE + x;
-            const worldZ = chunk.cz * CHUNK_SIZE + z;
+    const model = {
+        elements: json.elements || (parent ? parent.elements : []),
+        textures: { ...(parent ? parent.textures : {}), ...(json.textures || {}) }
+    };
 
-            const height = 64 + Math.floor(
-                8 * Math.sin(worldX * 0.05) +
-                8 * Math.cos(worldZ * 0.05)
-            );
+    modelCache.set(path, model);
+    return model;
+}
 
-            for (let y = 0; y < WORLD_HEIGHT; y++) {
-                const index = x + CHUNK_SIZE * (z + CHUNK_SIZE * y);
+export async function loadModel(modelName) {
+    const path = `assets/sixsevencraft/models/${modelName}.json`;
+    return await loadModelRecursive(path);
+}
 
-                if (y > height) {
-                    blocks[index] = 0;
-                    blockStates[index] = 0;
-                } else if (y === height) {
-                    blocks[index] = grass;
-                } else if (y > height - 4) {
-                    blocks[index] = dirt;
-                } else {
-                    blocks[index] = stone;
-                }
-            }
+// Convert model JSON into face templates for the mesher
+export function buildFaceTemplates(model) {
+    const faces = [];
+
+    for (const elem of model.elements) {
+        const { from, to } = elem;
+
+        for (const [faceName, face] of Object.entries(elem.faces)) {
+            const texName = face.texture.replace('#', '');
+            const uv = face.uv || [0, 0, 16, 16];
+
+            faces.push({
+                faceName,
+                from,
+                to,
+                textureName: texName,
+                uv,
+                cullface: face.cullface || null,
+                rotation: face.rotation || 0
+            });
         }
     }
 
-    chunk.needsRemesh = true;
+    return faces;
 }
+
 
