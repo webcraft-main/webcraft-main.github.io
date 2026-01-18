@@ -1,6 +1,6 @@
 // chunkMesher.js — model-aware greedy meshing
 
-import * as THREE from 'three';
+const THREE = window.THREE
 import { CHUNK_SIZE, WORLD_HEIGHT } from './config.js';
 import { getBlockModelFaces } from './blockMeshFromState.js';
 
