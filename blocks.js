@@ -1,57 +1,108 @@
-// blocks.js — numeric block registry + state registry
+// blocks.js
+// Block + state registry, driven by BlockstateDB
 
-export const blockRegistry = [];
-export const blockNameToId = new Map();
+import { BlockstateDB, generateStateDefinitions } from "./blockstateDatabase.js";
 
-export const stateRegistry = [];          // stateID → { blockId, properties }
-export const stateLookup = new Map();     // "blockId|prop1=val,prop2=val" → stateID
+export const blockNameToId = new Map();   // "stone" → 1
+export const blockIdToName = [];          // [0:null, 1:"stone", ...]
+export const blocks = [];                 // blockId → { id, name, states: [stateId,...], defaultStateId }
 
-let nextBlockId = 1; // 0 = air
-let nextStateId = 1; // 0 = default state
+export const stateIdToDef = [];           // stateId → { id, blockId, blockName, properties, model, key }
+export const stateKeyToId = new Map();    // "stone|axis=y" → stateId
 
-export function registerBlock(name, baseProperties = {}) {
+let nextBlockId = 1;
+let nextStateId = 1;
+
+// -----------------------------
+// BLOCK REGISTRATION
+// -----------------------------
+
+export function registerBlock(name) {
+    if (blockNameToId.has(name)) return blockNameToId.get(name);
+
     const id = nextBlockId++;
     blockNameToId.set(name, id);
+    blockIdToName[id] = name;
 
-    blockRegistry[id] = {
+    blocks[id] = {
         id,
         name,
-        baseProperties
+        states: [],
+        defaultStateId: 0,
     };
-
-    // Register default state
-    const key = `${id}|`;
-    stateLookup.set(key, 0);
-    stateRegistry[0] = { blockId: id, properties: {} };
 
     return id;
 }
 
-export function registerBlockState(blockId, properties) {
-    const key = `${blockId}|` + Object.entries(properties)
-        .map(([k, v]) => `${k}=${v}`)
-        .join(',');
+// -----------------------------
+// STATE GENERATION FROM BLOCKSTATE DB
+// -----------------------------
 
-    if (stateLookup.has(key)) return stateLookup.get(key);
+export function buildStatesFromBlockstates() {
+    const defs = generateStateDefinitions();
 
-    const stateId = nextStateId++;
-    stateLookup.set(key, stateId);
-    stateRegistry[stateId] = { blockId, properties };
+    for (const def of defs) {
+        const blockId = blockNameToId.get(def.blockName);
+        if (!blockId) {
+            console.warn("[blocks] State for unknown block:", def.blockName);
+            continue;
+        }
 
-    return stateId;
+        const id = nextStateId++;
+
+        const key = makeStateKey(def.blockName, def.properties);
+
+        const state = {
+            id,
+            blockId,
+            blockName: def.blockName,
+            properties: def.properties,
+            model: def.model,
+            key: def.key,
+            multipart: def.multipart || null,
+        };
+
+        stateIdToDef[id] = state;
+        stateKeyToId.set(key, id);
+
+        blocks[blockId].states.push(id);
+
+        // default: first state becomes default
+        if (!blocks[blockId].defaultStateId) {
+            blocks[blockId].defaultStateId = id;
+        }
+    }
 }
 
-export function getState(blockId, properties) {
-    const key = `${blockId}|` + Object.entries(properties)
-        .map(([k, v]) => `${k}=${v}`)
-        .join(',');
+// -----------------------------
+// HELPERS
+// -----------------------------
 
-    return stateLookup.get(key) ?? 0;
+function makeStateKey(blockName, props) {
+    const entries = Object.entries(props || {}).sort(([a], [b]) => a.localeCompare(b));
+    if (entries.length === 0) return blockName;
+    const suffix = entries.map(([k, v]) => `${k}=${v}`).join(",");
+    return `${blockName}|${suffix}`;
 }
 
-
-export function getBlock(x, y, z) {
-    return blockMap.get(key(x, y, z));
+/**
+ * Get stateId for a block + properties.
+ * If no exact match, returns the block's default state.
+ */
+export function getStateId(blockId, properties = {}) {
+    const blockName = blockIdToName[blockId];
+    const key = makeStateKey(blockName, properties);
+    const id = stateKeyToId.get(key);
+    if (id) return id;
+    return blocks[blockId].defaultStateId;
 }
+
+/**
+ * Get state definition by id.
+ */
+export function getStateDef(stateId) {
+    return stateIdToDef[stateId] || null;
+}
+
 
 
