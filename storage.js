@@ -1,33 +1,47 @@
-import { blockMap, setBlock } from "./blocks.js";
+// storage.js — binary chunk save/load
 
-const STORAGE_KEY = "sixsevencraft-world";
+import { CHUNK_SIZE, WORLD_HEIGHT } from './config.js';
 
-export function saveWorld() {
-    const data = [];
+const CHUNK_VOLUME = CHUNK_SIZE * CHUNK_SIZE * WORLD_HEIGHT;
 
-    for (const [key, entry] of blockMap.entries()) {
-        const [x, y, z] = key.split(",").map(Number);
-        data.push({
-            x, y, z,
-            name: entry.block.name
-        });
-    }
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    console.log("World saved:", data.length, "blocks");
+export function createEmptyChunk(cx, cz) {
+    return {
+        cx, cz,
+        blocks: new Uint16Array(CHUNK_VOLUME),
+        blockStates: new Uint16Array(CHUNK_VOLUME),
+        mesh: null,
+        needsRemesh: true
+    };
 }
 
-export function loadWorld() {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return;
-
-    try {
-        const data = JSON.parse(raw);
-        data.forEach(b => {
-            setBlock(b.x, b.y, b.z, b.name);
-        });
-        console.log("World loaded:", data.length, "blocks");
-    } catch (e) {
-        console.warn("Failed to load world:", e);
-    }
+function encodeArray(arr) {
+    return btoa(String.fromCharCode(...new Uint8Array(arr.buffer)));
 }
+
+function decodeArray(str) {
+    const binary = atob(str);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new Uint16Array(bytes.buffer);
+}
+
+export function saveChunk(chunk) {
+    return {
+        cx: chunk.cx,
+        cz: chunk.cz,
+        blocks: encodeArray(chunk.blocks),
+        blockStates: encodeArray(chunk.blockStates)
+    };
+}
+
+export function loadChunk(data) {
+    return {
+        cx: data.cx,
+        cz: data.cz,
+        blocks: decodeArray(data.blocks),
+        blockStates: decodeArray(data.blockStates),
+        mesh: null,
+        needsRemesh: true
+    };
+}
+
