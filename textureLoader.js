@@ -1,4 +1,4 @@
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.158.0/+esm";
+const THREE = window.THREE
 
 export const textureCache = new Map();
 
