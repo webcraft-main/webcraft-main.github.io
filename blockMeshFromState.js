@@ -1,36 +1,69 @@
 // blockMeshFromState.js — resolves blockstate → model → face templates
 
-import { stateRegistry } from './blocks.js';
+import { stateRegistry, blockRegistry } from './blocks.js';
 import { loadModel, buildFaceTemplates } from './modelLoader.js';
 
+// Cache: blockId|stateId → face templates
 export const blockModelCache = new Map();
 
+/**
+ * Returns the face templates for a block given its blockId + stateId.
+ * This is what the greedy mesher consumes.
+ */
 export async function getBlockModelFaces(blockId, stateId) {
+    const cacheKey = `${blockId}|${stateId}`;
+    if (blockModelCache.has(cacheKey)) {
+        return blockModelCache.get(cacheKey);
+    }
+
     const state = stateRegistry[stateId] || { properties: {} };
-
-    const key = `${blockId}|${JSON.stringify(state.properties)}`;
-    if (blockModelCache.has(key)) return blockModelCache.get(key);
-
-    // Resolve blockstate → model name
     const modelName = resolveModelName(blockId, state.properties);
 
     const model = await loadModel(modelName);
     const faces = buildFaceTemplates(model);
 
-    blockModelCache.set(key, faces);
+    blockModelCache.set(cacheKey, faces);
     return faces;
 }
 
-// This is where you map blockId + properties → model name
-// Expand this as you add more blocks
-function resolveModelName(blockId, properties) {
-    // Example:
-    // logs: axis = x/y/z
-    // slabs: type = top/bottom/double
-    // stairs: facing, half, shape
+/**
+ * Maps blockId + blockstate properties → correct model name.
+ * This is where blockstate logic becomes real rendering.
+ */
+export function resolveModelName(blockId, properties) {
+    const name = blockRegistry[blockId].name;
 
-    // For now, assume simple blocks:
-    return `block/${blockId}`;
+    // -----------------------------
+    // GRASS BLOCK
+    // -----------------------------
+    if (name === "grass_block") {
+        if (properties.snowy === "true") return "block/grass_block_snow";
+        return "block/grass_block";
+    }
+
+    // -----------------------------
+    // LOGS (axis = x/y/z)
+    // -----------------------------
+    if (name.endsWith("_log")) {
+        const axis = properties.axis || "y";
+        if (axis === "x" || axis === "z") {
+            return `block/${name}_horizontal`;
+        }
+        return `block/${name}`;
+    }
+
+    // -----------------------------
+    // LEAVES
+    // -----------------------------
+    if (name.endsWith("_leaves")) {
+        return `block/${name}`;
+    }
+
+    // -----------------------------
+    // PLANKS, STONE, DIRT, SIMPLE CUBES
+    // -----------------------------
+    return `block/${name}`;
 }
+
 
 
