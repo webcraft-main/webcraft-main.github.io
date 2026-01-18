@@ -1,139 +1,47 @@
-import { setBlock } from "./blocks.js";
+// terrain.js — simple infinite terrain generator
 
-export const CHUNK_SIZE = 16;
-export const VIEW_DISTANCE = 3;
+import { registerBlock, registerBlockState } from './blocks.js';
 
-const noise2D = createNoise2D();
-const loadedChunks = new Set();
+const grass = registerBlock("grass");
+const dirt = registerBlock("dirt");
+const stone = registerBlock("stone");
 
-function key(cx, cz) {
-    return `${cx},${cz}`;
-}
+export function generateChunk(chunk) {
+    const { blocks, blockStates } = chunk;
 
-export function ensureChunksAround(playerPos) {
-    const cx = Math.floor(playerPos.x / CHUNK_SIZE);
-    const cz = Math.floor(playerPos.z / CHUNK_SIZE);
-
-    for (let dz = -VIEW_DISTANCE; dz <= VIEW_DISTANCE; dz++) {
-        for (let dx = -VIEW_DISTANCE; dx <= VIEW_DISTANCE; dx++) {
-            const k = key(cx + dx, cz + dz);
-            if (!loadedChunks.has(k)) {
-                generateChunk(cx + dx, cz + dz);
-                loadedChunks.add(k);
-            }
-        }
-    }
-}
-
-/* ============================================================
-   BIOME SELECTION
-   ============================================================ */
-
-function getBiome(cx, cz) {
-    const n = noise2D(cx * 0.05, cz * 0.05);
-
-    if (n < -0.35) return "OCEAN";
-    if (n < -0.1) return "ICE_PLAINS";
-    if (n < 0.25) return "GRASSY_PLAINS";
-    if (n < 0.55) return "OAK_FOREST";
-    return "VOLCANIC";
-}
-
-/* ============================================================
-   HEIGHTMAP PER BIOME
-   ============================================================ */
-
-function getHeight(biome, wx, wz) {
-    const h = noise2D(wx * 0.05, wz * 0.05);
-
-    switch (biome) {
-        case "OCEAN": return -2 + h * 1;
-        case "ICE_PLAINS": return 1 + h * 2;
-        case "GRASSY_PLAINS": return 2 + h * 3;
-        case "OAK_FOREST": return 3 + h * 4;
-        case "VOLCANIC": return 4 + h * 2;
-    }
-}
-
-/* ============================================================
-   DECORATION HELPERS
-   ============================================================ */
-
-function maybeTree(biome) {
-    return biome === "OAK_FOREST" && Math.random() < 0.05;
-}
-
-/* ============================================================
-   CHUNK GENERATION
-   ============================================================ */
-
-function generateChunk(cx, cz) {
-    const biome = getBiome(cx, cz);
+    const CHUNK_SIZE = 16;
+    const WORLD_HEIGHT = 128;
 
     for (let x = 0; x < CHUNK_SIZE; x++) {
         for (let z = 0; z < CHUNK_SIZE; z++) {
-            const wx = cx * CHUNK_SIZE + x;
-            const wz = cz * CHUNK_SIZE + z;
-            const h = Math.floor(getHeight(biome, wx, wz));
 
-            // --- BLOCKSTATE‑READY BLOCK PLACEMENT ---
-            if (biome === "ICE_PLAINS") {
-                setBlock(wx, h, wz, { id: "snow", state: {} });
+            const worldX = chunk.cx * CHUNK_SIZE + x;
+            const worldZ = chunk.cz * CHUNK_SIZE + z;
 
-            } else if (biome === "GRASSY_PLAINS") {
-                setBlock(wx, h, wz, { id: "grass", state: {} });
+            const height = 64 + Math.floor(
+                8 * Math.sin(worldX * 0.05) +
+                8 * Math.cos(worldZ * 0.05)
+            );
 
-            } else if (biome === "OAK_FOREST") {
-                setBlock(wx, h, wz, { id: "grass", state: {} });
-                if (maybeTree(biome)) {
-                    generateOakTree(wx, h + 1, wz);
+            for (let y = 0; y < WORLD_HEIGHT; y++) {
+                const index = x + CHUNK_SIZE * (z + CHUNK_SIZE * y);
+
+                if (y > height) {
+                    blocks[index] = 0;
+                    blockStates[index] = 0;
+                } else if (y === height) {
+                    blocks[index] = grass;
+                } else if (y > height - 4) {
+                    blocks[index] = dirt;
+                } else {
+                    blocks[index] = stone;
                 }
-
-            } else if (biome === "VOLCANIC") {
-                setBlock(wx, h, wz, { id: "deepslate", state: {} });
-                if (Math.random() < 0.03) {
-                    setBlock(wx, h + 1, wz, { id: "lava", state: {} });
-                }
-
-            } else if (biome === "OCEAN") {
-                setBlock(wx, h, wz, { id: "sand", state: {} });
-                for (let y = h + 1; y <= 0; y++) {
-                    setBlock(wx, y, wz, { id: "water", state: {} });
-                }
-            }
-
-            // Random puddles
-            if (biome !== "OCEAN" && Math.random() < 0.01) {
-                setBlock(wx, h + 1, wz, { id: "water", state: {} });
             }
         }
     }
+
+    chunk.needsRemesh = true;
 }
 
-/* ============================================================
-   OAK TREE GENERATOR
-   ============================================================ */
-
-function generateOakTree(x, y, z) {
-    // Logs need axis=y for correct blockstate model
-    for (let i = 0; i < 4; i++) {
-        setBlock(x, y + i, z, { id: "oak_log", state: { axis: "y" } });
-    }
-
-    // Leaves don't need state
-    for (let dx = -2; dx <= 2; dx++) {
-        for (let dz = -2; dz <= 2; dz++) {
-            if (Math.abs(dx) + Math.abs(dz) < 4) {
-                setBlock(x + dx, y + 4, z + dz, { id: "oak_leaves", state: {} });
-            }
-        }
-    }
-}
-
-export function getBiomeAt(x, z) {
-    const cx = Math.floor(x / CHUNK_SIZE);
-    const cz = Math.floor(z / CHUNK_SIZE);
-    return getBiome(cx, cz);
-}
 
 
