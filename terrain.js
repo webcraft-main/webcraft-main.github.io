@@ -1,10 +1,11 @@
 // terrain.js — simple infinite terrain generator
 
-import { registerBlock, registerBlockState } from './blocks.js';
+import { registerBlock } from './blocks.js';
 
-const grass = registerBlock("grass");
-const dirt = registerBlock("dirt");
-const stone = registerBlock("stone");
+// Correct block names that match your blockstate JSON filenames
+export const GRASS_BLOCK = registerBlock("grass_block");
+export const DIRT = registerBlock("dirt");
+export const STONE = registerBlock("stone");
 
 export function generateChunk(chunk) {
     const { blocks, blockStates } = chunk;
@@ -30,15 +31,19 @@ export function generateChunk(chunk) {
                     blocks[index] = 0;
                     blockStates[index] = 0;
                 } else if (y === height) {
-                    blocks[index] = grass;
+                    blocks[index] = GRASS_BLOCK;
                 } else if (y > height - 4) {
-                    blocks[index] = dirt;
+                    blocks[index] = DIRT;
                 } else {
-                    blocks[index] = stone;
+                    blocks[index] = STONE;
                 }
             }
         }
     }
+
+    chunk.needsRemesh = true;
+}
+
 
     chunk.needsRemesh = true;
 }
