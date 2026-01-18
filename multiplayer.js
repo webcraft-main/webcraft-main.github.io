@@ -1,50 +1,102 @@
+// multiplayer.js — chunk-based multiplayer sync
+
 import { scene } from "./engine.js";
-import { player } from "./world.js";
-import { ensureRemote, updateRemoteTarget, removeRemote, remotes } from "./world.js";
+import { world } from "./main.js"; // export world from main.js
+import * as THREE from "three";
 
 export const socket = new WebSocket("wss://sixsevencraft-server.onrender.com");
 
 export let playerId = null;
+export const remotePlayers = new Map();
 
+// -----------------------------
+// CONNECTION
+// -----------------------------
 socket.addEventListener("open", () => {
     playerId = crypto.randomUUID();
     socket.send(JSON.stringify({ type: "join", id: playerId }));
 });
 
-export function sendMovement() {
+// -----------------------------
+// SEND PLAYER MOVEMENT
+// -----------------------------
+export function sendMovement(player) {
     if (!playerId || socket.readyState !== WebSocket.OPEN) return;
 
     socket.send(JSON.stringify({
         type: "move",
         id: playerId,
-        x: player.pos.x,
-        y: player.pos.y,
-        z: player.pos.z,
-        ry: player.yaw
+        x: player.position.x,
+        y: player.position.y,
+        z: player.position.z,
+        ry: player.rotation.y
     }));
 }
 
+// -----------------------------
+// HANDLE INCOMING MESSAGES
+// -----------------------------
 socket.addEventListener("message", e => {
     const data = JSON.parse(e.data);
 
-    if (data.type === "state") {
-        // Update or create remote players
-        for (const id in data.players) {
-            if (id === playerId) continue;
-            updateRemoteTarget(id, data.players[id], scene);
-        }
+    switch (data.type) {
 
-        // Remove players no longer in state
-        for (const id in remotes) {
-            if (!data.players[id] && id !== playerId) {
-                removeRemote(id, scene);
+        // Remote player positions
+        case "state":
+            for (const id in data.players) {
+                if (id === playerId) continue;
+                updateRemotePlayer(id, data.players[id]);
             }
-        }
-    }
+            cleanupMissingPlayers(data.players);
+            break;
 
-    if (data.type === "leave") {
-        if (data.id !== playerId) {
-            removeRemote(data.id, scene);
-        }
+        // Chunk data from server
+        case "chunk":
+            world.loadRemoteChunk(data);
+            break;
+
+        // Block update from server
+        case "blockUpdate":
+            world.setBlock(data.x, data.y, data.z, data.blockId, data.stateId);
+            break;
+
+        // Player left
+        case "leave":
+            removeRemotePlayer(data.id);
+            break;
     }
 });
+
+// -----------------------------
+// REMOTE PLAYER MANAGEMENT
+// -----------------------------
+function updateRemotePlayer(id, info) {
+    let obj = remotePlayers.get(id);
+
+    if (!obj) {
+        obj = new THREE.Mesh(
+            new THREE.BoxGeometry(0.6, 1.8, 0.6),
+            new THREE.MeshStandardMaterial({ color: 0x00aaff })
+        );
+        obj.position.set(info.x, info.y, info.z);
+        scene.add(obj);
+        remotePlayers.set(id, obj);
+    }
+
+    obj.position.set(info.x, info.y, info.z);
+    obj.rotation.y = info.ry;
+}
+
+function removeRemotePlayer(id) {
+    const obj = remotePlayers.get(id);
+    if (!obj) return;
+    scene.remove(obj);
+    remotePlayers.delete(id);
+}
+
+function cleanupMissingPlayers(serverPlayers) {
+    for (const id of remotePlayers.keys()) {
+        if (!serverPlayers[id]) removeRemotePlayer(id);
+    }
+}
+
