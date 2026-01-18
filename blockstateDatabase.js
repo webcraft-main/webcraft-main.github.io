@@ -263,11 +263,27 @@ function keyToProps(key) {
 }
 
 function pickModel(entry) {
-    if (Array.isArray(entry)) {
-        // TODO: support weights; for now, pick first
-        return entry[0].model;
+    if (!Array.isArray(entry)) {
+        return entry.model;
     }
-    return entry.model;
+
+    // Weighted random selection
+    let total = 0;
+    for (const e of entry) {
+        total += e.weight || 1;
+    }
+
+    let r = Math.random() * total;
+
+    for (const e of entry) {
+        r -= (e.weight || 1);
+        if (r <= 0) {
+            return e.model;
+        }
+    }
+
+    // Fallback (should never hit)
+    return entry[0].model;
 }
 
 function matchesWhen(props, when) {
