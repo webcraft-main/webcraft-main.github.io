@@ -1,92 +1,54 @@
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.158.0/+esm";
-import { scene } from "./engine.js";
-import { createMeshForBlock } from "./blockMeshFromState.js";
+// blocks.js — numeric block registry + state registry
 
-export const BlockRegistry = {};
-export const BlockID = {};
-export let nextBlockId = 1;
+export const blockRegistry = [];
+export const blockNameToId = new Map();
 
-// Optional registry for custom/simple blocks
-export function registerBlock(name, data) {
-    BlockRegistry[name] = {
-        id: nextBlockId,
+export const stateRegistry = [];          // stateID → { blockId, properties }
+export const stateLookup = new Map();     // "blockId|prop1=val,prop2=val" → stateID
+
+let nextBlockId = 1; // 0 = air
+let nextStateId = 1; // 0 = default state
+
+export function registerBlock(name, baseProperties = {}) {
+    const id = nextBlockId++;
+    blockNameToId.set(name, id);
+
+    blockRegistry[id] = {
+        id,
         name,
-        solid: data.solid ?? true,
-        transparent: data.transparent ?? false,
-        fluid: data.fluid ?? false,
-        gravity: data.gravity ?? false,
-        light: data.light ?? 0,
-        material: data.material,
-        drops: data.drops ?? name,
-        color: data.color ?? 0xffffff,
-        mesh: null
+        baseProperties
     };
-    BlockID[nextBlockId] = BlockRegistry[name];
-    nextBlockId++;
+
+    // Register default state
+    const key = `${id}|`;
+    stateLookup.set(key, 0);
+    stateRegistry[0] = { blockId: id, properties: {} };
+
+    return id;
 }
 
-// Legacy simple cube mesh (still usable for custom blocks)
-export function createBlockMesh(block, x, y, z) {
-    const mat = new THREE.MeshStandardMaterial({
-        color: block.color,
-        transparent: block.transparent,
-        opacity: block.transparent ? 0.6 : 1
-    });
+export function registerBlockState(blockId, properties) {
+    const key = `${blockId}|` + Object.entries(properties)
+        .map(([k, v]) => `${k}=${v}`)
+        .join(',');
 
-    const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), mat);
-    mesh.position.set(x, y, z);
-    mesh.userData.block = block;
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    scene.add(mesh);
-    return mesh;
+    if (stateLookup.has(key)) return stateLookup.get(key);
+
+    const stateId = nextStateId++;
+    stateLookup.set(key, stateId);
+    stateRegistry[stateId] = { blockId, properties };
+
+    return stateId;
 }
 
-// World storage
-export const blockMap = new Map();
-function key(x, y, z) { return `${x},${y},${z}`; }
+export function getState(blockId, properties) {
+    const key = `${blockId}|` + Object.entries(properties)
+        .map(([k, v]) => `${k}=${v}`)
+        .join(',');
 
-// NEW: setBlock now accepts either "name" or { id, state }
-export function setBlock(x, y, z, blockData) {
-    let id, state;
-
-    if (typeof blockData === "string") {
-        id = blockData;
-        state = {};
-    } else if (blockData && typeof blockData === "object") {
-        id = blockData.id;
-        state = blockData.state || {};
-    } else {
-        return;
-    }
-
-    const k = key(x, y, z);
-    if (blockMap.has(k)) removeBlock(x, y, z);
-
-    const entry = { id, state, mesh: null };
-    blockMap.set(k, entry);
-
-    // Use blockstate/model system for mesh
-    createMeshForBlock(id, state).then(mesh => {
-        if (!blockMap.has(k)) {
-            // Block was removed before mesh finished loading
-            if (mesh) scene.remove(mesh);
-            return;
-        }
-        if (!mesh) return;
-        mesh.position.set(x, y, z);
-        scene.add(mesh);
-        entry.mesh = mesh;
-    });
+    return stateLookup.get(key) ?? 0;
 }
 
-export function removeBlock(x, y, z) {
-    const k = key(x, y, z);
-    const entry = blockMap.get(k);
-    if (!entry) return;
-    if (entry.mesh) scene.remove(entry.mesh);
-    blockMap.delete(k);
-}
 
 export function getBlock(x, y, z) {
     return blockMap.get(key(x, y, z));
