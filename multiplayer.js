@@ -2,7 +2,8 @@
 
 import { scene } from "./engine.js";
 import { world } from "./main.js"; // export world from main.js
-import * as THREE from "three";
+
+const THREE = window.THREE
 
 export const socket = new WebSocket("wss://sixsevencraft-server.onrender.com");
 
