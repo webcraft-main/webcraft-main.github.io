@@ -1,9 +1,19 @@
-export const blockstates = new Map();
+// blockstateRegistry.js — loads blockstate JSON
 
-export function registerBlockstate(name, json) {
-    blockstates.set(name, json);
+export const blockstateRegistry = new Map();
+
+export async function loadBlockstate(name) {
+    const path = `assets/minecraft/blockstates/${name}.json`;
+
+    const res = await fetch(path);
+    if (!res.ok) return null;
+
+    const json = await res.json();
+    blockstateRegistry.set(name, json);
+    return json;
 }
 
 export function getBlockstate(name) {
-    return blockstates.get(name);
+    return blockstateRegistry.get(name) || null;
 }
+
