@@ -1,142 +1,86 @@
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.158.0/+esm";
-import { scene, camera, renderer } from "./engine.js";
-import { player, stepRemoteInterpolation, worldTime } from "./world.js";
-import { keys } from "./input.js";
-import { ensureChunksAround } from "./terrain.js";
-import { updatePhysics } from "./physics.js";
-import { sendMovement } from "./multiplayer.js";
-import { saveWorld, loadWorld } from "./storage.js";
-import { loadAllBlockstates } from "./loadAllBlockstates.js";
+// main.js — game loop + chunk loading + meshing
 
-let lastTime = performance.now();
+import * as THREE from 'three';
+import { World } from './world.js';
+import { generateChunk } from './terrain.js';
+import { meshChunk } from './chunkMesher.js';
+import { loadAllBlockstates } from './loadAllBlockstates.js';
 
-let volcanicTimer = 0;
-const VOLCANIC_ERUPTION_TIME = 40 * 60; // 40 minutes
+import { CHUNK_SIZE } from './config.js';
 
-function updateVolcano(dt) {
-    volcanicTimer += dt;
-    if (volcanicTimer >= VOLCANIC_ERUPTION_TIME) {
-        volcanicTimer = 0;
-        console.log("🔥 VOLCANIC ERUPTION!");
-    }
-}
+const world = new World();
 
-const heartsEl = document.getElementById("hearts");
-const hungerEl = document.getElementById("hunger");
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.1, 1000);
+camera.position.set(0, 80, 0);
 
-document.addEventListener("keydown", e => {
-    if (e.code === "KeyR") loadWorld();
-    if (e.code === "KeyP") saveWorld();
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+
+// Material shared by all chunks
+world.material = new THREE.MeshStandardMaterial({
+    map: null, // texture atlas assigned later
+    side: THREE.FrontSide
 });
 
-function updateHUD() {
-    heartsEl.innerHTML = "";
-    hungerEl.innerHTML = "";
+// Load blockstates + models
+await loadAllBlockstates();
 
-    for (let i = 0; i < 10; i++) {
-        const heart = document.createElement("div");
-        heart.className = "heart " + (player.health > i * 2 ? "full" : "empty");
-        heartsEl.appendChild(heart);
-    }
+// Player chunk tracking
+let lastPlayerChunk = { cx: 0, cz: 0 };
 
-    for (let i = 0; i < 10; i++) {
-        const h = document.createElement("div");
-        h.className = "hunger-icon " + (player.hunger > i * 2 ? "full" : "empty");
-        hungerEl.appendChild(h);
+function getPlayerChunk() {
+    const cx = Math.floor(camera.position.x / CHUNK_SIZE);
+    const cz = Math.floor(camera.position.z / CHUNK_SIZE);
+    return { cx, cz };
+}
+
+async function ensureChunk(cx, cz) {
+    if (!world.hasChunk(cx, cz)) {
+        const chunk = world.ensureChunk(cx, cz);
+        generateChunk(chunk);
+        await meshChunk(world, chunk);
+        scene.add(chunk.mesh);
     }
 }
 
-function updateTime(dt) {
-    worldTime.timeOfDay = (worldTime.timeOfDay + dt) % worldTime.dayLength;
-    worldTime.seasonTime = (worldTime.seasonTime + dt) % worldTime.seasonLength;
+async function updateChunks() {
+    const { cx, cz } = getPlayerChunk();
 
-    if (worldTime.seasonTime < dt) {
-        worldTime.seasonIndex = (worldTime.seasonIndex + 1) % 4;
-        console.log("Season changed to", worldTime.seasonIndex);
-    }
+    // Only update when player crosses chunk boundary
+    if (cx === lastPlayerChunk.cx && cz === lastPlayerChunk.cz) return;
+    lastPlayerChunk = { cx, cz };
 
-    const t = worldTime.timeOfDay / worldTime.dayLength;
-    const brightness = Math.max(0.1, Math.sin(t * Math.PI));
-    renderer.setClearColor(new THREE.Color(0x87ceeb).multiplyScalar(brightness));
-}
+    const radius = 4; // load 9x9 chunks around player
 
-function applyHungerAndHealth(dt, moving) {
-    if (moving) {
-        player.hunger = Math.max(0, player.hunger - dt * 0.5);
-    } else if (player.hunger > 16 && player.health < 20) {
-        player.health = Math.min(20, player.health + dt * 0.5);
-    }
-
-    if (player.hunger <= 0) {
-        player.health = Math.max(0, player.health - dt * 0.5);
+    for (let dx = -radius; dx <= radius; dx++) {
+        for (let dz = -radius; dz <= radius; dz++) {
+            ensureChunk(cx + dx, cz + dz);
+        }
     }
 }
 
-camera.position.copy(player.pos);
+function animate() {
+    requestAnimationFrame(animate);
 
-function tick(dt) {
-    let moveSpeed = 7;
+    updateChunks();
 
-    const isSprinting = keys["ShiftLeft"] && player.hunger > 0;
-    const isSneaking  = keys["ControlLeft"];
-
-    if (isSprinting) moveSpeed *= 1.6;
-    if (isSneaking)  moveSpeed *= 0.4;
-
-    const dir = new THREE.Vector3();
-    const f = new THREE.Vector3(0,0,-1).applyQuaternion(camera.quaternion); f.y = 0;
-    const s = new THREE.Vector3().crossVectors(camera.up, f);
-
-    if (keys["KeyW"]) dir.add(f);
-    if (keys["KeyS"]) dir.sub(f);
-    if (keys["KeyA"]) dir.add(s);
-    if (keys["KeyD"]) dir.sub(s);
-
-    let moving = false;
-    if (dir.lengthSq() > 0) {
-        dir.normalize().multiplyScalar(moveSpeed * dt);
-        player.pos.add(dir);
-        moving = true;
+    // Remesh chunks that need it
+    for (const chunk of world.chunks.values()) {
+        if (chunk.needsRemesh) {
+            meshChunk(world, chunk).then(mesh => {
+                if (!scene.children.includes(mesh)) {
+                    scene.add(mesh);
+                }
+            });
+        }
     }
 
-    player.vel.y -= 30 * dt;
-    player.pos.y += player.vel.y * dt;
-
-    if (player.pos.y < 2) {
-        player.pos.y = 2;
-        player.vel.y = 0;
-    }
-
-    camera.position.copy(player.pos);
-    player.yaw = camera.rotation.y;
-
-    ensureChunksAround(player.pos);
-    updatePhysics(dt);
-    stepRemoteInterpolation(dt);
-
-    updateTime(dt);
-    applyHungerAndHealth(dt, moving);
-    updateHUD();
-
-    sendMovement();
-}
-
-function loop(now) {
-    const dt = Math.min(0.05, (now - lastTime) / 1000);
-    lastTime = now;
-
-    tick(dt);
-    updateVolcano(dt);
     renderer.render(scene, camera);
-
-    requestAnimationFrame(loop);
 }
 
-async function init() {
-    await loadAllBlockstates(); // ← loads ALL blockstates before the game starts
-    requestAnimationFrame(loop);
-}
+animate();
 
-init();
 
 
