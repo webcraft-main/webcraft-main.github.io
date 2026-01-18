@@ -1,69 +1,40 @@
-// blockMeshFromState.js — resolves blockstate → model → face templates
+// blockMeshFromState.js
 
-import { stateRegistry, blockRegistry } from './blocks.js';
-import { loadModel, buildFaceTemplates } from './modelLoader.js';
+const THREE = window.THREE;
 
-// Cache: blockId|stateId → face templates
-export const blockModelCache = new Map();
+import { getStateDef } from "./blocks.js";
+import { resolveModelForBlock } from "./blockstateDatabase.js";
+import { loadModel } from "./modelLoader.js"; // assuming you have this
 
-/**
- * Returns the face templates for a block given its blockId + stateId.
- * This is what the greedy mesher consumes.
- */
-export async function getBlockModelFaces(blockId, stateId) {
-    const cacheKey = `${blockId}|${stateId}`;
-    if (blockModelCache.has(cacheKey)) {
-        return blockModelCache.get(cacheKey);
-    }
+const modelCache = new Map(); // modelName → parsed model data
 
-    const state = stateRegistry[stateId] || { properties: {} };
-    const modelName = resolveModelName(blockId, state.properties);
+export async function buildBlockMeshFromState(stateId, x, y, z, targetGeometry) {
+    const state = getStateDef(stateId);
+    if (!state) return;
 
+    const modelName = state.model || resolveModelForBlock(state.blockName, state.properties);
+    if (!modelName) return;
+
+    const model = await getModel(modelName);
+    if (!model) return;
+
+    // Here you plug into your existing greedy mesher / face builder.
+    // For now, assume `addModelToGeometry(model, x, y, z, targetGeometry)` exists.
+    addModelToGeometry(model, x, y, z, targetGeometry);
+}
+
+async function getModel(modelName) {
+    if (modelCache.has(modelName)) return modelCache.get(modelName);
     const model = await loadModel(modelName);
-    const faces = buildFaceTemplates(model);
-
-    blockModelCache.set(cacheKey, faces);
-    return faces;
+    modelCache.set(modelName, model);
+    return model;
 }
 
-/**
- * Maps blockId + blockstate properties → correct model name.
- * This is where blockstate logic becomes real rendering.
- */
-export function resolveModelName(blockId, properties) {
-    const name = blockRegistry[blockId].name;
-
-    // -----------------------------
-    // GRASS BLOCK
-    // -----------------------------
-    if (name === "grass_block") {
-        if (properties.snowy === "true") return "block/grass_block_snow";
-        return "block/grass_block";
-    }
-
-    // -----------------------------
-    // LOGS (axis = x/y/z)
-    // -----------------------------
-    if (name.endsWith("_log")) {
-        const axis = properties.axis || "y";
-        if (axis === "x" || axis === "z") {
-            return `block/${name}_horizontal`;
-        }
-        return `block/${name}`;
-    }
-
-    // -----------------------------
-    // LEAVES
-    // -----------------------------
-    if (name.endsWith("_leaves")) {
-        return `block/${name}`;
-    }
-
-    // -----------------------------
-    // PLANKS, STONE, DIRT, SIMPLE CUBES
-    // -----------------------------
-    return `block/${name}`;
+// Stub: you already have something like this in your mesher.
+function addModelToGeometry(model, x, y, z, targetGeometry) {
+    // Use model.elements, faces, UVs, etc. to push into targetGeometry.
 }
+
 
 
 
