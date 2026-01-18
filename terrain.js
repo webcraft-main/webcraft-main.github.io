@@ -43,10 +43,3 @@ export function generateChunk(chunk) {
 
     chunk.needsRemesh = true;
 }
-
-
-    chunk.needsRemesh = true;
-}
-
-
-
