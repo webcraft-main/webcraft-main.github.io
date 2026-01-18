@@ -93,6 +93,14 @@ export class World {
             state: chunk.blockStates[index]
         };
     }
+
+loadRemoteChunk(data) {
+    const chunk = this.ensureChunk(data.cx, data.cz);
+    chunk.blocks = new Uint16Array(data.blocks);
+    chunk.blockStates = new Uint16Array(data.blockStates);
+    chunk.needsRemesh = true;
+}
+
 }
 
 
