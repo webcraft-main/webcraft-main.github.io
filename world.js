@@ -1,70 +1,100 @@
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.158.0/+esm";
+// world.js — Infinite world chunk storage
 
-export const player = {
-    pos: new THREE.Vector3(0, 2, 0),
-    vel: new THREE.Vector3(),
-    yaw: 0,
-    onGround: false,
-    health: 20,
-    hunger: 20
-};
+import { CHUNK_SIZE, WORLD_HEIGHT } from './config.js';
+import { createEmptyChunk } from './storage.js';
 
-// Store remote players
-export const remotes = {};
+export class World {
+    constructor() {
+        this.chunks = new Map(); // key: "cx,cz" → chunk object
+    }
 
-// Create remote player mesh if missing
-export function ensureRemote(id, scene) {
-    if (remotes[id]) return;
+    _key(cx, cz) {
+        return `${cx},${cz}`;
+    }
 
-    const geo = new THREE.BoxGeometry(0.6, 1.8, 0.6);
-    const mat = new THREE.MeshStandardMaterial({ color: 0x00ffff });
-    const mesh = new THREE.Mesh(geo, mat);
+    hasChunk(cx, cz) {
+        return this.chunks.has(this._key(cx, cz));
+    }
 
-    mesh.position.set(0, 2, 0);
-    scene.add(mesh);
+    getChunk(cx, cz) {
+        return this.chunks.get(this._key(cx, cz)) || null;
+    }
 
-    remotes[id] = {
-        mesh,
-        targetPos: new THREE.Vector3(),
-        targetYaw: 0
-    };
-}
+    ensureChunk(cx, cz) {
+        const key = this._key(cx, cz);
+        if (!this.chunks.has(key)) {
+            this.chunks.set(key, createEmptyChunk(cx, cz));
+        }
+        return this.chunks.get(key);
+    }
 
-// Update remote player target position/rotation
-export function updateRemoteTarget(id, data, scene) {
-    ensureRemote(id, scene);
+    // Convert world coords → chunk coords + local coords
+    worldToChunk(x, y, z) {
+        const cx = Math.floor(x / CHUNK_SIZE);
+        const cz = Math.floor(z / CHUNK_SIZE);
+        const lx = x - cx * CHUNK_SIZE;
+        const lz = z - cz * CHUNK_SIZE;
+        return { cx, cz, lx, y, lz };
+    }
 
-    const r = remotes[id];
-    r.targetPos.set(data.x, data.y, data.z);
-    r.targetYaw = data.ry;
-}
+    getBlock(x, y, z) {
+        if (y < 0 || y >= WORLD_HEIGHT) return 0;
 
-// Remove remote player
-export function removeRemote(id, scene) {
-    if (!remotes[id]) return;
+        const { cx, cz, lx, lz } = this.worldToChunk(x, y, z);
+        const chunk = this.getChunk(cx, cz);
+        if (!chunk) return 0;
 
-    scene.remove(remotes[id].mesh);
-    delete remotes[id];
-}
+        const index = lx + CHUNK_SIZE * (lz + CHUNK_SIZE * y);
+        return chunk.blocks[index];
+    }
 
-// Smoothly interpolate all remote players toward their target positions
-export function stepRemoteInterpolation() {
-    for (const id in remotes) {
-        const r = remotes[id];
+    getBlockStateID(x, y, z) {
+        if (y < 0 || y >= WORLD_HEIGHT) return 0;
 
-        r.mesh.position.lerp(r.targetPos, 0.2);
-        r.mesh.rotation.y += (r.targetYaw - r.mesh.rotation.y) * 0.2;
+        const { cx, cz, lx, lz } = this.worldToChunk(x, y, z);
+        const chunk = this.getChunk(cx, cz);
+        if (!chunk) return 0;
+
+        const index = lx + CHUNK_SIZE * (lz + CHUNK_SIZE * y);
+        return chunk.blockStates[index];
+    }
+
+    setBlock(x, y, z, blockId, stateId = 0) {
+        if (y < 0 || y >= WORLD_HEIGHT) return;
+
+        const { cx, cz, lx, lz } = this.worldToChunk(x, y, z);
+        const chunk = this.ensureChunk(cx, cz);
+
+        const index = lx + CHUNK_SIZE * (lz + CHUNK_SIZE * y);
+        chunk.blocks[index] = blockId;
+        chunk.blockStates[index] = stateId;
+
+        chunk.needsRemesh = true;
+    }
+
+    // Neighbor chunk access for meshing
+    getNeighborBlock(cx, cz, lx, y, lz, dx, dz) {
+        let nx = lx + dx;
+        let nz = lz + dz;
+        let ncx = cx;
+        let ncz = cz;
+
+        if (nx < 0) { nx += CHUNK_SIZE; ncx--; }
+        if (nx >= CHUNK_SIZE) { nx -= CHUNK_SIZE; ncx++; }
+        if (nz < 0) { nz += CHUNK_SIZE; ncz--; }
+        if (nz >= CHUNK_SIZE) { nz -= CHUNK_SIZE; ncz++; }
+
+        const chunk = this.getChunk(ncx, ncz);
+        if (!chunk) return { block: 0, state: 0 };
+
+        const index = nx + CHUNK_SIZE * (nz + CHUNK_SIZE * y);
+        return {
+            block: chunk.blocks[index],
+            state: chunk.blockStates[index]
+        };
     }
 }
 
-// Simple world time counter (ticks)
-export let worldTime = {
-    timeOfDay: 0,
-    dayLength: 420,
-    seasonTime: 0,
-    seasonLength: 900,
-    seasonIndex: 0
-};
 
 
 
