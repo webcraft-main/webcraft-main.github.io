@@ -1,0 +1,57 @@
+[
+  {
+    "section": "SixSevenCraft",
+    "disciplines": [
+      {
+        "discipline": "Founders",
+        "titles": [
+          {
+            "title": "Lead Developer, Engine Architect, Systems Programmer",
+            "names": [
+              "Arya Sharma"
+            ]
+          },
+          {
+            "title": "Creative Director, Concept Designer, Idea Lead",
+            "names": [
+              "Advik Abhilash"
+            ]
+          }
+        ]
+      },
+      {
+        "discipline": "Development",
+        "titles": [
+          {
+            "title": "Core Engine & Architecture",
+            "names": [
+              "Arya Sharma"
+            ]
+          }
+        ]
+      },
+      {
+        "discipline": "Design",
+        "titles": [
+          {
+            "title": "Worldbuilding & Gameplay Vision",
+            "names": [
+              "Advik Abhilash"
+            ]
+          }
+        ]
+      },
+      {
+        "discipline": "Special Thanks",
+        "titles": [
+          {
+            "title": "Supporters, Testers, Early Contributors",
+            "names": [
+              "The SixSevenCraft Community"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
