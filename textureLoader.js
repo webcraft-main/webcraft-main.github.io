@@ -1,4 +1,4 @@
-const THREE = window.THREE
+const THREE = window.THREE;
 
 export const textureCache = new Map();
 
@@ -13,3 +13,8 @@ export function loadTexture(path) {
     textureCache.set(path, tex);
     return tex;
 }
+
+export function tex(category, name) {
+    return loadTexture(`assets/sixsevencraft/textures/${category}/${name}.png`);
+}
+
