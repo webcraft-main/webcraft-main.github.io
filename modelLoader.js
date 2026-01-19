@@ -14,7 +14,13 @@ async function loadModelRecursive(path) {
 
     let parent = null;
     if (json.parent) {
-        const parentPath = `assets/sixsevencraft/models/${json.parent}.json`;
+        let parentPath;
+        if (json.parent.includes(":")) {
+            const [namespace, rest] = json.parent.split(":");
+            parentPath = `assets/${namespace}/models/${rest}.json`;
+        } else {
+            parentPath = `assets/sixsevencraft/models/${json.parent}.json`;
+        }
         parent = await loadModelRecursive(parentPath);
     }
 
@@ -32,15 +38,22 @@ export async function loadModel(modelName) {
     return await loadModelRecursive(path);
 }
 
-// Convert model JSON into face templates for the mesher
+function resolveTexture(texName, textures) {
+    if (!texName.startsWith("#")) return texName;
+    const key = texName.slice(1);
+    return textures[key];
+}
+
 export function buildFaceTemplates(model) {
     const faces = [];
 
     for (const elem of model.elements) {
+        if (!elem.faces) continue;
+
         const { from, to } = elem;
 
         for (const [faceName, face] of Object.entries(elem.faces)) {
-            const texName = face.texture.replace('#', '');
+            const texName = resolveTexture(face.texture, model.textures);
             const uv = face.uv || [0, 0, 16, 16];
 
             faces.push({
@@ -57,5 +70,6 @@ export function buildFaceTemplates(model) {
 
     return faces;
 }
+
 
 
