@@ -38,12 +38,14 @@ export async function loadModel(modelName) {
     return await loadModelRecursive(path);
 }
 
+// Resolve #texture references
 function resolveTexture(texName, textures) {
     if (!texName.startsWith("#")) return texName;
     const key = texName.slice(1);
     return textures[key];
 }
 
+// Convert model JSON into face templates for the mesher
 export function buildFaceTemplates(model) {
     const faces = [];
 
@@ -60,7 +62,7 @@ export function buildFaceTemplates(model) {
                 faceName,
                 from,
                 to,
-                textureName: texName,
+                textureName: texName, // e.g. "sixsevencraft:block/stone"
                 uv,
                 cullface: face.cullface || null,
                 rotation: face.rotation || 0
@@ -70,6 +72,3 @@ export function buildFaceTemplates(model) {
 
     return faces;
 }
-
-
-
