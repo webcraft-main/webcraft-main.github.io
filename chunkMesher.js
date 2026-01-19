@@ -1,6 +1,7 @@
 // chunkMesher.js — model-aware greedy meshing
 
-const THREE = window.THREE
+const THREE = window.THREE;
+
 import { CHUNK_SIZE, WORLD_HEIGHT } from './config.js';
 import { getBlockModelFaces } from './blockMeshFromState.js';
 
@@ -29,6 +30,7 @@ export async function meshChunk(world, chunk) {
         for (let d = -1; d < dims[axis]; d++) {
             let n = 0;
 
+            // Build mask
             for (let j = 0; j < dims[v]; j++) {
                 for (let i = 0; i < dims[u]; i++) {
 
@@ -45,6 +47,7 @@ export async function meshChunk(world, chunk) {
 
             n = 0;
 
+            // Greedy merge
             for (let j = 0; j < dims[v]; j++) {
                 for (let i = 0; i < dims[u];) {
 
@@ -54,6 +57,9 @@ export async function meshChunk(world, chunk) {
                         n++;
                         continue;
                     }
+
+                    // Determine which face this quad represents
+                    voxel.face = voxel.faces[pickFace(axis, d)];
 
                     let width = 1;
                     while (i + width < dims[u] && mask[n + width] && canMerge(voxel, mask[n + width])) {
@@ -94,10 +100,13 @@ export async function meshChunk(world, chunk) {
     chunk.needsRemesh = false;
     return mesh;
 
+    // -----------------------
     // Helpers
+    // -----------------------
 
     function addQuad(voxel, axis, d, i, j, width, height) {
-        const { face } = voxel;
+        const face = voxel.face;
+        if (!face) return;
 
         const x = [0, 0, 0];
         x[axis] = d + 1;
@@ -123,43 +132,5 @@ export async function meshChunk(world, chunk) {
 
         indices.push(base, base + 1, base + 2, base, base + 2, base + 3);
 
-        const { texture } = face;
-        uvs.push(...texture.uv00, ...texture.uv10, ...texture.uv11, ...texture.uv01);
-    }
-
-    function shouldMerge(a, b) {
-        if (!a || !b) return false;
-        return a.block === b.block && a.state === b.state && a.faceKey === b.faceKey;
-    }
-
-    function canMerge(a, b) {
-        return shouldMerge(a, b);
-    }
-}
-
-function getVoxel(world, chunk, axis, d, i, j) {
-    const dims = [CHUNK_SIZE, WORLD_HEIGHT, CHUNK_SIZE];
-
-    const x = [0, 0, 0];
-    x[axis] = d;
-    x[(axis + 1) % 3] = i;
-    x[(axis + 2) % 3] = j;
-
-    const lx = x[0], y = x[1], lz = x[2];
-
-    if (y < 0 || y >= WORLD_HEIGHT) return null;
-
-    const index = lx + CHUNK_SIZE * (lz + CHUNK_SIZE * y);
-
-    const block = chunk.blocks[index];
-    if (block === 0) return null;
-
-    const state = chunk.blockStates[index];
-
-    return {
-        block,
-        state,
-        face: null, // filled later
-        faceKey: `${block}|${state}`
-    };
-}
+        const tex = face.texture;
+        uvs.push
