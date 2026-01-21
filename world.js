@@ -1,7 +1,104 @@
-// world.js — Infinite world chunk storage
+// world.js
 
 import { CHUNK_SIZE, WORLD_HEIGHT } from './config.js';
-import { createEmptyChunk } from './storage.js';
+import { registerBlock } from './blocks.js';
+
+// -----------------------------------------------------
+// BLOCK REGISTRATION (terrain uses these)
+// -----------------------------------------------------
+
+export const GRASS_BLOCK = registerBlock("grass_block");
+export const DIRT = registerBlock("dirt");
+export const STONE = registerBlock("stone");
+
+// -----------------------------------------------------
+// CHUNK CREATION / STORAGE HELPERS
+// -----------------------------------------------------
+
+const CHUNK_VOLUME = CHUNK_SIZE * CHUNK_SIZE * WORLD_HEIGHT;
+
+function createEmptyChunk(cx, cz) {
+    return {
+        cx, cz,
+        blocks: new Uint16Array(CHUNK_VOLUME),
+        blockStates: new Uint16Array(CHUNK_VOLUME),
+        mesh: null,
+        needsRemesh: true
+    };
+}
+
+function encodeArray(arr) {
+    return btoa(String.fromCharCode(...new Uint8Array(arr.buffer)));
+}
+
+function decodeArray(str) {
+    const binary = atob(str);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new Uint16Array(bytes.buffer);
+}
+
+export function saveChunk(chunk) {
+    return {
+        cx: chunk.cx,
+        cz: chunk.cz,
+        blocks: encodeArray(chunk.blocks),
+        blockStates: encodeArray(chunk.blockStates)
+    };
+}
+
+export function loadChunk(data) {
+    return {
+        cx: data.cx,
+        cz: data.cz,
+        blocks: decodeArray(data.blocks),
+        blockStates: decodeArray(data.blockStates),
+        mesh: null,
+        needsRemesh: true
+    };
+}
+
+// -----------------------------------------------------
+// TERRAIN GENERATION
+// -----------------------------------------------------
+
+export function generateChunk(chunk) {
+    const { blocks, blockStates } = chunk;
+
+    for (let x = 0; x < CHUNK_SIZE; x++) {
+        for (let z = 0; z < CHUNK_SIZE; z++) {
+
+            const worldX = chunk.cx * CHUNK_SIZE + x;
+            const worldZ = chunk.cz * CHUNK_SIZE + z;
+
+            const height = 64 + Math.floor(
+                8 * Math.sin(worldX * 0.05) +
+                8 * Math.cos(worldZ * 0.05)
+            );
+
+            for (let y = 0; y < WORLD_HEIGHT; y++) {
+                const index = x + CHUNK_SIZE * (z + CHUNK_SIZE * y);
+
+                if (y > height) {
+                    blocks[index] = 0;
+                    blockStates[index] = 0;
+                } else if (y === height) {
+                    blocks[index] = GRASS_BLOCK;
+                } else if (y > height - 4) {
+                    blocks[index] = DIRT;
+                } else {
+                    blocks[index] = STONE;
+                }
+            }
+        }
+    }
+
+    chunk.needsRemesh = true;
+}
+
+// -----------------------------------------------------
+// WORLD CLASS (chunk storage + access + remote load)
+// -----------------------------------------------------
 
 export class World {
     constructor() {
@@ -23,7 +120,9 @@ export class World {
     ensureChunk(cx, cz) {
         const key = this._key(cx, cz);
         if (!this.chunks.has(key)) {
-            this.chunks.set(key, createEmptyChunk(cx, cz));
+            const chunk = createEmptyChunk(cx, cz);
+            generateChunk(chunk);
+            this.chunks.set(key, chunk);
         }
         return this.chunks.get(key);
     }
@@ -94,15 +193,11 @@ export class World {
         };
     }
 
-loadRemoteChunk(data) {
-    const chunk = this.ensureChunk(data.cx, data.cz);
-    chunk.blocks = new Uint16Array(data.blocks);
-    chunk.blockStates = new Uint16Array(data.blockStates);
-    chunk.needsRemesh = true;
+    // Remote chunk loading (multiplayer / server)
+    loadRemoteChunk(data) {
+        const chunk = this.ensureChunk(data.cx, data.cz);
+        chunk.blocks = new Uint16Array(data.blocks);
+        chunk.blockStates = new Uint16Array(data.blockStates);
+        chunk.needsRemesh = true;
+    }
 }
-
-}
-
-
-
-
