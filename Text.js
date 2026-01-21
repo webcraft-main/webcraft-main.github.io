@@ -1,7 +1,14 @@
-// Text.js
+// Text.js — unified font loader + glyph registry + 3D text mesh builder
 
-export const FontRegistry = new Map(); // "default" → { glyphs, config }
+const THREE = window.THREE;
 
+// -----------------------------------------------------
+// FONT REGISTRY
+// -----------------------------------------------------
+
+export const FontRegistry = new Map(); // "default" → { config, glyphs }
+
+// Load a font config + included glyph maps
 export async function loadFont(name) {
     const configPath = `assets/sixsevencraft/font/${name}.json`;
     const res = await fetch(configPath);
@@ -9,8 +16,9 @@ export async function loadFont(name) {
 
     const config = await res.json();
 
-    // Load includes
     const glyphs = {};
+
+    // Load includes from providers
     if (config.providers) {
         for (const provider of config.providers) {
             if (provider.type === "bitmap" && provider.file) {
@@ -32,11 +40,27 @@ export function getFont(name) {
     return FontRegistry.get(name) || null;
 }
 
-// textMesh.js
+// -----------------------------------------------------
+// TEXTURE CACHE
+// -----------------------------------------------------
 
-const THREE = window.THREE;
+const textureCache = new Map();
 
-import { getFont } from "./bitmapFont.js";
+function getFontTexture(font) {
+    if (textureCache.has(font)) return textureCache.get(font);
+
+    const path = `assets/sixsevencraft/font/${font}.png`;
+    const tex = new THREE.TextureLoader().load(path);
+    tex.magFilter = THREE.NearestFilter;
+    tex.minFilter = THREE.NearestFilter;
+
+    textureCache.set(font, tex);
+    return tex;
+}
+
+// -----------------------------------------------------
+// 3D TEXT MESH GENERATOR
+// -----------------------------------------------------
 
 export function createTextMesh(text, { font = "default", size = 1, spacing = 0.1 } = {}) {
     const fontData = getFont(font);
@@ -52,6 +76,7 @@ export function createTextMesh(text, { font = "default", size = 1, spacing = 0.1
 
     for (const char of text) {
         const glyph = glyphs[char];
+
         if (!glyph) {
             xOffset += size + spacing;
             continue;
@@ -94,20 +119,15 @@ export function createTextMesh(text, { font = "default", size = 1, spacing = 0.1
 
     const material = new THREE.MeshBasicMaterial({
         map: getFontTexture(font),
-        transparent: true,
+        transparent: true
     });
 
     return new THREE.Mesh(geometry, material);
 }
 
-function getFontTexture(font) {
-    // Load texture from font config
-    const path = `assets/sixsevencraft/font/${font}.png`;
-    const tex = new THREE.TextureLoader().load(path);
-    tex.magFilter = THREE.NearestFilter;
-    tex.minFilter = THREE.NearestFilter;
-    return tex;
-}
+// -----------------------------------------------------
+// PUBLIC API
+// -----------------------------------------------------
 
 export const Text = {
     async loadFonts(fontNames) {
@@ -118,5 +138,10 @@ export const Text = {
 
     create3D(text, options) {
         return createTextMesh(text, options);
+    },
+
+    getTexture(font) {
+        return getFontTexture(font);
     }
 };
+
