@@ -1,7 +1,7 @@
 import { camera } from "./engine.js";
 import { blockMap, setBlock, removeBlock, getBlock } from "./blocks.js";
 import { explode } from "./physics.js";
-import { getBiomeAt } from "./terrain.js"; // you must export this
+import { getBiomeAt } from "./world.js"; 
 
 export const keys = {};
 export let selectedSlot = 0;
