@@ -3,59 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>sixsevencraft</title>
-    <!-- Favicon + PWA metadata --> 
-    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96"> 
-    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg"> 
-    <link rel="shortcut icon" href="favicon/favicon.ico"> 
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png"> 
-    <meta name="apple-mobile-web-app-title" content="SixSevenCraft"> 
+
+    <!-- Favicon + PWA metadata -->
+    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+    <link rel="shortcut icon" href="favicon/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="SixSevenCraft">
     <link rel="manifest" href="favicon/site.webmanifest">
+
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="ui">
-    <div id="instructions">
-        WASD: Move | SPACE: Jump<br>
-        SHIFT: Sprint | CTRL: Sneak<br>
-        1-8: Select Hotbar | LMB/RMB: Use<br>
-        P: Save | R: Reload
-    </div>
-
-    <div id="hud">
-        <div id="hearts"></div>
-        <div id="hunger"></div>
-    </div>
-
-    <div id="hotbar">
-        <div class="slot active" id="s0">GRASS</div>
-        <div class="slot" id="s1">STONE</div>
-        <div class="slot" id="s2">WOOD</div>
-        <div class="slot" id="s3">LEAVES</div>
-        <div class="slot" id="s4">WATER</div>
-        <div class="slot" id="s5">LAVA</div>
-        <div class="slot" id="s6" style="color:yellow">SAND</div>
-        <div class="slot" id="s7" style="color:red">TNT</div>
-    </div>
-</div>
+<!-- UI CANVAS (Minecraft-style HUD + Hotbar) -->
+<canvas id="guiCanvas"></canvas>
 
 <!-- THREE.js -->
 <script type="module">
-  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/+esm';
-  window.THREE = THREE;
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/+esm';
+    window.THREE = THREE;
 </script>
 
 <!-- Simplex Noise -->
 <script type="module">
-  import { createNoise2D } from 'https://cdn.jsdelivr.net/npm/simplex-noise@4.0.1/+esm';
-  window.createNoise2D = createNoise2D;
+    import { createNoise2D } from 'https://cdn.jsdelivr.net/npm/simplex-noise@4.0.1/+esm';
+    window.createNoise2D = createNoise2D;
 </script>
 
+<!-- GUI Renderer -->
+<script type="module" src="gui.js"></script>
 
-<!-- Main game script -->
+<!-- Main Game -->
 <script type="module" src="main.js"></script>
 
 </body>
 </html>
+
 
 
