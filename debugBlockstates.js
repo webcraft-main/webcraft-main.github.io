@@ -1,7 +1,7 @@
 // debugBlockstates.js
 
-import { BlockstateDB } from "./blockstateDatabase.js";
-import { blocks, stateIdToDef } from "./blocks.js";
+import { BlockstateDB } from "./blockRenderer.js";
+import { blocks, stateIdToDef } from "./blockRenderer.js";
 
 export function initDebugBlockstateUI() {
     const container = document.createElement("div");
