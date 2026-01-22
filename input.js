@@ -1,5 +1,5 @@
 import { camera } from "./engine.js";
-import { blockMap, setBlock, removeBlock, getBlock } from "./blocks.js";
+import { blockMap, setBlock, removeBlock, getBlock } from "./blockRenderer.js";
 import { explode } from "./physics.js";
 import { getBiomeAt } from "./world.js"; 
 
