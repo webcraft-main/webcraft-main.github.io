@@ -1,7 +1,7 @@
 // world.js
 
 import { CHUNK_SIZE, WORLD_HEIGHT } from './config.js';
-import { registerBlock } from './blocks.js';
+import { registerBlock } from './blockRenderer.js';
 
 // -----------------------------------------------------
 // BLOCK REGISTRATION (terrain uses these)
