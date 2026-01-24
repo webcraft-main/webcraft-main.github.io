@@ -257,5 +257,7 @@ export function initDebugBlockstateUI() {
         header.textContent = name;
         header.style.color = "#0ff";
         blockDiv.appendChild(header);
+    document.body.appendChild(container);
+}
 
 
