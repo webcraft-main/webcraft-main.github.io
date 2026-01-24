@@ -3,7 +3,7 @@
 const THREE = window.THREE;
 
 import { CHUNK_SIZE, WORLD_HEIGHT } from './config.js';
-import { getBlockModelFaces } from './blockMeshFromState.js';
+import { getBlockModelFaces } from './blockRenderer.js';
 
 export async function meshChunk(world, chunk) {
     const geometry = new THREE.BufferGeometry();
