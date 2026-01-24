@@ -11,6 +11,8 @@ const BlockstateDB = {
     allModels: new Set(),
 };
 
+export { BlockstateDB };
+
 const blockNameToId = new Map();
 const blockIdToName = [];
 const stateIdToDef = [];
@@ -350,3 +352,5 @@ function matchesWhen(props, when) {
     }
     return true;
 }
+
+
