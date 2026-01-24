@@ -25,8 +25,8 @@ let hotbarItems = [
 // -----------------------------------------------------
 
 async function loadGUITextures() {
-    hotbarTex = await loadTexture("assets/sixsevencraft/textures/gui/hotbar.png");
-    selectTex = await loadTexture("assets/sixsevencraft/textures/gui/hotbar_selection.png");
+    hotbarTex = await loadTexture("assets/sixsevencraft/textures/gui/sprites/hud/hotbar.png");
+    selectTex = await loadTexture("assets/sixsevencraft/textures/gui/sprites/hud/hotbar_selection.png");
 
     for (const item of hotbarItems) {
         const tex = await loadTexture(`assets/sixsevencraft/textures/item/${item}.png`);
