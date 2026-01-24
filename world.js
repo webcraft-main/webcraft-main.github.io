@@ -1,7 +1,38 @@
-// world.js
+// world.js — unified world system + block discovery + debug UI
 
 import { CHUNK_SIZE, WORLD_HEIGHT } from './config.js';
-import { registerBlock } from './blockRenderer.js';
+import {
+    registerBlock,
+    loadAllBlockstates,
+    buildStatesFromBlockstates,
+    BlockstateDB,
+    getStateDef
+} from './blockRenderer.js';
+
+// -----------------------------------------------------
+// BLOCK DISCOVERY (auto from blockstates folder)
+// -----------------------------------------------------
+
+export async function loadBlockNames() {
+    const url = "assets/sixsevencraft/blockstates/";
+    const res = await fetch(url);
+    const text = await res.text();
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, "text/html");
+
+    const names = [];
+
+    doc.querySelectorAll("a").forEach(a => {
+        const href = a.getAttribute("href");
+        if (href && href.endsWith(".json")) {
+            const name = href.replace(".json", "");
+            names.push(name);
+        }
+    });
+
+    return names;
+}
 
 // -----------------------------------------------------
 // BLOCK REGISTRATION (terrain uses these)
@@ -127,7 +158,6 @@ export class World {
         return this.chunks.get(key);
     }
 
-    // Convert world coords → chunk coords + local coords
     worldToChunk(x, y, z) {
         const cx = Math.floor(x / CHUNK_SIZE);
         const cz = Math.floor(z / CHUNK_SIZE);
@@ -138,40 +168,32 @@ export class World {
 
     getBlock(x, y, z) {
         if (y < 0 || y >= WORLD_HEIGHT) return 0;
-
         const { cx, cz, lx, lz } = this.worldToChunk(x, y, z);
         const chunk = this.getChunk(cx, cz);
         if (!chunk) return 0;
-
         const index = lx + CHUNK_SIZE * (lz + CHUNK_SIZE * y);
         return chunk.blocks[index];
     }
 
     getBlockStateID(x, y, z) {
         if (y < 0 || y >= WORLD_HEIGHT) return 0;
-
         const { cx, cz, lx, lz } = this.worldToChunk(x, y, z);
         const chunk = this.getChunk(cx, cz);
         if (!chunk) return 0;
-
         const index = lx + CHUNK_SIZE * (lz + CHUNK_SIZE * y);
         return chunk.blockStates[index];
     }
 
     setBlock(x, y, z, blockId, stateId = 0) {
         if (y < 0 || y >= WORLD_HEIGHT) return;
-
         const { cx, cz, lx, lz } = this.worldToChunk(x, y, z);
         const chunk = this.ensureChunk(cx, cz);
-
         const index = lx + CHUNK_SIZE * (lz + CHUNK_SIZE * y);
         chunk.blocks[index] = blockId;
         chunk.blockStates[index] = stateId;
-
         chunk.needsRemesh = true;
     }
 
-    // Neighbor chunk access for meshing
     getNeighborBlock(cx, cz, lx, y, lz, dx, dz) {
         let nx = lx + dx;
         let nz = lz + dz;
@@ -193,7 +215,6 @@ export class World {
         };
     }
 
-    // Remote chunk loading (multiplayer / server)
     loadRemoteChunk(data) {
         const chunk = this.ensureChunk(data.cx, data.cz);
         chunk.blocks = new Uint16Array(data.blocks);
@@ -201,3 +222,40 @@ export class World {
         chunk.needsRemesh = true;
     }
 }
+
+// -----------------------------------------------------
+// DEBUG UI (optional dev overlay)
+// -----------------------------------------------------
+
+export function initDebugBlockstateUI() {
+    const container = document.createElement("div");
+    container.style.position = "fixed";
+    container.style.top = "0";
+    container.style.right = "0";
+    container.style.maxHeight = "100vh";
+    container.style.overflow = "auto";
+    container.style.background = "rgba(0,0,0,0.8)";
+    container.style.color = "#fff";
+    container.style.fontFamily = "monospace";
+    container.style.fontSize = "11px";
+    container.style.padding = "8px";
+    container.style.zIndex = "9999";
+
+    const title = document.createElement("div");
+    title.textContent = "Blockstate Debug";
+    title.style.fontWeight = "bold";
+    title.style.marginBottom = "4px";
+    container.appendChild(title);
+
+    for (const [name, entry] of BlockstateDB.byName.entries()) {
+        const blockDiv = document.createElement("div");
+        blockDiv.style.borderBottom = "1px solid #444";
+        blockDiv.style.marginBottom = "4px";
+        blockDiv.style.paddingBottom = "4px";
+
+        const header = document.createElement("div");
+        header.textContent = name;
+        header.style.color = "#0ff";
+        blockDiv.appendChild(header);
+
+
