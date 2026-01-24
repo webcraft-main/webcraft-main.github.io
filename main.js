@@ -4,7 +4,7 @@ const THREE = window.THREE;
 
 import { registerBlock, buildStatesFromBlockstates } from "./blockRenderer.js";
 import { BlockstateDB, loadAllBlockstates, validateBlockstates } from "./blockRenderer.js";
-import { initDebugBlockstateUI } from "./debugBlockstates.js"; // new file
+import { initDebugBlockstateUI } from "./world.js"; // new file
 
 // 1. Register all blocks (names must match blockstate filenames)
 const BLOCK_NAMES = [
