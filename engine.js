@@ -18,15 +18,17 @@ camera.rotation.order = "YXZ";
 // -----------------------------------------------------
 // RENDERER
 // -----------------------------------------------------
+const canvas = document.getElementById("mainCanvas");
+
 export const renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
     antialias: true,
-    alpha: true // allows GUI canvas to overlay cleanly
+    alpha: true
 });
+
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-document.body.appendChild(renderer.domElement);
 
 
 // -----------------------------------------------------
