@@ -1,72 +1,63 @@
-// gui.js — Minecraft-style GUI (hotbar + inventory)
-
 import { tex, loadAllItemNames } from "./textureLoader.js";
-import { registerInventoryToggle, registerHotbarSelect } from "./input.js";
+import { registerInventoryToggle, registerHotbarSelect, selectedSlot as inputSelectedSlot } from "./input.js";
 
 const canvas = document.getElementById("guiCanvas");
 const ctx = canvas.getContext("2d");
 
-// -----------------------------------------------------
-// STATE
-// -----------------------------------------------------
-
 let hotbarTex = null;
 let selectTex = null;
+let creativeItemsTex = null;
+let creativeSearchTex = null;
+let creativeInventoryTex = null;
 
-let itemTextures = new Map();   // name → THREE.Texture
-let allItems = [];              // list of all item names
+let itemTextures = new Map();
+let allItems = [];
 
 let hotbarItems = new Array(9).fill(null);
-let selectedSlot = 0;
+let armorSlots = [null, null, null, null];
+let craftingGrid = [null, null, null, null];
+let craftingResult = null;
 
 let inventoryOpen = false;
+window.inventoryOpen = false;
 
-// Inventory layout
-const INV_COLS = 9;
-const INV_ROWS = 4;
-const SLOT_SIZE = 32;
-const SLOT_PADDING = 4;
+let selectedTab = "items";
+let scrollOffset = 0;
+let maxScroll = 0;
+let searchText = "";
 
-let invX = 0, invY = 0, invW = 0, invH = 0;
-
-// -----------------------------------------------------
-// RESIZE CANVAS (with DPI scaling)
-// -----------------------------------------------------
+const SLOT_SIZE = 18;
+const SLOT_PADDING = 1;
+const VISIBLE_ROWS = 5;
+const COLS = 9;
 
 function resizeCanvas() {
     const dpr = window.devicePixelRatio || 1;
-
     canvas.width = window.innerWidth * dpr;
     canvas.height = window.innerHeight * dpr;
-
     canvas.style.width = window.innerWidth + "px";
     canvas.style.height = window.innerHeight + "px";
-
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
-// -----------------------------------------------------
-// LOAD GUI + ITEM TEXTURES
-// -----------------------------------------------------
-
 async function loadGUITextures() {
     hotbarTex = await tex("gui", "hotbar");
     selectTex = await tex("gui", "hotbar_selection");
+    creativeItemsTex = await tex("gui/container/creative_inventory", "tab_items");
+    creativeSearchTex = await tex("gui/container/creative_inventory", "tab_item_search");
+    creativeInventoryTex = await tex("gui/container/creative_inventory", "tab_inventory");
 
     allItems = await loadAllItemNames();
+    maxScroll = Math.max(0, Math.ceil(allItems.length / COLS) - VISIBLE_ROWS);
 
     for (const name of allItems) {
         const icon = await tex("item", name);
         if (icon) itemTextures.set(name, icon);
     }
 }
-
-// -----------------------------------------------------
-// HOTBAR DRAWING
-// -----------------------------------------------------
 
 function drawHotbar() {
     const w = canvas.width / (window.devicePixelRatio || 1);
@@ -78,21 +69,15 @@ function drawHotbar() {
     const x = (w - hotbarWidth) / 2;
     const y = h - hotbarHeight - 10;
 
-    // Draw hotbar frame
-    if (hotbarTex?.image) {
-        ctx.drawImage(hotbarTex.image, x, y);
-    }
+    if (hotbarTex?.image) ctx.drawImage(hotbarTex.image, x, y);
 
-    // Slot width from texture
     const SLOT_W = hotbarWidth / 9;
 
-    // Draw selected slot highlight
     if (selectTex?.image) {
-        const slotX = x + selectedSlot * SLOT_W;
+        const slotX = x + inputSelectedSlot * SLOT_W;
         ctx.drawImage(selectTex.image, slotX, y - 1);
     }
 
-    // Draw item icons
     for (let i = 0; i < 9; i++) {
         const item = hotbarItems[i];
         if (!item) continue;
@@ -107,134 +92,111 @@ function drawHotbar() {
     }
 }
 
-// -----------------------------------------------------
-// INVENTORY DRAWING
-// -----------------------------------------------------
-
 function drawInventory() {
     if (!inventoryOpen) return;
 
     const w = canvas.width / (window.devicePixelRatio || 1);
     const h = canvas.height / (window.devicePixelRatio || 1);
 
-    invW = INV_COLS * SLOT_SIZE + 40;
-    invH = INV_ROWS * SLOT_SIZE + 80;
+    const leftTex = selectedTab === "search" ? creativeSearchTex : creativeItemsTex;
+    const leftImg = leftTex.image;
+    const rightImg = creativeInventoryTex.image;
 
-    invX = (w - invW) / 2;
-    invY = (h - invH) / 2;
+    const leftW = leftImg.width;
+    const leftH = leftImg.height;
+    const rightW = rightImg.width;
+    const rightH = rightImg.height;
 
-    // Background
-    ctx.fillStyle = "rgba(0,0,0,0.7)";
-    ctx.fillRect(invX, invY, invW, invH);
+    const totalW = leftW + rightW;
+    const totalH = Math.max(leftH, rightH);
 
-    // Title
-    ctx.fillStyle = "white";
-    ctx.font = "20px monospace";
-    ctx.fillText("Inventory", invX + 20, invY + 30);
+    const baseX = (w - totalW) / 2;
+    const baseY = (h - totalH) / 2;
 
-    const startX = invX + 20;
-    const startY = invY + 50;
+    ctx.drawImage(leftImg, baseX, baseY);
+    ctx.drawImage(rightImg, baseX + leftW, baseY);
 
-    let index = 0;
+    const gridX = baseX + 9;
+    const gridY = baseY + 18;
 
-    for (let row = 0; row < INV_ROWS; row++) {
-        for (let col = 0; col < INV_COLS; col++) {
-            const sx = startX + col * SLOT_SIZE;
-            const sy = startY + row * SLOT_SIZE;
+    let items = allItems;
+    if (selectedTab === "search" && searchText.length > 0) {
+        items = allItems.filter(name => name.includes(searchText.toLowerCase()));
+    }
 
-            // Slot background
-            ctx.fillStyle = "rgba(255,255,255,0.1)";
-            ctx.fillRect(sx, sy, SLOT_SIZE, SLOT_SIZE);
+    maxScroll = Math.max(0, Math.ceil(items.length / COLS) - VISIBLE_ROWS);
+    let index = scrollOffset * COLS;
 
-            if (index >= allItems.length) {
-                index++;
-                continue;
-            }
+    for (let row = 0; row < VISIBLE_ROWS; row++) {
+        for (let col = 0; col < COLS; col++) {
+            if (index >= items.length) break;
 
-            const name = allItems[index];
+            const name = items[index];
             const tex = itemTextures.get(name);
+            const x = gridX + col * SLOT_SIZE;
+            const y = gridY + row * SLOT_SIZE;
 
             if (tex?.image) {
-                const inner = SLOT_SIZE - SLOT_PADDING * 2;
-                ctx.drawImage(
-                    tex.image,
-                    sx + SLOT_PADDING,
-                    sy + SLOT_PADDING,
-                    inner,
-                    inner
-                );
+                ctx.drawImage(tex.image, x + SLOT_PADDING, y + SLOT_PADDING, 16, 16);
             }
 
             index++;
         }
     }
-}
 
-// -----------------------------------------------------
-// INVENTORY CLICK HANDLING
-// -----------------------------------------------------
+    const barX = baseX + leftW - 12;
+    const barY = gridY;
+    const barH = VISIBLE_ROWS * SLOT_SIZE;
+    const sliderH = Math.max(20, barH * (VISIBLE_ROWS / (maxScroll + VISIBLE_ROWS)));
+    const sliderY = barY + (scrollOffset / maxScroll) * (barH - sliderH);
 
-canvas.addEventListener("mousedown", (e) => {
-    if (!inventoryOpen) return;
+    ctx.fillStyle = "rgba(0,0,0,0.3)";
+    ctx.fillRect(barX, barY, 8, barH);
+    ctx.fillStyle = "rgba(200,200,200,0.8)";
+    ctx.fillRect(barX, sliderY, 8, sliderH);
 
-    const rect = canvas.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
+    const tabY = baseY - 28;
+    function drawTab(x, label, key) {
+        const active = selectedTab === key;
+        ctx.fillStyle = active ? "#ffffff" : "#888888";
+        ctx.fillRect(x, tabY, 60, 24);
+        ctx.fillStyle = active ? "#000000" : "#222222";
+        ctx.font = "14px monospace";
+        ctx.fillText(label, x + 8, tabY + 16);
+    }
 
-    const mx = (e.clientX - rect.left) * dpr;
-    const my = (e.clientY - rect.top) * dpr;
+    drawTab(baseX + 0, "Items", "items");
+    drawTab(baseX + 70, "Search", "search");
+    drawTab(baseX + 140, "Inv", "inventory");
 
-    if (mx < invX || mx > invX + invW || my < invY || my > invH) return;
+    if (selectedTab === "search") {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(gridX, baseY + 4, 162, 14);
+        ctx.fillStyle = "#000000";
+        ctx.font = "12px monospace";
+        ctx.fillText(searchText, gridX + 4, baseY + 15);
+    }
 
-    const startX = invX + 20;
-    const startY = invY + 50;
+    const rightX = baseX + leftW;
+    const rightY = baseY;
 
-    const localX = mx - startX;
-    const localY = my - startY;
+    for (let i = 0; i < 4; i++) {
+        const sx = rightX + 7;
+        const sy = rightY + 7 + i * 20;
+        ctx.strokeStyle = "rgba(255,255,255,0.5)";
+        ctx.strokeRect(sx, sy, SLOT_SIZE, SLOT_SIZE);
+        const item = armorSlots[i];
+        const tex = itemTextures.get(item);
+        if (tex?.image) ctx.drawImage(tex.image, sx + 1, sy + 1, 16, 16);
+    }
 
-    if (localX < 0 || localY < 0) return;
-
-    const col = Math.floor(localX / SLOT_SIZE);
-    const row = Math.floor(localY / SLOT_SIZE);
-
-    if (col < 0 || col >= INV_COLS || row < 0 || row >= INV_ROWS) return;
-
-    const index = row * INV_COLS + col;
-    if (index >= allItems.length) return;
-
-    const pickedName = allItems[index];
-    hotbarItems[selectedSlot] = pickedName;
-});
-
-// -----------------------------------------------------
-// MAIN RENDER LOOP
-// -----------------------------------------------------
-
-function renderGUI() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    drawHotbar();
-    drawInventory();
-
-    requestAnimationFrame(renderGUI);
-}
-
-// -----------------------------------------------------
-// INITIALIZE
-// -----------------------------------------------------
-
-async function initGUI() {
-    registerInventoryToggle(() => {
-        inventoryOpen = !inventoryOpen;
-    });
-
-    registerHotbarSelect((idx) => {
-        selectedSlot = idx;
-    });
-
-    await loadGUITextures();
-    renderGUI();
-}
-
-initGUI();
-
+    for (let i = 0; i < 4; i++) {
+        const row = Math.floor(i / 2);
+        const col = i % 2;
+        const sx = rightX + 60 + col * 20;
+        const sy = rightY + 17 + row * 20;
+        ctx.strokeStyle = "rgba(255,255,255,0.5)";
+        ctx.strokeRect(sx, sy, SLOT_SIZE, SLOT_SIZE);
+        const item = craftingGrid[i];
+        const tex = itemTextures.get(item);
 
