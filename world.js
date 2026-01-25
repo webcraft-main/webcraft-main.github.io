@@ -1,13 +1,7 @@
-// world.js — unified world system + block discovery + debug UI
+// world.js — unified world system + chunk storage + terrain
 
 import { CHUNK_SIZE, WORLD_HEIGHT } from './config.js';
-import {
-    registerBlock,
-    loadAllBlockstates,
-    buildStatesFromBlockstates,
-    BlockstateDB,
-    getStateDef
-} from './blockRenderer.js';
+import { BlockstateDB } from './blockRenderer.js';
 
 // -----------------------------------------------------
 // BLOCK DISCOVERY (auto from blockstates folder)
@@ -26,21 +20,12 @@ export async function loadBlockNames() {
     doc.querySelectorAll("a").forEach(a => {
         const href = a.getAttribute("href");
         if (href && href.endsWith(".json")) {
-            const name = href.replace(".json", "");
-            names.push(name);
+            names.push(href.replace(".json", ""));
         }
     });
 
     return names;
 }
-
-// -----------------------------------------------------
-// BLOCK REGISTRATION (terrain uses these)
-// -----------------------------------------------------
-
-export const GRASS_BLOCK = registerBlock("grass_block");
-export const DIRT = registerBlock("dirt");
-export const STONE = registerBlock("stone");
 
 // -----------------------------------------------------
 // CHUNK CREATION / STORAGE HELPERS
@@ -114,11 +99,11 @@ export function generateChunk(chunk) {
                     blocks[index] = 0;
                     blockStates[index] = 0;
                 } else if (y === height) {
-                    blocks[index] = GRASS_BLOCK;
+                    blocks[index] = BlockstateDB.byName.get("grass_block")?.id || 0;
                 } else if (y > height - 4) {
-                    blocks[index] = DIRT;
+                    blocks[index] = BlockstateDB.byName.get("dirt")?.id || 0;
                 } else {
-                    blocks[index] = STONE;
+                    blocks[index] = BlockstateDB.byName.get("stone")?.id || 0;
                 }
             }
         }
@@ -128,12 +113,13 @@ export function generateChunk(chunk) {
 }
 
 // -----------------------------------------------------
-// WORLD CLASS (chunk storage + access + remote load)
+// WORLD CLASS
 // -----------------------------------------------------
 
 export class World {
     constructor() {
-        this.chunks = new Map(); // key: "cx,cz" → chunk object
+        this.chunks = new Map();
+        this.textureAtlas = null;
     }
 
     _key(cx, cz) {
@@ -194,27 +180,6 @@ export class World {
         chunk.needsRemesh = true;
     }
 
-    getNeighborBlock(cx, cz, lx, y, lz, dx, dz) {
-        let nx = lx + dx;
-        let nz = lz + dz;
-        let ncx = cx;
-        let ncz = cz;
-
-        if (nx < 0) { nx += CHUNK_SIZE; ncx--; }
-        if (nx >= CHUNK_SIZE) { nx -= CHUNK_SIZE; ncx++; }
-        if (nz < 0) { nz += CHUNK_SIZE; ncz--; }
-        if (nz >= CHUNK_SIZE) { nz -= CHUNK_SIZE; ncz++; }
-
-        const chunk = this.getChunk(ncx, ncz);
-        if (!chunk) return { block: 0, state: 0 };
-
-        const index = nx + CHUNK_SIZE * (nz + CHUNK_SIZE * y);
-        return {
-            block: chunk.blocks[index],
-            state: chunk.blockStates[index]
-        };
-    }
-
     loadRemoteChunk(data) {
         const chunk = this.ensureChunk(data.cx, data.cz);
         chunk.blocks = new Uint16Array(data.blocks);
@@ -224,45 +189,7 @@ export class World {
 }
 
 // -----------------------------------------------------
-// DEBUG UI (optional dev overlay)
+// EXPORT WORLD INSTANCE
 // -----------------------------------------------------
 
-export function initDebugBlockstateUI() {
-    const container = document.createElement("div");
-    container.style.position = "fixed";
-    container.style.top = "0";
-    container.style.right = "0";
-    container.style.maxHeight = "100vh";
-    container.style.overflow = "auto";
-    container.style.background = "rgba(0,0,0,0.8)";
-    container.style.color = "#fff";
-    container.style.fontFamily = "monospace";
-    container.style.fontSize = "11px";
-    container.style.padding = "8px";
-    container.style.zIndex = "9999";
-
-    const title = document.createElement("div");
-    title.textContent = "Blockstate Debug";
-    title.style.fontWeight = "bold";
-    title.style.marginBottom = "4px";
-    container.appendChild(title);
-
-for (const [name, entry] of BlockstateDB.byName.entries()) {
-    const blockDiv = document.createElement("div");
-    blockDiv.style.borderBottom = "1px solid #444";
-    blockDiv.style.marginBottom = "4px";
-    blockDiv.style.paddingBottom = "4px";
-
-    const header = document.createElement("div");
-    header.textContent = name;
-    header.style.color = "#0ff";
-    blockDiv.appendChild(header);
-
-    container.appendChild(blockDiv);
-}
-
-document.body.appendChild(container);
-}
-
-
-
+export const world = new World();
