@@ -3,24 +3,22 @@
 const THREE = window.THREE;
 
 // -----------------------------------------------------
-// INTERNAL DATABASES
+// INTERNAL DATABASES (NOW EXPORTED)
 // -----------------------------------------------------
 
-const BlockstateDB = {
+export const BlockstateDB = {
     byName: new Map(),
     allModels: new Set(),
 };
 
-export { BlockstateDB };
+export const blockNameToId = new Map();
+export const blockIdToName = [];
+export const stateIdToDef = [];
+export const stateKeyToId = new Map();
+export const blocks = [];
 
-const blockNameToId = new Map();
-const blockIdToName = [];
-const stateIdToDef = [];
-const stateKeyToId = new Map();
-const blocks = [];
-
-let nextBlockId = 1;
-let nextStateId = 1;
+export let nextBlockId = 1;
+export let nextStateId = 1;
 
 // -----------------------------------------------------
 // BLOCK REGISTRATION
@@ -60,7 +58,7 @@ export async function loadAllBlockstates(blockNames) {
     }
 }
 
-async function loadOneBlockstate(name) {
+export async function loadOneBlockstate(name) {
     const path = `assets/sixsevencraft/blockstates/${name}.json`;
 
     try {
@@ -80,7 +78,7 @@ async function loadOneBlockstate(name) {
     }
 }
 
-function extractProperties(raw) {
+export function extractProperties(raw) {
     const props = {};
 
     if (raw.variants) {
@@ -110,7 +108,7 @@ function extractProperties(raw) {
     return props;
 }
 
-function extractModels(raw) {
+export function extractModels(raw) {
     const models = new Set();
 
     if (raw.variants) {
@@ -171,7 +169,7 @@ export function buildStatesFromBlockstates() {
     }
 }
 
-function generateStateDefinitions() {
+export function generateStateDefinitions() {
     const result = [];
 
     for (const [name, entry] of BlockstateDB.byName.entries()) {
@@ -210,13 +208,13 @@ function generateStateDefinitions() {
     return result;
 }
 
-function makeStateKey(blockName, props) {
+export function makeStateKey(blockName, props) {
     const entries = Object.entries(props || {}).sort(([a], [b]) => a.localeCompare(b));
     if (entries.length === 0) return blockName;
     return `${blockName}|` + entries.map(([k, v]) => `${k}=${v}`).join(",");
 }
 
-function keyToProps(key) {
+export function keyToProps(key) {
     if (!key) return {};
     const props = {};
     for (const part of key.split(",")) {
@@ -226,7 +224,7 @@ function keyToProps(key) {
     return props;
 }
 
-function pickModel(entry) {
+export function pickModel(entry) {
     if (!Array.isArray(entry)) return entry.model;
 
     let total = 0;
@@ -242,17 +240,17 @@ function pickModel(entry) {
 }
 
 // -----------------------------------------------------
-// MODEL LOADING
+// MODEL LOADING (NOW EXPORTED)
 // -----------------------------------------------------
 
-const modelCache = new Map();
+export const modelCache = new Map();
 
-async function loadModel(modelName) {
+export async function loadModel(modelName) {
     const path = `assets/sixsevencraft/models/${modelName}.json`;
     return await loadModelRecursive(path);
 }
 
-async function loadModelRecursive(path) {
+export async function loadModelRecursive(path) {
     if (modelCache.has(path)) return modelCache.get(path);
 
     const res = await fetch(path);
@@ -279,7 +277,7 @@ async function loadModelRecursive(path) {
     return model;
 }
 
-function resolveTexture(texName, textures) {
+export function resolveTexture(texName, textures) {
     if (!texName.startsWith("#")) return texName;
     return textures[texName.slice(1)];
 }
@@ -288,7 +286,7 @@ function resolveTexture(texName, textures) {
 // FACE TEMPLATE GENERATION
 // -----------------------------------------------------
 
-function buildFaceTemplates(model) {
+export function buildFaceTemplates(model) {
     const faces = [];
 
     for (const elem of model.elements) {
@@ -340,7 +338,7 @@ export async function getBlockModelFaces(blockId, stateId) {
     return buildFaceTemplates(model);
 }
 
-function matchesWhen(props, when) {
+export function matchesWhen(props, when) {
     for (const [k, v] of Object.entries(when)) {
         if (typeof v === "string") {
             if (props[k] !== v) return false;
@@ -352,5 +350,6 @@ function matchesWhen(props, when) {
     }
     return true;
 }
+
 
 
