@@ -14,6 +14,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
+      - name: Debug list
+        run: |
+          echo "Listing item folder:"
+          ls -R assets/sixsevencraft/textures/item
+
       - name: Generate itemlist.json
         run: |
           mkdir -p assets/sixsevencraft/textures/item
