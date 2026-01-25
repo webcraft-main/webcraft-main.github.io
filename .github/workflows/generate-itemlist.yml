@@ -14,11 +14,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Debug list
-        run: |
-          echo "Listing item folder:"
-          ls -R assets/sixsevencraft/textures/item
-
       - name: Generate itemlist.json
         run: |
           mkdir -p assets/sixsevencraft/textures/item
@@ -26,7 +21,12 @@ jobs:
             | sed 's/.*\///;s/.png$//' \
             | jq -R -s -c 'split("\n") | map(select(length > 0))' \
             > assets/sixsevencraft/textures/item/itemlist.json
-
+      
+      - name: Debug list
+        run: |
+          echo "Listing item folder:"
+          ls -R assets/sixsevencraft/textures/item
+      
       - name: Commit itemlist.json
         run: |
           git config user.name "GitHub Action"
