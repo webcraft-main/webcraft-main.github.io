@@ -1,0 +1,8 @@
+{
+  "name": "Grassy Plains",
+  "baseHeight": 64,
+  "variation": 8,
+  "surface": "grass_block",
+  "subsurface": "dirt",
+  "stone": "stone"
+}
