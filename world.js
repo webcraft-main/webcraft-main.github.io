@@ -193,3 +193,5 @@ export class World {
 // -----------------------------------------------------
 
 export const world = new World();
+
+window.world = world;
