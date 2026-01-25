@@ -1,0 +1,8 @@
+{
+  "name": "Oak Forest",
+  "baseHeight": 66,
+  "variation": 10,
+  "surface": "grass_block",
+  "subsurface": "dirt",
+  "stone": "stone"
+}
