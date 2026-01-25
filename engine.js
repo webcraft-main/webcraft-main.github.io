@@ -61,6 +61,41 @@ window.addEventListener("resize", () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+
+// -----------------------------------------------------
+// INPUT STATE (WASD + Sprint + Crouch)
+// -----------------------------------------------------
+export const input = {
+    forward: false,
+    backward: false,
+    left: false,
+    right: false,
+    sprint: false,
+    crouch: false
+};
+
+window.addEventListener("keydown", (e) => {
+    switch (e.code) {
+        case "KeyW": input.forward = true; break;
+        case "KeyS": input.backward = true; break;
+        case "KeyA": input.left = true; break;
+        case "KeyD": input.right = true; break;
+        case "ShiftLeft": input.sprint = true; break;
+        case "ControlLeft": input.crouch = true; break;
+    }
+});
+
+window.addEventListener("keyup", (e) => {
+    switch (e.code) {
+        case "KeyW": input.forward = false; break;
+        case "KeyS": input.backward = false; break;
+        case "KeyA": input.left = false; break;
+        case "KeyD": input.right = false; break;
+        case "ShiftLeft": input.sprint = false; break;
+        case "ControlLeft": input.crouch = false; break;
+    }
+});
+
 window.scene = scene;
 window.camera = camera;
 window.renderer = renderer;
