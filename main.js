@@ -27,19 +27,10 @@ async function init() {
     // 3. Build state registry from blockstates
     buildStatesFromBlockstates();
 
-    // 4. Validate blockstates against models (simple check)
-    const issues = validateBlockstates(modelName => {
-        // naive check: assume all models exist; or plug into your model loader cache
-        return true;
-    });
-    if (issues.length > 0) {
-        console.warn("[Blockstate Validation] Issues:", issues);
-    }
-
-    // 5. Init debug UI
+    // 4. Init debug UI
     initDebugBlockstateUI();
 
-    // 6. Continue with your existing world/engine init...
+    // 5. Continue with your existing world/engine init...
     // create world, start render loop, etc.
 }
 
