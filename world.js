@@ -13,8 +13,9 @@ export async function loadBlockNames() {
         console.error("Failed to load blocklist.json", res.status, res.statusText);
         return [];
     }
-
+    return await res.json();
 }
+
 
 // -----------------------------------------------------
 // CHUNK CREATION / STORAGE HELPERS
