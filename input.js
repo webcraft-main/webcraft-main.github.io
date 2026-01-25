@@ -1,25 +1,58 @@
+// input.js — merged gameplay + GUI input
+
 import { camera } from "./engine.js";
-import { blockMap, setBlock, removeBlock, getBlock } from "./blockRenderer.js";
-import { explode } from "./physics.js";
-import { getBiomeAt } from "./world.js"; 
+import { blockMap, setBlock, removeBlock } from "./blockRenderer.js";
+import { getBiomeAt } from "./world.js";
 
 export const keys = {};
 export let selectedSlot = 0;
 
+// GUI callbacks
+let inventoryToggleCallback = null;
+let hotbarSelectCallback = null;
+
 /* ============================
-   HOTBAR SELECTION
+   PUBLIC REGISTRATION FUNCTIONS
+   ============================ */
+export function registerInventoryToggle(fn) {
+    inventoryToggleCallback = fn;
+}
+
+export function registerHotbarSelect(fn) {
+    hotbarSelectCallback = fn;
+}
+
+/* ============================
+   KEY DOWN
    ============================ */
 document.addEventListener("keydown", e => {
     keys[e.code] = true;
 
-    if (e.key >= 1 && e.key <= 8) {
-        selectedSlot = e.key - 1;
-        document.querySelectorAll('.slot').forEach((s,i) =>
+    // HOTBAR SELECTION (1–9)
+    if (e.key >= "1" && e.key <= "9") {
+        selectedSlot = parseInt(e.key) - 1;
+
+        if (hotbarSelectCallback) {
+            hotbarSelectCallback(selectedSlot);
+        }
+
+        document.querySelectorAll('.slot').forEach((s, i) =>
             s.className = (i === selectedSlot) ? 'slot active' : 'slot'
         );
     }
+
+    // INVENTORY TOGGLE (E)
+    if (e.key === "e" || e.key === "E") {
+        if (inventoryToggleCallback) {
+            inventoryToggleCallback();
+        }
+        e.preventDefault();
+    }
 });
 
+/* ============================
+   KEY UP
+   ============================ */
 document.addEventListener("keyup", e => {
     keys[e.code] = false;
 });
@@ -28,14 +61,19 @@ document.addEventListener("keyup", e => {
    MOUSE CLICK (BREAK / PLACE)
    ============================ */
 window.addEventListener("mousedown", e => {
+    // If inventory is open, GUI handles clicks
+    if (window.inventoryOpen === true) return;
+
     if (!document.pointerLockElement) {
         document.body.requestPointerLock();
         return;
     }
 
     const ray = new THREE.Raycaster();
-    ray.setFromCamera({x:0, y:0}, camera);
-    const hits = ray.intersectObjects(Array.from(blockMap.values()).map(e => e.mesh));
+    ray.setFromCamera({ x: 0, y: 0 }, camera);
+    const hits = ray.intersectObjects(
+        Array.from(blockMap.values()).map(e => e.mesh)
+    );
 
     if (hits.length === 0) return;
 
@@ -43,12 +81,6 @@ window.addEventListener("mousedown", e => {
 
     if (e.button === 0) {
         // LEFT CLICK = BREAK
-        const block = obj.userData.block;
-
-        if (block.name === "tnt") {
-            explode(obj.position);
-        }
-
         removeBlock(
             Math.round(obj.position.x),
             Math.round(obj.position.y),
@@ -64,8 +96,7 @@ window.addEventListener("mousedown", e => {
 
         const biome = getBiomeAt(x, z);
 
-        // VOLCANIC BIOME SPECIAL RULE:
-        // placing cobblestone (stone) ignites lava
+        // VOLCANIC BIOME SPECIAL RULE
         if (selectedSlot === 1 && biome === "VOLCANIC") {
             setBlock(x, y, z, "lava");
         } else {
@@ -73,7 +104,9 @@ window.addEventListener("mousedown", e => {
                 "grass", "stone", "oak_log", "oak_leaves",
                 "water", "lava", "sand", "tnt"
             ];
-            setBlock(x, y, z, blockNames[selectedSlot]);
+
+            const chosen = blockNames[selectedSlot] || "stone";
+            setBlock(x, y, z, chosen);
         }
     }
 });
@@ -88,4 +121,5 @@ document.addEventListener("mousemove", e => {
         camera.rotation.x = Math.max(-1.5, Math.min(1.5, camera.rotation.x));
     }
 });
+
 
