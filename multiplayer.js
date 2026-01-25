@@ -1,9 +1,9 @@
 // multiplayer.js — chunk-based multiplayer sync
 
 import { scene } from "./engine.js";
-import { world } from "./main.js"; // export world from main.js
+import { world } from "./world.js"; // FIXED: world comes from world.js
 
-const THREE = window.THREE
+const THREE = window.THREE;
 
 export const socket = new WebSocket("wss://sixsevencraft-server.onrender.com");
 
@@ -53,7 +53,7 @@ socket.addEventListener("message", e => {
 
         // Chunk data from server
         case "chunk":
-            world.loadRemoteChunk(data);
+            world.loadRemoteChunk(data); // world.js handles decoding
             break;
 
         // Block update from server
@@ -84,6 +84,7 @@ function updateRemotePlayer(id, info) {
         remotePlayers.set(id, obj);
     }
 
+    // TODO: interpolation hook
     obj.position.set(info.x, info.y, info.z);
     obj.rotation.y = info.ry;
 }
