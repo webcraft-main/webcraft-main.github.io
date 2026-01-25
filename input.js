@@ -2,7 +2,7 @@
 
 import { camera } from "./engine.js";
 import { world } from "./world.js";   // correct source of setBlock/removeBlock
-import { getBiomeAt } from "./worldgen.js"; // biome lookup
+import { getBiomeAt } from "./world.js"; // biome lookup
 import { raycastVoxel } from "./raycast.js"; // voxel ray-marcher
 
 export const keys = {};
