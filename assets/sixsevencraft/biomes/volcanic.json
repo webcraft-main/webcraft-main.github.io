@@ -2,7 +2,7 @@
   "name": "Volcanic",
   "baseHeight": 80,
   "variation": 20,
-  "surface": "basalt",
-  "subsurface": "blackstone",
-  "stone": "magma_block"
+  "surface": "deepslate",
+  "subsurface": "deepslate",
+  "stone": "deepslate"
 }
