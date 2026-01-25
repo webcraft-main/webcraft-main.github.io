@@ -65,28 +65,16 @@ export function tex(category, name) {
 
 // -----------------------------------------------------
 // AUTO-DISCOVER ALL ITEM ICON NAMES
-// (from assets/sixsevencraft/textures/item/)
+// (from assets/sixsevencraft/textures/item/itemlist.json)
 // -----------------------------------------------------
 
 export async function loadAllItemNames() {
-    const url = "assets/sixsevencraft/textures/item/";
-    const res = await fetch(url);
-    const text = await res.text();
-
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, "text/html");
-
-    const names = [];
-
-    doc.querySelectorAll("a").forEach(a => {
-        const href = a.getAttribute("href");
-        if (href && href.endsWith(".png")) {
-            names.push(href.replace(".png", ""));
-        }
-    });
-
-    return names;
+    const res = await fetch("assets/sixsevencraft/textures/item/itemlist.json");
+    if (!res.ok) {
+        console.error("Failed to load itemlist.json", res.status, res.statusText);
+        return [];
+    }
+    return await res.json();
 }
-
 
 
