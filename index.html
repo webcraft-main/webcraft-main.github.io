@@ -1,33 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>sixsevencraft</title>
+    <meta charset="UTF-8" />
+    <title>SixSevenCraft</title>
 
     <!-- Favicon + PWA metadata -->
-    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96">
-    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
-    <link rel="shortcut icon" href="favicon/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
-    <meta name="apple-mobile-web-app-title" content="SixSevenCraft">
-    <link rel="manifest" href="favicon/site.webmanifest">
+    <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+    <link rel="shortcut icon" href="favicon/favicon.ico" />
+    <meta name="apple-mobile-web-app-title" content="SixSevenCraft" />
+    <link rel="manifest" href="favicon/site.webmanifest" />
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- UI CANVAS (Minecraft-style HUD + Hotbar) -->
+<!-- MAIN GAME CANVAS (WebGL) -->
+<canvas id="mainCanvas"></canvas>
+
+<!-- GUI CANVAS (HUD + Hotbar + Inventory) -->
 <canvas id="guiCanvas"></canvas>
 
 <!-- THREE.js -->
 <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/+esm';
+    import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.158.0/+esm";
     window.THREE = THREE;
 </script>
 
 <!-- Simplex Noise -->
 <script type="module">
-    import { createNoise2D } from 'https://cdn.jsdelivr.net/npm/simplex-noise@4.0.1/+esm';
+    import { createNoise2D } from "https://cdn.jsdelivr.net/npm/simplex-noise@4.0.1/+esm";
     window.createNoise2D = createNoise2D;
 </script>
 
@@ -39,6 +41,7 @@
 
 </body>
 </html>
+
 
 
 
