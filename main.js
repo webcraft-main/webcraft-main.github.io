@@ -21,8 +21,9 @@ import { initDebugBlockstateUI } from "./debugBlockstateUI.js";
 // -----------------------------------------------------
 
 async function discoverBlockNames() {
-    const res = await fetch("assets/sixsevencraft/blockstates/");
-    const text = await res.text();
+    const res = await fetch("assets/sixsevencraft/blockstates/blocklist.json");
+    return await res.json();
+}
 
     const matches = [...text.matchAll(/href="([^"]+\.json)"/g)];
     return matches.map(m => m[1].replace(".json", ""));
