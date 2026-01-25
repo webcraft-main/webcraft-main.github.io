@@ -1,8 +1,8 @@
 // autoBlockList.js
 export async function loadBlockNames() {
-    const url = "assets/sixsevencraft/blockstates/";
-    const res = await fetch(url);
-    const text = await res.text();
+    const res = await fetch("assets/sixsevencraft/blockstates/blocklist.json");
+    return await res.json();
+}
 
     // Parse directory listing (GitHub Pages returns HTML)
     const parser = new DOMParser();
