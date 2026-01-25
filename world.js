@@ -247,17 +247,22 @@ export function initDebugBlockstateUI() {
     title.style.marginBottom = "4px";
     container.appendChild(title);
 
-    for (const [name, entry] of BlockstateDB.byName.entries()) {
-        const blockDiv = document.createElement("div");
-        blockDiv.style.borderBottom = "1px solid #444";
-        blockDiv.style.marginBottom = "4px";
-        blockDiv.style.paddingBottom = "4px";
+for (const [name, entry] of BlockstateDB.byName.entries()) {
+    const blockDiv = document.createElement("div");
+    blockDiv.style.borderBottom = "1px solid #444";
+    blockDiv.style.marginBottom = "4px";
+    blockDiv.style.paddingBottom = "4px";
 
-        const header = document.createElement("div");
-        header.textContent = name;
-        header.style.color = "#0ff";
-        blockDiv.appendChild(header);
-    document.body.appendChild(container);
+    const header = document.createElement("div");
+    header.textContent = name;
+    header.style.color = "#0ff";
+    blockDiv.appendChild(header);
+
+    container.appendChild(blockDiv);
 }
+
+document.body.appendChild(container);
+}
+
 
 
