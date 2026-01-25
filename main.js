@@ -20,14 +20,15 @@ import { initDebugBlockstateUI } from "./debugBlockstateUI.js";
 // AUTO-DISCOVER BLOCK NAMES
 // -----------------------------------------------------
 
-async function discoverBlockNames() {
+export async function discoverBlockNames() {
     const res = await fetch("assets/sixsevencraft/blockstates/blocklist.json");
+    if (!res.ok) {
+        console.error("Failed to load blocklist.json", res.status, res.statusText);
+        return [];
+    }
     return await res.json();
 }
 
-    const matches = [...text.matchAll(/href="([^"]+\.json)"/g)];
-    return matches.map(m => m[1].replace(".json", ""));
-}
 
 // -----------------------------------------------------
 // MAIN INIT
