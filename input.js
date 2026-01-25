@@ -107,12 +107,9 @@ window.addEventListener("mousedown", e => {
    MOUSE LOOK
    ============================ */
 document.addEventListener("mousemove", e => {
-    if (document.pointerLockElement) {
-        camera.rotation.y -= e.movementX * 0.002;
-        camera.rotation.x -= e.movementY * 0.002;
-        camera.rotation.x = Math.max(-1.5, Math.min(1.5, camera.rotation.x));
-    }
+    if (document.pointerLockElement !== document.body) return;
+
+    camera.rotation.y -= e.movementX * 0.002;
+    camera.rotation.x -= e.movementY * 0.002;
+    camera.rotation.x = Math.max(-1.5, Math.min(1.5, camera.rotation.x));
 });
-
-
-
