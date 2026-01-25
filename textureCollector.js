@@ -3,7 +3,7 @@
 export async function collectAllTextureNames(BlockstateDB) {
     const textures = new Set();
 
-    for (const [blockName, stateDef] of BlockstateDB.list) {
+    for (const [blockName, stateDef] of BlockstateDB.byName) {
         for (const variant of stateDef.variants) {
             if (!variant.model) continue;
 
