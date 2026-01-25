@@ -60,3 +60,6 @@ window.addEventListener("resize", () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+window.scene = scene;
+window.camera = camera;
+window.renderer = renderer;
