@@ -1,9 +1,9 @@
-// input.js — merged gameplay + GUI input
+// input.js — unified gameplay + GUI input
 
 import { camera } from "./engine.js";
-import { getStateDef } from "./blockRenderer.js";
-import { world } from "./main.js";
-import { getBiomeAt } from "./world.js";
+import { world } from "./world.js";   // correct source of setBlock/removeBlock
+import { getBiomeAt } from "./worldgen.js"; // biome lookup
+import { raycastVoxel } from "./raycast.js"; // voxel ray-marcher
 
 export const keys = {};
 export let selectedSlot = 0;
@@ -37,9 +37,7 @@ document.addEventListener("keydown", e => {
             hotbarSelectCallback(selectedSlot);
         }
 
-        document.querySelectorAll('.slot').forEach((s, i) =>
-            s.className = (i === selectedSlot) ? 'slot active' : 'slot'
-        );
+        e.preventDefault();
     }
 
     // INVENTORY TOGGLE (E)
@@ -62,44 +60,37 @@ document.addEventListener("keyup", e => {
    MOUSE CLICK (BREAK / PLACE)
    ============================ */
 window.addEventListener("mousedown", e => {
-    // If inventory is open, GUI handles clicks
+    // GUI handles clicks when inventory is open
     if (window.inventoryOpen === true) return;
 
+    // Acquire pointer lock
     if (!document.pointerLockElement) {
         document.body.requestPointerLock();
         return;
     }
 
-    const ray = new THREE.Raycaster();
-    ray.setFromCamera({ x: 0, y: 0 }, camera);
-    const hits = ray.intersectObjects(
-        Array.from(blockMap.values()).map(e => e.mesh)
-    );
+    // Ray-march into voxel world
+    const hit = raycastVoxel(camera, world);
 
-    if (hits.length === 0) return;
+    if (!hit) return;
 
-    const obj = hits[0].object;
+    const { x, y, z, nx, ny, nz } = hit;
 
     if (e.button === 0) {
         // LEFT CLICK = BREAK
-        removeBlock(
-            Math.round(obj.position.x),
-            Math.round(obj.position.y),
-            Math.round(obj.position.z)
-        );
+        world.setBlock(x, y, z, 0); // 0 = air
 
-    } else {
+    } else if (e.button === 2) {
         // RIGHT CLICK = PLACE
-        const p = obj.position.clone().add(hits[0].face.normal);
-        const x = Math.round(p.x);
-        const y = Math.round(p.y);
-        const z = Math.round(p.z);
+        const px = x + nx;
+        const py = y + ny;
+        const pz = z + nz;
 
-        const biome = getBiomeAt(x, z);
+        const biome = getBiomeAt(px, pz);
 
         // VOLCANIC BIOME SPECIAL RULE
         if (selectedSlot === 1 && biome === "VOLCANIC") {
-            setBlock(x, y, z, "lava");
+            world.setBlock(px, py, pz, world.getBlockId("lava"));
         } else {
             const blockNames = [
                 "grass", "stone", "oak_log", "oak_leaves",
@@ -107,7 +98,7 @@ window.addEventListener("mousedown", e => {
             ];
 
             const chosen = blockNames[selectedSlot] || "stone";
-            setBlock(x, y, z, chosen);
+            world.setBlock(px, py, pz, world.getBlockId(chosen));
         }
     }
 });
@@ -122,5 +113,6 @@ document.addEventListener("mousemove", e => {
         camera.rotation.x = Math.max(-1.5, Math.min(1.5, camera.rotation.x));
     }
 });
+
 
 
