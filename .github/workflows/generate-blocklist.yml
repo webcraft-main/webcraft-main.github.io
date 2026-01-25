@@ -1,0 +1,29 @@
+name: Generate blocklist.json
+
+on:
+  push:
+    paths:
+      - 'assets/sixsevencraft/blockstates/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Generate blocklist.json
+        run: |
+          mkdir -p assets/sixsevencraft/blockstates
+          find assets/sixsevencraft/blockstates -name '*.json' \
+            | sed 's/.*\///;s/.json$//' \
+            | jq -R -s -c 'split("\n") | map(select(length > 0))' \
+            > assets/sixsevencraft/blockstates/blocklist.json
+
+      - name: Commit blocklist
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git add assets/sixsevencraft/blockstates/blocklist.json
+          git commit -m "Auto-update blocklist.json" || echo "No changes"
+          git push
