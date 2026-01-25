@@ -1,37 +1,67 @@
-// main.js
+// main.js — full auto-discovery bootstrap
 
 const THREE = window.THREE;
 
-import { registerBlock, buildStatesFromBlockstates } from "./blockRenderer.js";
-import { BlockstateDB, loadAllBlockstates } from "./blockRenderer.js";
-import { initDebugBlockstateUI } from "./world.js"; // new file
+import {
+    registerBlock,
+    buildStatesFromBlockstates,
+    loadAllBlockstates,
+    BlockstateDB
+} from "./blockRenderer.js";
 
-// 1. Register all blocks (names must match blockstate filenames)
-const BLOCK_NAMES = [
-    "stone",
-    "grass_block",
-    "dirt",
-    "oak_log",
-    "oak_leaves",
-    // ...add all your block names here
-];
+import { buildBlockTextureAtlas } from "./textureAtlas.js";
+import { collectAllTextureNames } from "./textureCollector.js";
+import { world } from "./world.js"; // ← YOUR ORIGINAL IMPORT
+import { scene, camera, renderer } from "./engine.js";
+import { startGameLoop } from "./loop.js";
+import { initDebugBlockstateUI } from "./debugBlockstateUI.js";
 
-for (const name of BLOCK_NAMES) {
-    registerBlock(name);
+// -----------------------------------------------------
+// AUTO-DISCOVER BLOCK NAMES
+// -----------------------------------------------------
+
+async function discoverBlockNames() {
+    const res = await fetch("assets/sixsevencraft/blockstates/");
+    const text = await res.text();
+
+    const matches = [...text.matchAll(/href="([^"]+\.json)"/g)];
+    return matches.map(m => m[1].replace(".json", ""));
 }
 
+// -----------------------------------------------------
+// MAIN INIT
+// -----------------------------------------------------
+
 async function init() {
-    // 2. Load all blockstates
+
+    // 1. Auto-discover all blockstate files
+    const BLOCK_NAMES = await discoverBlockNames();
+
+    // 2. Register all blocks
+    for (const name of BLOCK_NAMES) {
+        registerBlock(name);
+    }
+
+    // 3. Load blockstates
     await loadAllBlockstates(BLOCK_NAMES);
 
-    // 3. Build state registry from blockstates
+    // 4. Build state registry
     buildStatesFromBlockstates();
 
-    // 4. Init debug UI
+    // 5. Collect all texture names from blockstates + models
+    const textureNames = await collectAllTextureNames(BlockstateDB);
+
+    // 6. Build texture atlas
+    const { texture: atlasTexture } = await buildBlockTextureAtlas(textureNames);
+
+    // 7. Inject atlas into your existing world
+    world.textureAtlas = atlasTexture;
+
+    // 8. Debug UI
     initDebugBlockstateUI();
 
-    // 5. Continue with your existing world/engine init...
-    // create world, start render loop, etc.
+    // 9. Start game loop
+    startGameLoop(world, scene, camera, renderer);
 }
 
 init();
