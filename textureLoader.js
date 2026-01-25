@@ -4,16 +4,19 @@ const THREE = window.THREE;
 
 export const textureCache = new Map();
 
-// Core async texture loader
+// -----------------------------------------------------
+// CORE ASYNC TEXTURE LOADER
+// -----------------------------------------------------
+
 export async function loadTexture(path) {
     if (textureCache.has(path)) return textureCache.get(path);
 
     const loader = new THREE.TextureLoader();
 
-    const tex = await new Promise((resolve, reject) => {
+    const tex = await new Promise((resolve) => {
         loader.load(
             path,
-            resolve,
+            (texture) => resolve(texture),
             undefined,
             (err) => {
                 console.warn("[TextureLoader] Failed to load:", path, err);
@@ -34,7 +37,10 @@ export async function loadTexture(path) {
     return tex;
 }
 
-// High-level texture router
+// -----------------------------------------------------
+// HIGH-LEVEL TEXTURE ROUTER
+// -----------------------------------------------------
+
 export function tex(category, name) {
     // GUI routing
     if (category === "gui") {
@@ -56,5 +62,31 @@ export function tex(category, name) {
         `assets/sixsevencraft/textures/${category}/${name}.png`
     );
 }
+
+// -----------------------------------------------------
+// AUTO-DISCOVER ALL ITEM ICON NAMES
+// (from assets/sixsevencraft/textures/item/)
+// -----------------------------------------------------
+
+export async function loadAllItemNames() {
+    const url = "assets/sixsevencraft/textures/item/";
+    const res = await fetch(url);
+    const text = await res.text();
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(text, "text/html");
+
+    const names = [];
+
+    doc.querySelectorAll("a").forEach(a => {
+        const href = a.getAttribute("href");
+        if (href && href.endsWith(".png")) {
+            names.push(href.replace(".png", ""));
+        }
+    });
+
+    return names;
+}
+
 
 
