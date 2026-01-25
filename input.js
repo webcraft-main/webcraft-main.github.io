@@ -64,9 +64,9 @@ window.addEventListener("mousedown", e => {
     if (window.inventoryOpen === true) return;
 
     // Acquire pointer lock
-    if (!document.pointerLockElement) {
-        document.body.requestPointerLock();
-        return;
+    if (!document.pointerLockElement && window.inventoryOpen !== true) {
+         document.body.requestPointerLock();
+         return;
     }
 
     // Ray-march into voxel world
