@@ -1,0 +1,31 @@
+name: Generate itemlist.json
+
+on:
+  push:
+    paths:
+      - 'assets/sixsevencraft/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Generate itemlist.json
+        run: |
+          mkdir -p assets/sixsevencraft/textures/item
+          find assets/sixsevencraft/textures/item -maxdepth 1 -name '*.json' \
+            | sed 's/.*\///;s/.json$//' \
+            | jq -R -s -c 'split("\n") | map(select(length > 0))' \
+            > assets/sixsevencraft/textures/item/itemlist.json
+
+      - name: Commit item.json
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git add assets/sixsevencraft/textures/item/itemlist.json
+          git commit -m "Auto-update itemlist.json" || echo "No changes"
+          git push
