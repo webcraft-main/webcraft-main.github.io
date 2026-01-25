@@ -63,6 +63,8 @@ async function init() {
     // 9. Start game loop
     startGameLoop(world, scene, camera, renderer);
 }
+// Force-load the spawn chunk
+world.ensureChunk(0, 0);
 
 init();
 
