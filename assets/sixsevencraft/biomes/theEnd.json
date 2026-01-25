@@ -1,0 +1,8 @@
+{
+  "name": "The End",
+  "baseHeight": 70,
+  "variation": 4,
+  "surface": "end_stone",
+  "subsurface": "end_stone",
+  "stone": "end_stone"
+}
