@@ -4,27 +4,16 @@ import { CHUNK_SIZE, WORLD_HEIGHT } from './config.js';
 import { BlockstateDB } from './blockRenderer.js';
 
 // -----------------------------------------------------
-// BLOCK DISCOVERY (auto from blockstates folder)
+// BLOCK DISCOVERY (from auto-generated manifest)
 // -----------------------------------------------------
 
 export async function loadBlockNames() {
-    const url = "assets/sixsevencraft/blockstates/";
-    const res = await fetch(url);
-    const text = await res.text();
+    const res = await fetch("assets/sixsevencraft/blockstates/blocklist.json");
+    if (!res.ok) {
+        console.error("Failed to load blocklist.json", res.status, res.statusText);
+        return [];
+    }
 
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, "text/html");
-
-    const names = [];
-
-    doc.querySelectorAll("a").forEach(a => {
-        const href = a.getAttribute("href");
-        if (href && href.endsWith(".json")) {
-            names.push(href.replace(".json", ""));
-        }
-    });
-
-    return names;
 }
 
 // -----------------------------------------------------
