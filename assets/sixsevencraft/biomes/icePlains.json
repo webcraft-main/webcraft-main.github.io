@@ -1,0 +1,8 @@
+{
+  "name": "Ice Plains",
+  "baseHeight": 68,
+  "variation": 6,
+  "surface": "snow_block",
+  "subsurface": "packed_ice",
+  "stone": "stone"
+}
