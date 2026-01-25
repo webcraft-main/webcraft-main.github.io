@@ -16,6 +16,29 @@ export async function loadBlockNames() {
     return await res.json();
 }
 
+// ----------------///
+// BIOME CREATION  ///
+// ----------------///
+export async function loadBiomes() {
+    const biomeNames = [
+        "Ice Plains",
+        "Grassy Plains",
+        "Oak Forest",
+        "Volcanic",
+        "The End"
+    ];
+
+    for (const name of biomeNames) {
+        const res = await fetch(`assets/sixsevencraft/biomes/${name}.json`);
+        if (!res.ok) {
+            console.error("Failed to load biome", name);
+            continue;
+        }
+        const data = await res.json();
+        BiomeDB.byName.set(data.name, data);
+        BiomeDB.list.push(data);
+    }
+}
 
 // -----------------------------------------------------
 // CHUNK CREATION / STORAGE HELPERS
