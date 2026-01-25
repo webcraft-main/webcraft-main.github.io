@@ -1,7 +1,8 @@
 // input.js — merged gameplay + GUI input
 
 import { camera } from "./engine.js";
-import { blockMap, setBlock, removeBlock } from "./blockRenderer.js";
+import { getStateDef } from "./blockRenderer.js";
+import { world } from "./main.js";
 import { getBiomeAt } from "./world.js";
 
 export const keys = {};
