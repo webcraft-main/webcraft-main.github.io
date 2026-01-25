@@ -1,36 +1,32 @@
-body { margin: 0; overflow: hidden; font-family: 'Courier New', sans-serif; background: #000; }
-canvas { display: block; }
+/* Reset + base */
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #000;
+  font-family: 'Courier New', monospace;
+}
 
-#ui {
+/* Both canvases fill the screen */
+canvas {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+  display: block;
+}
+
+/* Main WebGL canvas (world) */
+#mainCanvas {
+  z-index: 0;
+}
+
+/* GUI canvas (hotbar, inventory, HUD) */
+#guiCanvas {
+  z-index: 10;
+  pointer-events: none; /* GUI is drawn, not clicked */
   image-rendering: pixelated;
 }
 
-
-#hotbar {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 5px;
-  background: rgba(0,0,0,0.8);
-  padding: 8px;
-  border: 2px solid #333;
-  pointer-events: auto;
-}
-.slot { width: 45px; height: 45px; border: 2px solid #777; display: flex; justify-content: center; align-items: center; color: white; font-size: 8px; background: #444; }
-.slot.active { border-color: #fff; background: #666; box-shadow: 0 0 15px cyan; }
-.mc-color-2 { color: #00AA00; }
-.mc-color-3 { color: #00AAAA; }
-.mc-color-f { color: #FFFFFF; }
-.mc-color-7 { color: #AAAAAA; }
-
+/* Optional: instructions overlay */
 #instructions {
   position: absolute;
   top: 10px;
@@ -40,35 +36,8 @@ canvas { display: block; }
   padding: 10px;
   font-size: 12px;
   border-radius: 5px;
-}
-
-#hud {
-  position: absolute;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  color: white;
+  z-index: 20;
   pointer-events: none;
 }
 
-#hearts, #hunger {
-  display: flex;
-  gap: 2px;
-}
-
-.heart, .hunger-icon {
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
-}
-
-.heart.full { background: red; }
-.heart.empty { background: #330000; }
-
-.hunger-icon.full { background: orange; }
-.hunger-icon.empty { background: #332000; }
 
