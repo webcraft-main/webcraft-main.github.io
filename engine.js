@@ -14,6 +14,7 @@ export const camera = new THREE.PerspectiveCamera(
 );
 camera.rotation.order = "YXZ";
 
+camera.position.set(0, 80, 0);
 
 // -----------------------------------------------------
 // RENDERER
