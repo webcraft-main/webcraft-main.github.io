@@ -16,7 +16,7 @@ let selectTex = null;
 let itemTextures = new Map();   // name → THREE.Texture
 let allItems = [];              // list of all item names
 
-let hotbarItems = new Array(9).fill(null); // 9 empty slots
+let hotbarItems = new Array(9).fill(null);
 let selectedSlot = 0;
 
 let inventoryOpen = false;
@@ -27,18 +27,22 @@ const INV_ROWS = 4;
 const SLOT_SIZE = 32;
 const SLOT_PADDING = 4;
 
-let invX = 0;
-let invY = 0;
-let invW = 0;
-let invH = 0;
+let invX = 0, invY = 0, invW = 0, invH = 0;
 
 // -----------------------------------------------------
-// RESIZE CANVAS
+// RESIZE CANVAS (with DPI scaling)
 // -----------------------------------------------------
 
 function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+
+    canvas.style.width = window.innerWidth + "px";
+    canvas.style.height = window.innerHeight + "px";
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
 
 window.addEventListener("resize", resizeCanvas);
@@ -49,19 +53,14 @@ resizeCanvas();
 // -----------------------------------------------------
 
 async function loadGUITextures() {
-    // Hotbar frame + selection
     hotbarTex = await tex("gui", "hotbar");
     selectTex = await tex("gui", "hotbar_selection");
 
-    // Discover all item icons
     allItems = await loadAllItemNames();
 
-    // Load all item textures
     for (const name of allItems) {
         const icon = await tex("item", name);
-        if (icon) {
-            itemTextures.set(name, icon);
-        }
+        if (icon) itemTextures.set(name, icon);
     }
 }
 
@@ -70,11 +69,11 @@ async function loadGUITextures() {
 // -----------------------------------------------------
 
 function drawHotbar() {
-    const w = canvas.width;
-    const h = canvas.height;
+    const w = canvas.width / (window.devicePixelRatio || 1);
+    const h = canvas.height / (window.devicePixelRatio || 1);
 
-    const hotbarWidth = 182; // Minecraft hotbar width
-    const hotbarHeight = 22;
+    const hotbarWidth = hotbarTex?.image?.width || 182;
+    const hotbarHeight = hotbarTex?.image?.height || 22;
 
     const x = (w - hotbarWidth) / 2;
     const y = h - hotbarHeight - 10;
@@ -84,13 +83,16 @@ function drawHotbar() {
         ctx.drawImage(hotbarTex.image, x, y);
     }
 
+    // Slot width from texture
+    const SLOT_W = hotbarWidth / 9;
+
     // Draw selected slot highlight
     if (selectTex?.image) {
-        const slotX = x + selectedSlot * 20 - 1;
+        const slotX = x + selectedSlot * SLOT_W;
         ctx.drawImage(selectTex.image, slotX, y - 1);
     }
 
-    // Draw item icons in hotbar
+    // Draw item icons
     for (let i = 0; i < 9; i++) {
         const item = hotbarItems[i];
         if (!item) continue;
@@ -98,7 +100,10 @@ function drawHotbar() {
         const tex = itemTextures.get(item);
         if (!tex?.image) continue;
 
-        ctx.drawImage(tex.image, x + 3 + i * 20, y + 3, 16, 16);
+        const iconX = x + i * SLOT_W + (SLOT_W - 16) / 2;
+        const iconY = y + (hotbarHeight - 16) / 2;
+
+        ctx.drawImage(tex.image, iconX, iconY, 16, 16);
     }
 }
 
@@ -109,8 +114,8 @@ function drawHotbar() {
 function drawInventory() {
     if (!inventoryOpen) return;
 
-    const w = canvas.width;
-    const h = canvas.height;
+    const w = canvas.width / (window.devicePixelRatio || 1);
+    const h = canvas.height / (window.devicePixelRatio || 1);
 
     invW = INV_COLS * SLOT_SIZE + 40;
     invH = INV_ROWS * SLOT_SIZE + 80;
@@ -127,7 +132,6 @@ function drawInventory() {
     ctx.font = "20px monospace";
     ctx.fillText("Inventory", invX + 20, invY + 30);
 
-    // Slots + items
     const startX = invX + 20;
     const startY = invY + 50;
 
@@ -140,7 +144,7 @@ function drawInventory() {
 
             // Slot background
             ctx.fillStyle = "rgba(255,255,255,0.1)";
-            ctx.fillRect(sx, sy, SLOT_SIZE - SLOT_PADDING, SLOT_SIZE - SLOT_PADDING);
+            ctx.fillRect(sx, sy, SLOT_SIZE, SLOT_SIZE);
 
             if (index >= allItems.length) {
                 index++;
@@ -151,12 +155,13 @@ function drawInventory() {
             const tex = itemTextures.get(name);
 
             if (tex?.image) {
+                const inner = SLOT_SIZE - SLOT_PADDING * 2;
                 ctx.drawImage(
                     tex.image,
-                    sx + 4,
-                    sy + 4,
-                    SLOT_SIZE - 8 - SLOT_PADDING,
-                    SLOT_SIZE - 8 - SLOT_PADDING
+                    sx + SLOT_PADDING,
+                    sy + SLOT_PADDING,
+                    inner,
+                    inner
                 );
             }
 
@@ -173,13 +178,12 @@ canvas.addEventListener("mousedown", (e) => {
     if (!inventoryOpen) return;
 
     const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
+    const dpr = window.devicePixelRatio || 1;
 
-    // Check if click is inside inventory area
-    if (mx < invX || mx > invX + invW || my < invY || my > invY + invH) {
-        return;
-    }
+    const mx = (e.clientX - rect.left) * dpr;
+    const my = (e.clientY - rect.top) * dpr;
+
+    if (mx < invX || mx > invX + invW || my < invY || my > invH) return;
 
     const startX = invX + 20;
     const startY = invY + 50;
@@ -195,11 +199,9 @@ canvas.addEventListener("mousedown", (e) => {
     if (col < 0 || col >= INV_COLS || row < 0 || row >= INV_ROWS) return;
 
     const index = row * INV_COLS + col;
-    if (index < 0 || index >= allItems.length) return;
+    if (index >= allItems.length) return;
 
     const pickedName = allItems[index];
-
-    // Place into currently selected hotbar slot
     hotbarItems[selectedSlot] = pickedName;
 });
 
@@ -210,10 +212,7 @@ canvas.addEventListener("mousedown", (e) => {
 function renderGUI() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Always draw hotbar
     drawHotbar();
-
-    // Draw inventory overlay if open
     drawInventory();
 
     requestAnimationFrame(renderGUI);
@@ -224,7 +223,6 @@ function renderGUI() {
 // -----------------------------------------------------
 
 async function initGUI() {
-    // Hook up input events
     registerInventoryToggle(() => {
         inventoryOpen = !inventoryOpen;
     });
@@ -238,4 +236,5 @@ async function initGUI() {
 }
 
 initGUI();
+
 
