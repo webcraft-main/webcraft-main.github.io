@@ -17,12 +17,12 @@ jobs:
       - name: Generate itemlist.json
         run: |
           mkdir -p assets/sixsevencraft/textures/item
-          find assets/sixsevencraft/textures/item -maxdepth 1 -name '*.json' \
-            | sed 's/.*\///;s/.json$//' \
+          find assets/sixsevencraft/textures/item -maxdepth 1 -name '*.png' \
+            | sed 's/.*\///;s/.png$//' \
             | jq -R -s -c 'split("\n") | map(select(length > 0))' \
             > assets/sixsevencraft/textures/item/itemlist.json
 
-      - name: Commit item.json
+      - name: Commit itemlist.json
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"
