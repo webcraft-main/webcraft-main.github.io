@@ -26,7 +26,12 @@ jobs:
         run: |
           echo "Listing item folder:"
           ls -R assets/sixsevencraft/textures/item
-      
+
+      - name: Show generated itemlist.json
+        run: |
+          echo "Generated itemlist.json:"
+          cat assets/sixsevencraft/textures/item/itemlist.json
+
       - name: Commit itemlist.json
         run: |
           git config user.name "GitHub Action"
