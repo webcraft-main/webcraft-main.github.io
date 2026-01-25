@@ -351,5 +351,12 @@ export function matchesWhen(props, when) {
     return true;
 }
 
+// -----------------------------------------------------
+// PUBLIC API: STATE LOOKUP
+// -----------------------------------------------------
+
+export function getStateDef(stateId) {
+    return stateIdToDef[stateId] || null;
+}
 
 
