@@ -199,4 +199,5 @@ function drawInventory() {
         ctx.strokeRect(sx, sy, SLOT_SIZE, SLOT_SIZE);
         const item = craftingGrid[i];
         const tex = itemTextures.get(item);
-
+    }
+}
