@@ -199,5 +199,39 @@ function drawInventory() {
         ctx.strokeRect(sx, sy, SLOT_SIZE, SLOT_SIZE);
         const item = craftingGrid[i];
         const tex = itemTextures.get(item);
+        if (tex?.image) {
+            ctx.drawImage(tex.image, resultX + 1, resultY + 1, 16, 16);
+        }
     }
+} // end of drawInventory()
+
+
+// -----------------------------------------------------
+// RENDER LOOP
+// -----------------------------------------------------
+function renderGUI() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawHotbar();
+    drawInventory();
+    requestAnimationFrame(renderGUI);
 }
+
+
+// -----------------------------------------------------
+// INIT
+// -----------------------------------------------------
+async function initGUI() {
+    registerInventoryToggle(() => {
+        inventoryOpen = !inventoryOpen;
+        window.inventoryOpen = inventoryOpen;
+    });
+
+    registerHotbarSelect((idx) => {
+        // hotbar selection already synced via inputSelectedSlot
+    });
+
+    await loadGUITextures();
+    renderGUI();
+}
+
+initGUI();
