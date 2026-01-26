@@ -60,14 +60,19 @@ document.addEventListener("keyup", e => {
    MOUSE CLICK (BREAK / PLACE)
    ============================ */
 window.addEventListener("mousedown", e => {
-    // GUI handles clicks when inventory is open
-    if (window.inventoryOpen === true) return;
-
-    // Acquire pointer lock
-    if (!document.pointerLockElement && window.inventoryOpen !== true) {
-         document.body.requestPointerLock();
-         return;
+    // If inventory is open, DO NOT pointer-lock, DO NOT break/place blocks
+    if (window.inventoryOpen === true) {
+        e.stopPropagation();
+        e.preventDefault();
+        return;
     }
+
+    // Acquire pointer lock only during gameplay
+    if (!document.pointerLockElement) {
+        document.body.requestPointerLock();
+        return;
+    }
+
 
     // Ray-march into voxel world
     const hit = raycastVoxel(camera, world);
