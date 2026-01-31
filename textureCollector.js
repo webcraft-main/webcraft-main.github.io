@@ -1,59 +1,53 @@
-// textureCollector.js — collects all texture names used by blockstates + models
-
 export async function collectAllTextureNames(BlockstateDB) {
     const textures = new Set();
 
     for (const [blockName, stateDef] of BlockstateDB.byName) {
 
-        // --- SAFETY: ensure variants exists and is iterable ---
-        if (!stateDef || !stateDef.variants) {
-            console.warn("Blockstate missing variants:", blockName, stateDef);
-            continue;
-        }
+        if (!stateDef) continue;
 
-        let variantsArray = [];
+        // -------------------------------
+        // 1. HANDLE VARIANTS (normal blocks)
+        // -------------------------------
+        if (stateDef.variants) {
+            let variantsArray = [];
 
-        // Minecraft-style: variants is an OBJECT, not an array
-        if (Array.isArray(stateDef.variants)) {
-            variantsArray = stateDef.variants;
-        } else if (typeof stateDef.variants === "object") {
-            // Convert { "": {...}, "facing=north": {...} } into array of variant objects
-            for (const key in stateDef.variants) {
-                const v = stateDef.variants[key];
-                if (v) variantsArray.push(v);
-            }
-        } else {
-            console.warn("Invalid variants format:", blockName, stateDef.variants);
-            continue;
-        }
-
-        // --- Iterate normalized variants ---
-        for (const variant of variantsArray) {
-            if (!variant || !variant.model) continue;
-
-            const model = BlockstateDB.models.get(variant.model);
-            if (!model) continue;
-
-            // Collect textures from model.textures
-            if (model.textures) {
-                for (const key in model.textures) {
-                    const tex = model.textures[key];
-                    if (typeof tex === "string") {
-                        textures.add(tex);
-                    }
+            if (Array.isArray(stateDef.variants)) {
+                variantsArray = stateDef.variants;
+            } else if (typeof stateDef.variants === "object") {
+                for (const key in stateDef.variants) {
+                    const v = stateDef.variants[key];
+                    if (v) variantsArray.push(v);
                 }
             }
 
-            // Collect textures from model.elements[*].faces[*].texture
-            if (model.elements) {
-                for (const elem of model.elements) {
-                    if (!elem.faces) continue;
+            for (const variant of variantsArray) {
+                if (!variant || !variant.model) continue;
 
-                    for (const faceName in elem.faces) {
-                        const face = elem.faces[faceName];
-                        if (face.texture) {
-                            textures.add(face.texture);
-                        }
+                const model = BlockstateDB.models.get(variant.model);
+                if (!model) continue;
+
+                collectTexturesFromModel(model, textures);
+            }
+        }
+
+        // -------------------------------
+        // 2. HANDLE MULTIPART (fences, walls, torches, etc.)
+        // -------------------------------
+        if (stateDef.multipart) {
+            for (const part of stateDef.multipart) {
+                if (!part.apply) continue;
+
+                // apply.model: "block/fence_side"
+                if (part.apply.model) {
+                    const model = BlockstateDB.models.get(part.apply.model);
+                    if (model) collectTexturesFromModel(model, textures);
+                }
+
+                // apply.models: [ {model:"...", x:0}, ... ]
+                if (Array.isArray(part.apply.models)) {
+                    for (const m of part.apply.models) {
+                        const model = BlockstateDB.models.get(m.model);
+                        if (model) collectTexturesFromModel(model, textures);
                     }
                 }
             }
@@ -62,4 +56,36 @@ export async function collectAllTextureNames(BlockstateDB) {
 
     return Array.from(textures);
 }
+
+
+// ---------------------------------------------------------
+// Helper: extract textures from a model
+// ---------------------------------------------------------
+function collectTexturesFromModel(model, textures) {
+
+    // model.textures: { "all": "block/stone", ... }
+    if (model.textures) {
+        for (const key in model.textures) {
+            const tex = model.textures[key];
+            if (typeof tex === "string") {
+                textures.add(tex);
+            }
+        }
+    }
+
+    // model.elements[*].faces[*].texture
+    if (model.elements) {
+        for (const elem of model.elements) {
+            if (!elem.faces) continue;
+
+            for (const faceName in elem.faces) {
+                const face = elem.faces[faceName];
+                if (face.texture) {
+                    textures.add(face.texture);
+                }
+            }
+        }
+    }
+}
+
 
