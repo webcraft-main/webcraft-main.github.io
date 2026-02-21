@@ -4,16 +4,11 @@
 // CHUNK DIMENSIONS
 // -----------------------------------------------------
 
-// Horizontal chunk size (X and Z)
-export const CHUNK_SIZE = 16;
+export const CHUNK_SIZE_X = 16;
+export const CHUNK_SIZE_Y = 256;
+export const CHUNK_SIZE_Z = 16;
 
-// Vertical world height (Y)
-export const WORLD_HEIGHT = 128;
-
-// Derived values
-export const CHUNK_AREA = CHUNK_SIZE * CHUNK_SIZE;
-export const CHUNK_VOLUME = CHUNK_SIZE * CHUNK_SIZE * WORLD_HEIGHT;
-
+export const CHUNK_RADIUS = 6; // how many chunks to load around player
 
 // -----------------------------------------------------
 // WORLD GENERATION / RENDERING
