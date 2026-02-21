@@ -1,4 +1,4 @@
-// loop.js — main game loop
+// loop.js — main game loop (chunk-aware + GUI-safe)
 
 import { input } from "./engine.js";
 
@@ -37,10 +37,25 @@ export function startGameLoop(world, scene, camera, renderer) {
         camera.position.y = input.crouch ? 79.6 : 80;
 
         // -----------------------------
-        // WORLD UPDATE + RENDER
+        // CHUNK SYSTEM
         // -----------------------------
-        if (world.update) world.update();
+        // Load/unload chunks around player
+        world.updateLoadedChunks(camera.position.x, camera.position.z);
+
+        // Rebuild meshes for dirty chunks
+        world.remeshDirtyChunks();
+
+        // -----------------------------
+        // RENDER 3D WORLD
+        // -----------------------------
         renderer.render(scene, camera);
+
+        // -----------------------------
+        // RENDER GUI (your GUI canvas)
+        // -----------------------------
+        if (world.gui && world.gui.render) {
+            world.gui.render();
+        }
 
         requestAnimationFrame(tick);
     }
