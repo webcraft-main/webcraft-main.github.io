@@ -1,10 +1,16 @@
-// world.js — unified world system + chunk storage + terrain
+// world.js — unified world system + 3D chunk storage + terrain
 
-import { CHUNK_SIZE, WORLD_HEIGHT } from './config.js';
-import { BlockstateDB } from './blockRenderer.js';
+import {
+    CHUNK_SIZE_X,
+    CHUNK_SIZE_Y,
+    CHUNK_SIZE_Z,
+    CHUNK_RADIUS
+} from "./config.js";
+
+import { BlockstateDB } from "./blockRenderer.js";
 
 // -----------------------------------------------------
-// BLOCK DISCOVERY (from auto-generated manifest)
+// BLOCK DISCOVERY
 // -----------------------------------------------------
 
 export async function loadBlockNames() {
@@ -16,9 +22,10 @@ export async function loadBlockNames() {
     return await res.json();
 }
 
-// ----------------///
-// BIOME CREATION  ///
-// ----------------///
+// -----------------------------------------------------
+// BIOME LOADING
+// -----------------------------------------------------
+
 export async function loadBiomes() {
     const biomeNames = [
         "Ice Plains",
@@ -41,10 +48,10 @@ export async function loadBiomes() {
 }
 
 // -----------------------------------------------------
-// CHUNK CREATION / STORAGE HELPERS
+// CHUNK HELPERS
 // -----------------------------------------------------
 
-const CHUNK_VOLUME = CHUNK_SIZE * CHUNK_SIZE * WORLD_HEIGHT;
+const CHUNK_VOLUME = CHUNK_SIZE_X * CHUNK_SIZE_Y * CHUNK_SIZE_Z;
 
 function createEmptyChunk(cx, cz) {
     return {
@@ -54,6 +61,10 @@ function createEmptyChunk(cx, cz) {
         mesh: null,
         needsRemesh: true
     };
+}
+
+function index3D(x, y, z) {
+    return x + CHUNK_SIZE_X * (z + CHUNK_SIZE_Z * y);
 }
 
 function encodeArray(arr) {
@@ -88,35 +99,35 @@ export function loadChunk(data) {
 }
 
 // -----------------------------------------------------
-// TERRAIN GENERATION
+// TERRAIN GENERATION (3D CHUNK VERSION)
 // -----------------------------------------------------
 
 export function generateChunk(chunk) {
     const { blocks, blockStates } = chunk;
 
-    for (let x = 0; x < CHUNK_SIZE; x++) {
-        for (let z = 0; z < CHUNK_SIZE; z++) {
+    for (let x = 0; x < CHUNK_SIZE_X; x++) {
+        for (let z = 0; z < CHUNK_SIZE_Z; z++) {
 
-            const worldX = chunk.cx * CHUNK_SIZE + x;
-            const worldZ = chunk.cz * CHUNK_SIZE + z;
+            const worldX = chunk.cx * CHUNK_SIZE_X + x;
+            const worldZ = chunk.cz * CHUNK_SIZE_Z + z;
 
             const height = 64 + Math.floor(
                 8 * Math.sin(worldX * 0.05) +
                 8 * Math.cos(worldZ * 0.05)
             );
 
-            for (let y = 0; y < WORLD_HEIGHT; y++) {
-                const index = x + CHUNK_SIZE * (z + CHUNK_SIZE * y);
+            for (let y = 0; y < CHUNK_SIZE_Y; y++) {
+                const idx = index3D(x, y, z);
 
                 if (y > height) {
-                    blocks[index] = 0;
-                    blockStates[index] = 0;
+                    blocks[idx] = 0;
+                    blockStates[idx] = 0;
                 } else if (y === height) {
-                    blocks[index] = BlockstateDB.byName.get("grass_block")?.id || 0;
+                    blocks[idx] = BlockstateDB.byName.get("grass_block")?.id || 0;
                 } else if (y > height - 4) {
-                    blocks[index] = BlockstateDB.byName.get("dirt")?.id || 0;
+                    blocks[idx] = BlockstateDB.byName.get("dirt")?.id || 0;
                 } else {
-                    blocks[index] = BlockstateDB.byName.get("stone")?.id || 0;
+                    blocks[idx] = BlockstateDB.byName.get("stone")?.id || 0;
                 }
             }
         }
@@ -126,7 +137,7 @@ export function generateChunk(chunk) {
 }
 
 // -----------------------------------------------------
-// WORLD CLASS
+// WORLD CLASS (3D CHUNKS)
 // -----------------------------------------------------
 
 export class World {
@@ -157,65 +168,74 @@ export class World {
         return this.chunks.get(key);
     }
 
-    worldToChunk(x, y, z) {
-        const cx = Math.floor(x / CHUNK_SIZE);
-        const cz = Math.floor(z / CHUNK_SIZE);
-        const lx = x - cx * CHUNK_SIZE;
-        const lz = z - cz * CHUNK_SIZE;
-        return { cx, cz, lx, y, lz };
+    worldToChunk(wx, wy, wz) {
+        const cx = Math.floor(wx / CHUNK_SIZE_X);
+        const cz = Math.floor(wz / CHUNK_SIZE_Z);
+
+        const lx = wx - cx * CHUNK_SIZE_X;
+        const lz = wz - cz * CHUNK_SIZE_Z;
+
+        return { cx, cz, lx, ly: wy, lz };
     }
 
-    getBlock(x, y, z) {
-        if (y < 0 || y >= WORLD_HEIGHT) return 0;
-        const { cx, cz, lx, lz } = this.worldToChunk(x, y, z);
+    getBlock(wx, wy, wz) {
+        if (wy < 0 || wy >= CHUNK_SIZE_Y) return 0;
+        const { cx, cz, lx, ly, lz } = this.worldToChunk(wx, wy, wz);
         const chunk = this.getChunk(cx, cz);
         if (!chunk) return 0;
-        const index = lx + CHUNK_SIZE * (lz + CHUNK_SIZE * y);
-        return chunk.blocks[index];
+        return chunk.blocks[index3D(lx, ly, lz)];
     }
 
-    getBlockStateID(x, y, z) {
-        if (y < 0 || y >= WORLD_HEIGHT) return 0;
-        const { cx, cz, lx, lz } = this.worldToChunk(x, y, z);
+    getBlockStateID(wx, wy, wz) {
+        if (wy < 0 || wy >= CHUNK_SIZE_Y) return 0;
+        const { cx, cz, lx, ly, lz } = this.worldToChunk(wx, wy, wz);
         const chunk = this.getChunk(cx, cz);
         if (!chunk) return 0;
-        const index = lx + CHUNK_SIZE * (lz + CHUNK_SIZE * y);
-        return chunk.blockStates[index];
+        return chunk.blockStates[index3D(lx, ly, lz)];
     }
 
-    setBlock(x, y, z, blockId, stateId = 0) {
-        if (y < 0 || y >= WORLD_HEIGHT) return;
-        const { cx, cz, lx, lz } = this.worldToChunk(x, y, z);
+    setBlock(wx, wy, wz, blockId, stateId = 0) {
+        if (wy < 0 || wy >= CHUNK_SIZE_Y) return;
+        const { cx, cz, lx, ly, lz } = this.worldToChunk(wx, wy, wz);
         const chunk = this.ensureChunk(cx, cz);
-        const index = lx + CHUNK_SIZE * (lz + CHUNK_SIZE * y);
-        chunk.blocks[index] = blockId;
-        chunk.blockStates[index] = stateId;
+        const idx = index3D(lx, ly, lz);
+
+        chunk.blocks[idx] = blockId;
+        chunk.blockStates[idx] = stateId;
         chunk.needsRemesh = true;
+
+        if (lx === 0) this.mark(cx - 1, cz);
+        if (lx === CHUNK_SIZE_X - 1) this.mark(cx + 1, cz);
+        if (lz === 0) this.mark(cx, cz - 1);
+        if (lz === CHUNK_SIZE_Z - 1) this.mark(cx, cz + 1);
     }
 
-    loadRemoteChunk(data) {
-        const chunk = this.ensureChunk(data.cx, data.cz);
-        chunk.blocks = new Uint16Array(data.blocks);
-        chunk.blockStates = new Uint16Array(data.blockStates);
-        chunk.needsRemesh = true;
+    mark(cx, cz) {
+        const c = this.getChunk(cx, cz);
+        if (c) c.needsRemesh = true;
+    }
+
+    updateLoadedChunks(px, pz) {
+        const centerCx = Math.floor(px / CHUNK_SIZE_X);
+        const centerCz = Math.floor(pz / CHUNK_SIZE_Z);
+
+        const needed = new Set();
+
+        for (let dx = -CHUNK_RADIUS; dx <= CHUNK_RADIUS; dx++) {
+            for (let dz = -CHUNK_RADIUS; dz <= CHUNK_RADIUS; dz++) {
+                const cx = centerCx + dx;
+                const cz = centerCz + dz;
+                needed.add(this._key(cx, cz));
+                this.ensureChunk(cx, cz);
+            }
+        }
+
+        for (const [key, chunk] of this.chunks.entries()) {
+            if (!needed.has(key)) {
+                this.chunks.delete(key);
+            }
+        }
     }
 }
-
-// -----------------------------------------------------
-// EXPORT WORLD INSTANCE
-// -----------------------------------------------------
 
 export const world = new World();
-
-export function getBiomeAt(x, z) {
-    const n = Math.sin(x * 0.004) + Math.cos(z * 0.004);
-
-    if (n > 1.2) return BiomeDB.byName.get("volcanic");
-    if (n > 0.4) return BiomeDB.byName.get("oak_forest");
-    if (n > -0.2) return BiomeDB.byName.get("grassyplains");
-    if (n > -1.0) return BiomeDB.byName.get("iceplains");
-
-    return BiomeDB.byName.get("the_end");
-}
-
-window.world = world;
