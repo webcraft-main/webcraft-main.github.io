@@ -28,11 +28,11 @@ export async function loadBlockNames() {
 
 export async function loadBiomes() {
     const biomeNames = [
-        "Ice Plains",
-        "Grassy Plains",
-        "Oak Forest",
-        "Volcanic",
-        "The End"
+        "icePlains",
+        "grassyPlains",
+        "oakForest",
+        "volcanic",
+        "theEnd"
     ];
 
     for (const name of biomeNames) {
