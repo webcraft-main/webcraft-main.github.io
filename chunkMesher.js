@@ -1,8 +1,13 @@
-// chunkMesher.js — model-aware greedy meshing + terrain shader
+// chunkMesher.js — model-aware greedy meshing + neighbor-aware culling + terrain shader
 
 const THREE = window.THREE;
 
-import { CHUNK_SIZE, WORLD_HEIGHT } from "./config.js";
+import {
+    CHUNK_SIZE_X,
+    CHUNK_SIZE_Y,
+    CHUNK_SIZE_Z
+} from "./config.js";
+
 import { getBlockModelFaces } from "./blockRenderer.js";
 import { loadShader } from "./shaderLoader.js";
 import { BlockAtlasUV } from "./textureAtlas.js";
@@ -31,46 +36,49 @@ async function ensureTerrainMaterial(world) {
             }
         });
     } else {
-        // keep atlas in sync if it changes
         terrainMaterial.uniforms.Sampler0.value = world.textureAtlas || null;
     }
     return terrainMaterial;
 }
 
-export async function meshChunk(world, chunk) {
+// -----------------------------------------------------
+// MAIN MESH FUNCTION
+// -----------------------------------------------------
+
+export async function meshChunk(world, chunk, neighbors) {
     const geometry = new THREE.BufferGeometry();
     const positions = [];
     const uvs = [];
     const indices = [];
 
-    // -------------------------------------------------
-    // 1) Precompute faces for all (blockId,stateId) in this chunk
-    // -------------------------------------------------
-    const faceCache = new Map(); // key: "blockId:stateId" → faces[]
+    const dims = [CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z];
 
-    const dims = [CHUNK_SIZE, WORLD_HEIGHT, CHUNK_SIZE];
+    // -------------------------------------------------
+    // 1) Precompute faces for all (blockId,stateId)
+    // -------------------------------------------------
+    const faceCache = new Map();
 
-    for (let y = 0; y < WORLD_HEIGHT; y++) {
-        for (let z = 0; z < CHUNK_SIZE; z++) {
-            for (let x = 0; x < CHUNK_SIZE; x++) {
-                const index = x + CHUNK_SIZE * (z + CHUNK_SIZE * y);
-                const blockId = chunk.blocks[index];
-                const stateId = chunk.blockStates[index];
+    for (let y = 0; y < CHUNK_SIZE_Y; y++) {
+        for (let z = 0; z < CHUNK_SIZE_Z; z++) {
+            for (let x = 0; x < CHUNK_SIZE_X; x++) {
+                const idx = x + CHUNK_SIZE_X * (z + CHUNK_SIZE_Z * y);
+                const blockId = chunk.blocks[idx];
+                const stateId = chunk.blockStates[idx];
                 if (!blockId) continue;
 
                 const key = `${blockId}:${stateId}`;
                 if (faceCache.has(key)) continue;
 
                 const faces = await getBlockModelFaces(blockId, stateId);
-                if (!faces || !faces.length) continue;
-
-                faceCache.set(key, faces);
+                if (faces && faces.length) {
+                    faceCache.set(key, faces);
+                }
             }
         }
     }
 
     // -------------------------------------------------
-    // 2) Greedy meshing over 3 axes
+    // 2) Greedy meshing (3 axes)
     // -------------------------------------------------
     for (let axis = 0; axis < 3; axis++) {
         const u = (axis + 1) % 3;
@@ -86,11 +94,11 @@ export async function meshChunk(world, chunk) {
         for (let d = -1; d < dims[axis]; d++) {
             let n = 0;
 
-            // Build mask
+            // Build mask with neighbor-aware visibility
             for (let j = 0; j < dims[v]; j++) {
                 for (let i = 0; i < dims[u]; i++) {
-                    const a = getVoxel(world, chunk, axis, d, i, j, faceCache);
-                    const b = getVoxel(world, chunk, axis, d + 1, i, j, faceCache);
+                    const a = getVoxel(chunk, neighbors, axis, d, i, j, faceCache);
+                    const b = getVoxel(chunk, neighbors, axis, d + 1, i, j, faceCache);
 
                     if (shouldMerge(a, b)) {
                         mask[n++] = null;
@@ -116,7 +124,6 @@ export async function meshChunk(world, chunk) {
                         continue;
                     }
 
-                    // pick which face of the model this quad represents
                     const faceIndex = pickFace(axis, voxel.side);
                     voxel.face = voxel.faces[faceIndex];
                     if (!voxel.face) {
@@ -159,6 +166,10 @@ export async function meshChunk(world, chunk) {
         }
     }
 
+    // -------------------------------------------------
+    // 3) Build geometry
+    // -------------------------------------------------
+
     geometry.setAttribute(
         "position",
         new THREE.Float32BufferAttribute(positions, 3)
@@ -173,9 +184,9 @@ export async function meshChunk(world, chunk) {
     chunk.needsRemesh = false;
     return mesh;
 
-    // -----------------------
-    // Helpers
-    // -----------------------
+    // -------------------------------------------------
+    // Helper functions
+    // -------------------------------------------------
 
     function addQuad(voxel, axis, d, i, j, width, height) {
         const face = voxel.face;
@@ -218,70 +229,74 @@ export async function meshChunk(world, chunk) {
         );
     }
 
-    function getVoxel(world, chunk, axis, d, i, j, faceCache) {
+    function getVoxel(chunk, neighbors, axis, d, i, j, faceCache) {
         if (d < 0 || d >= dims[axis]) return null;
 
         let x, y, z;
-        if (axis === 0) {
-            x = d;
-            y = i;
-            z = j;
-        } else if (axis === 1) {
-            x = i;
-            y = d;
-            z = j;
-        } else {
-            x = i;
-            y = j;
-            z = d;
-        }
+        if (axis === 0) { x = d; y = i; z = j; }
+        else if (axis === 1) { x = i; y = d; z = j; }
+        else { x = i; y = j; z = d; }
 
+        // Inside chunk
         if (
-            x < 0 || x >= CHUNK_SIZE ||
-            z < 0 || z >= CHUNK_SIZE ||
-            y < 0 || y >= WORLD_HEIGHT
+            x >= 0 && x < CHUNK_SIZE_X &&
+            y >= 0 && y < CHUNK_SIZE_Y &&
+            z >= 0 && z < CHUNK_SIZE_Z
         ) {
-            return null;
+            const idx = x + CHUNK_SIZE_X * (z + CHUNK_SIZE_Z * y);
+            const blockId = chunk.blocks[idx];
+            const stateId = chunk.blockStates[idx];
+            if (!blockId) return null;
+
+            const key = `${blockId}:${stateId}`;
+            return {
+                id: blockId,
+                state: stateId,
+                faces: faceCache.get(key)
+            };
         }
 
-        const index = x + CHUNK_SIZE * (z + CHUNK_SIZE * y);
-        const blockId = chunk.blocks[index];
-        const stateId = chunk.blockStates[index];
+        // Neighbor chunks
+        const neighbor = resolveNeighbor(neighbors, x, y, z);
+        if (!neighbor) return null;
+
+        const idx = neighbor.lx + CHUNK_SIZE_X * (neighbor.lz + CHUNK_SIZE_Z * y);
+        const blockId = neighbor.chunk.blocks[idx];
+        const stateId = neighbor.chunk.blockStates[idx];
 
         if (!blockId) return null;
 
         const key = `${blockId}:${stateId}`;
-        const faces = faceCache.get(key);
-        if (!faces || !faces.length) return null;
-
         return {
             id: blockId,
             state: stateId,
-            faces
+            faces: faceCache.get(key)
         };
     }
 
+    function resolveNeighbor(neighbors, x, y, z) {
+        if (x < 0 && neighbors.nx) return { chunk: neighbors.nx, lx: x + CHUNK_SIZE_X, lz: z };
+        if (x >= CHUNK_SIZE_X && neighbors.px) return { chunk: neighbors.px, lx: x - CHUNK_SIZE_X, lz: z };
+        if (z < 0 && neighbors.nz) return { chunk: neighbors.nz, lx: x, lz: z + CHUNK_SIZE_Z };
+        if (z >= CHUNK_SIZE_Z && neighbors.pz) return { chunk: neighbors.pz, lx: x, lz: z - CHUNK_SIZE_Z };
+        return null;
+    }
+
     function shouldMerge(a, b) {
-        // if both exist and are same block, we don't render the internal face
         if (!a || !b) return false;
-        if (a.id !== b.id) return false;
-        return true;
+        return a.id === b.id && a.state === b.state;
     }
 
     function canMerge(a, b, faceIndex) {
         if (!a || !b) return false;
         if (a.id !== b.id) return false;
         if (a.state !== b.state) return false;
-        // same face template
         return a.faces[faceIndex] === b.faces[faceIndex];
     }
 
     function pickFace(axis, side) {
-        // 0:+X, 1:-X, 2:+Y, 3:-Y, 4:+Z, 5:-Z
         if (axis === 0) return side > 0 ? 0 : 1;
         if (axis === 1) return side > 0 ? 2 : 3;
         return side > 0 ? 4 : 5;
     }
 }
-
-
