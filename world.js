@@ -243,15 +243,19 @@ export class World {
     }
 }
 
+// -----------------------------------------------------
+// BIOME SAMPLING
+// -----------------------------------------------------
+
 export function getBiomeAt(x, z) {
     const n = Math.sin(x * 0.004) + Math.cos(z * 0.004);
 
-    if (n > 1.2) return BiomeDB.byName.get("volcanic");
-    if (n > 0.4) return BiomeDB.byName.get("oak_forest");
-    if (n > -0.2) return BiomeDB.byName.get("grassyplains");
-    if (n > -1.0) return BiomeDB.byName.get("iceplains");
+    if (n > 1.2) return BiomeDB.byName.get("Volcanic");
+    if (n > 0.4) return BiomeDB.byName.get("Oak Forest");
+    if (n > -0.2) return BiomeDB.byName.get("Grassy Plains");
+    if (n > -1.0) return BiomeDB.byName.get("Ice Plains");
 
-    return BiomeDB.byName.get("the_end");
+    return BiomeDB.byName.get("The End");
 }
 
 export const world = new World();
