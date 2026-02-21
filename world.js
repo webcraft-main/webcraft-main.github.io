@@ -238,4 +238,15 @@ export class World {
     }
 }
 
+export function getBiomeAt(x, z) {
+    const n = Math.sin(x * 0.004) + Math.cos(z * 0.004);
+
+    if (n > 1.2) return BiomeDB.byName.get("volcanic");
+    if (n > 0.4) return BiomeDB.byName.get("oak_forest");
+    if (n > -0.2) return BiomeDB.byName.get("grassyplains");
+    if (n > -1.0) return BiomeDB.byName.get("iceplains");
+
+    return BiomeDB.byName.get("the_end");
+}
+
 export const world = new World();
