@@ -1,4 +1,4 @@
-// main.js — full auto-discovery bootstrap
+// main.js — unified bootstrap + chunk streaming
 
 const THREE = window.THREE;
 
@@ -11,7 +11,8 @@ import {
 
 import { buildBlockTextureAtlas } from "./textureAtlas.js";
 import { collectAllTextureNames } from "./textureCollector.js";
-import { world } from "./world.js"; // ← YOUR ORIGINAL IMPORT
+
+import { world, loadBiomes } from "./world.js";   // ← chunk‑aware world
 import { scene, camera, renderer } from "./engine.js";
 import { startGameLoop } from "./loop.js";
 import { initDebugBlockstateUI } from "./debugBlockstateUI.js";
@@ -28,7 +29,6 @@ export async function discoverBlockNames() {
     }
     return await res.json();
 }
-
 
 // -----------------------------------------------------
 // MAIN INIT
@@ -50,26 +50,26 @@ async function init() {
     // 4. Build state registry
     buildStatesFromBlockstates();
 
-    // 5. Collect all texture names from blockstates + models
+    // 5. Load biomes
+    await loadBiomes();
+
+    // 6. Collect all texture names from blockstates + models
     const textureNames = await collectAllTextureNames(BlockstateDB);
 
-    // 6. Build texture atlas
+    // 7. Build texture atlas
     const { texture: atlasTexture } = await buildBlockTextureAtlas(textureNames);
 
-    // 7. Inject atlas into your existing world
+    // 8. Inject atlas into world
     world.textureAtlas = atlasTexture;
 
-    // 8. Debug UI
+    // 9. Debug UI
     initDebugBlockstateUI();
 
-    // 9. Start game loop
+    // 10. Force-load spawn chunk (0,0)
+    world.ensureChunk(0, 0);
+
+    // 11. Start game loop (chunk-aware)
     startGameLoop(world, scene, camera, renderer);
 }
-// Force-load the spawn chunk
-world.ensureChunk(0, 0);
 
 init();
-
-
-
-
