@@ -26,6 +26,11 @@ export async function loadBlockNames() {
 // BIOME LOADING
 // -----------------------------------------------------
 
+export const BiomeDB = {
+    byName: new Map(),
+    list: []
+};
+
 export async function loadBiomes() {
     const biomeNames = [
         "icePlains",
