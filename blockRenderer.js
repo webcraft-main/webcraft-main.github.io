@@ -9,7 +9,9 @@ const THREE = window.THREE;
 export const BlockstateDB = {
     byName: new Map(),
     allModels: new Set(),
+    models: new Map(),   // <-- add this
 };
+
 
 export const blockNameToId = new Map();
 export const blockIdToName = [];
@@ -56,7 +58,14 @@ export async function loadAllBlockstates(blockNames) {
             BlockstateDB.allModels.add(model);
         }
     }
+
+    // preload all models into BlockstateDB.models
+    for (const modelName of BlockstateDB.allModels) {
+        const model = await loadModel(modelName);
+        BlockstateDB.models.set(modelName, model);
+    }
 }
+
 
 export async function loadOneBlockstate(name) {
     const path = `assets/sixsevencraft/blockstates/${name}.json`;
