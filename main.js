@@ -44,7 +44,7 @@ async function init() {
         registerBlock(name);
     }
 
-    // 3. Load blockstates
+    // 3. Load blockstates (this ALSO preloads models now)
     await loadAllBlockstates(BLOCK_NAMES);
 
     // 4. Build state registry
@@ -53,22 +53,25 @@ async function init() {
     // 5. Load biomes
     await loadBiomes();
 
-    // 6. Collect all texture names from blockstates + models
+    // 6. DEBUG: verify models are loaded
+    console.log("Models loaded:", BlockstateDB.models.size);
+
+    // 7. Collect all texture names
     const textureNames = await collectAllTextureNames(BlockstateDB);
 
-    // 7. Build texture atlas
+    // 8. Build texture atlas
     const { texture: atlasTexture } = await buildBlockTextureAtlas(textureNames);
 
-    // 8. Inject atlas into world
+    // 9. Inject atlas into world
     world.textureAtlas = atlasTexture;
 
-    // 9. Debug UI
+    // 10. Debug UI
     initDebugBlockstateUI();
 
-    // 10. Force-load spawn chunk (0,0)
+    // 11. Force-load spawn chunk (0,0)
     world.ensureChunk(0, 0);
 
-    // 11. Start game loop (chunk-aware)
+    // 12. Start game loop
     startGameLoop(world, scene, camera, renderer);
 }
 
