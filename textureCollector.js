@@ -1,13 +1,14 @@
+// textureCollector.js — gathers all texture names used by all block models
+
 export async function collectAllTextureNames(BlockstateDB) {
     const textures = new Set();
 
     for (const [blockName, stateDef] of BlockstateDB.byName) {
-
         if (!stateDef) continue;
 
-        // -------------------------------
-        // 1. HANDLE VARIANTS (normal blocks)
-        // -------------------------------
+        // -------------------------------------------------
+        // 1. VARIANTS
+        // -------------------------------------------------
         if (stateDef.variants) {
             let variantsArray = [];
 
@@ -23,30 +24,30 @@ export async function collectAllTextureNames(BlockstateDB) {
             for (const variant of variantsArray) {
                 if (!variant || !variant.model) continue;
 
-                const model = BlockstateDB.models.get(variant.model);
+                const model = BlockstateDB.models?.get?.(variant.model);
                 if (!model) continue;
 
                 collectTexturesFromModel(model, textures);
             }
         }
 
-        // -------------------------------
-        // 2. HANDLE MULTIPART (fences, walls, torches, etc.)
-        // -------------------------------
+        // -------------------------------------------------
+        // 2. MULTIPART
+        // -------------------------------------------------
         if (stateDef.multipart) {
             for (const part of stateDef.multipart) {
                 if (!part.apply) continue;
 
-                // apply.model: "block/fence_side"
+                // apply.model
                 if (part.apply.model) {
-                    const model = BlockstateDB.models.get(part.apply.model);
+                    const model = BlockstateDB.models?.get?.(part.apply.model);
                     if (model) collectTexturesFromModel(model, textures);
                 }
 
-                // apply.models: [ {model:"...", x:0}, ... ]
+                // apply.models[]
                 if (Array.isArray(part.apply.models)) {
                     for (const m of part.apply.models) {
-                        const model = BlockstateDB.models.get(m.model);
+                        const model = BlockstateDB.models?.get?.(m.model);
                         if (model) collectTexturesFromModel(model, textures);
                     }
                 }
@@ -87,5 +88,3 @@ function collectTexturesFromModel(model, textures) {
         }
     }
 }
-
-
