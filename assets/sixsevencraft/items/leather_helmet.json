@@ -31,7 +31,6 @@
       {
         "model": {
           "type": "model",
-          "model": "item/leather_helmet_netherite_trim",
           "tints": [
             {
               "type": "dye",
@@ -39,7 +38,6 @@
             }
           ]
         },
-        "when": "netherite"
       },
       {
         "model": {

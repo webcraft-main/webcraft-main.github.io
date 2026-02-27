@@ -1,7 +1,0 @@
-{
-  "parent": "block/template_shelf_right",
-  "textures": {
-    "all": "block/crimson_shelf",
-    "particle": "block/stripped_crimson_stem"
-  }
-}

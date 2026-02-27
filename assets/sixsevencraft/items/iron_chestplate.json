@@ -19,9 +19,7 @@
       {
         "model": {
           "type": "model",
-          "model": "item/iron_chestplate_netherite_trim"
         },
-        "when": "netherite"
       },
       {
         "model": {

@@ -2,7 +2,6 @@
     "parent": "block/block",
     "textures": {
         "top": "block/big_dripleaf_top",
-        "stem": "block/big_dripleaf_stem",
         "side": "block/big_dripleaf_side",
         "tip": "block/big_dripleaf_tip",
         "particle": "block/big_dripleaf_top"
@@ -49,8 +48,6 @@
             "rotation": { "origin": [ 8, 8, 12 ], "axis": "y", "angle": 45, "rescale": true },
             "shade": false,
             "faces": {
-                "north": { "uv": [ 3, 0, 14, 16 ], "texture": "#stem" },
-                "south": { "uv": [ 3, 0, 14, 16 ], "texture": "#stem" }
             }
         },
         {   "from": [ 5, 0, 12 ],
@@ -58,8 +55,6 @@
             "rotation": { "origin": [ 8, 8, 12 ], "axis": "y", "angle": -45, "rescale": true },
             "shade": false,
             "faces": {
-                "north": { "uv": [ 3, 0, 14, 16 ], "texture": "#stem" },
-                "south": { "uv": [ 3, 0, 14, 16 ], "texture": "#stem" }
             }
         }
     ]

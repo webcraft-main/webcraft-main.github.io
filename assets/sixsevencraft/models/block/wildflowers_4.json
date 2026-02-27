@@ -2,6 +2,5 @@
   "parent": "block/flowerbed_4",
   "textures": {
     "flowerbed": "block/wildflowers",
-    "stem": "block/wildflowers_stem"
   }
 }

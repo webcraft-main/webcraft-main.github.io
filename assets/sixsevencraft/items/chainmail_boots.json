@@ -19,9 +19,7 @@
       {
         "model": {
           "type": "model",
-          "model": "item/chainmail_boots_netherite_trim"
         },
-        "when": "netherite"
       },
       {
         "model": {

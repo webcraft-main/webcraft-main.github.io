@@ -19,9 +19,7 @@
       {
         "model": {
           "type": "model",
-          "model": "item/golden_boots_netherite_trim"
         },
-        "when": "netherite"
       },
       {
         "model": {
