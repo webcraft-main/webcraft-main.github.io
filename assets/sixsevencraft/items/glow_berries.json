@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/glow_berries"
+    "type": "model",
+    "model": "item/glow_berries"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/mangrove_stairs"
+    "type": "model",
+    "model": "block/mangrove_stairs"
   }
 }

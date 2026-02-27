@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:item/pitcher_pod"
+    "layer0": "item/pitcher_pod"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/gunpowder"
+    "type": "model",
+    "model": "item/gunpowder"
   }
 }

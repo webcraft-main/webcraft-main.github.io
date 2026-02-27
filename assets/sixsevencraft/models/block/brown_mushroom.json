@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cross",
+  "parent": "block/cross",
   "textures": {
-    "cross": "minecraft:block/brown_mushroom"
+    "cross": "block/brown_mushroom"
   }
 }

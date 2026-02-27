@@ -2,22 +2,22 @@
   "layers": {
     "horse_body": [
       {
-        "texture": "minecraft:copper"
+        "texture": "copper"
       }
     ],
     "humanoid": [
       {
-        "texture": "minecraft:copper"
+        "texture": "copper"
       }
     ],
     "humanoid_leggings": [
       {
-        "texture": "minecraft:copper"
+        "texture": "copper"
       }
     ],
     "nautilus_body": [
       {
-        "texture": "minecraft:copper"
+        "texture": "copper"
       }
     ]
   }

@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/light_blue_shulker_box"
+      "model": "block/light_blue_shulker_box"
     }
   }
 }

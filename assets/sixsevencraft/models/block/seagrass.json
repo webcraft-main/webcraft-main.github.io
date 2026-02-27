@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/template_seagrass",
+  "parent": "block/template_seagrass",
   "textures": {
-    "texture": "minecraft:block/seagrass"
+    "texture": "block/seagrass"
   }
 }

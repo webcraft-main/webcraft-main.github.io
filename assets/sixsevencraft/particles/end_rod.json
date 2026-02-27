@@ -1,12 +1,12 @@
 {
   "textures": [
-    "minecraft:glitter_7",
-    "minecraft:glitter_6",
-    "minecraft:glitter_5",
-    "minecraft:glitter_4",
-    "minecraft:glitter_3",
-    "minecraft:glitter_2",
-    "minecraft:glitter_1",
-    "minecraft:glitter_0"
+    "glitter_7",
+    "glitter_6",
+    "glitter_5",
+    "glitter_4",
+    "glitter_3",
+    "glitter_2",
+    "glitter_1",
+    "glitter_0"
   ]
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/lapis_ore"
+    "type": "model",
+    "model": "block/lapis_ore"
   }
 }

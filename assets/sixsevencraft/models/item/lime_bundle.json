@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:item/lime_bundle"
+    "layer0": "item/lime_bundle"
   }
 }

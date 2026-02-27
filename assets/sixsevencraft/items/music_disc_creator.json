@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/music_disc_creator"
+    "type": "model",
+    "model": "item/music_disc_creator"
   }
 }

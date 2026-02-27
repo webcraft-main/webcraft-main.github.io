@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/leaf_litter"
+    "type": "model",
+    "model": "item/leaf_litter"
   }
 }

@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/template_bed",
+  "parent": "item/template_bed",
   "textures": {
-    "particle": "minecraft:block/lime_wool"
+    "particle": "block/lime_wool"
   }
 }

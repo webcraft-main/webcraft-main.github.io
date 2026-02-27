@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:block/template_shelf_right",
+  "parent": "block/template_shelf_right",
   "textures": {
-    "all": "minecraft:block/crimson_shelf",
-    "particle": "minecraft:block/stripped_crimson_stem"
+    "all": "block/crimson_shelf",
+    "particle": "block/stripped_crimson_stem"
   }
 }

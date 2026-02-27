@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/deepslate_redstone_ore"
+      "model": "block/deepslate_redstone_ore"
     }
   }
 }

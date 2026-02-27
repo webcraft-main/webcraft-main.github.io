@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/snow_block"
+    "type": "model",
+    "model": "block/snow_block"
   }
 }

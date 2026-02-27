@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/brown_dye"
+    "type": "model",
+    "model": "item/brown_dye"
   }
 }

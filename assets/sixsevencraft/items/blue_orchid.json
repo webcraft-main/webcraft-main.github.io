@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/blue_orchid"
+    "type": "model",
+    "model": "item/blue_orchid"
   }
 }

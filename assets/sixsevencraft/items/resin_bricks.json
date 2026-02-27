@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/resin_bricks"
+    "type": "model",
+    "model": "block/resin_bricks"
   }
 }

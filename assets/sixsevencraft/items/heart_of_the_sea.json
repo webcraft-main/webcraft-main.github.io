@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/heart_of_the_sea"
+    "type": "model",
+    "model": "item/heart_of_the_sea"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/nether_sprouts"
+    "type": "model",
+    "model": "item/nether_sprouts"
   }
 }

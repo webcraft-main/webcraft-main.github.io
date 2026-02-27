@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/popped_chorus_fruit"
+    "type": "model",
+    "model": "item/popped_chorus_fruit"
   }
 }

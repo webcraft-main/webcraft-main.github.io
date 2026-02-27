@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:block/cube_column",
+  "parent": "block/cube_column",
   "textures": {
-    "end": "minecraft:block/ochre_froglight_top",
-    "side": "minecraft:block/ochre_froglight_side"
+    "end": "block/ochre_froglight_top",
+    "side": "block/ochre_froglight_side"
   }
 }

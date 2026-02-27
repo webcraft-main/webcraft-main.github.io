@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/coal_block"
+    "type": "model",
+    "model": "block/coal_block"
   }
 }

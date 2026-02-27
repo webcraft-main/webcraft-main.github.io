@@ -1,13 +1,13 @@
 {
   "variants": {
     "type=bottom": {
-      "model": "minecraft:block/cut_copper_slab"
+      "model": "block/cut_copper_slab"
     },
     "type=double": {
-      "model": "minecraft:block/cut_copper"
+      "model": "block/cut_copper"
     },
     "type=top": {
-      "model": "minecraft:block/cut_copper_slab_top"
+      "model": "block/cut_copper_slab_top"
     }
   }
 }

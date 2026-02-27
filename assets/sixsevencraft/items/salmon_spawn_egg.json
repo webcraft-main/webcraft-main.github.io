@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/salmon_spawn_egg"
+    "type": "model",
+    "model": "item/salmon_spawn_egg"
   }
 }

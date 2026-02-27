@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/wooden_hoe"
+    "type": "model",
+    "model": "item/wooden_hoe"
   }
 }

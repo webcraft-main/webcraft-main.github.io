@@ -1,14 +1,14 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/firework_star",
+    "type": "model",
+    "model": "item/firework_star",
     "tints": [
       {
-        "type": "minecraft:constant",
+        "type": "constant",
         "value": -1
       },
       {
-        "type": "minecraft:firework",
+        "type": "firework",
         "default": -7697782
       }
     ]

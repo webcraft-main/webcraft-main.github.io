@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/dead_fire_coral_fan"
+    "type": "model",
+    "model": "item/dead_fire_coral_fan"
   }
 }

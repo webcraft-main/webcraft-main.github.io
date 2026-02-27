@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/pitcher_plant"
+    "type": "model",
+    "model": "item/pitcher_plant"
   }
 }

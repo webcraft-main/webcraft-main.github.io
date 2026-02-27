@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:item/golden_helmet",
-    "layer1": "minecraft:trims/items/helmet_trim_netherite"
+    "layer0": "item/golden_helmet",
+    "layer1": "trims/items/helmet_trim_netherite"
   }
 }

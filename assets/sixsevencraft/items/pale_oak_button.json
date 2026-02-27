@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/pale_oak_button_inventory"
+    "type": "model",
+    "model": "block/pale_oak_button_inventory"
   }
 }

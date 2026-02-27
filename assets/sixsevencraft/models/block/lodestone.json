@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:block/cube_column",
+  "parent": "block/cube_column",
   "textures": {
-    "end": "minecraft:block/lodestone_top",
-    "side": "minecraft:block/lodestone_side"
+    "end": "block/lodestone_top",
+    "side": "block/lodestone_side"
   }
 }

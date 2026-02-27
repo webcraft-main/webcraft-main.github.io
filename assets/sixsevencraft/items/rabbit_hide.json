@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/rabbit_hide"
+    "type": "model",
+    "model": "item/rabbit_hide"
   }
 }

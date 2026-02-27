@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/flowering_azalea"
+    "type": "model",
+    "model": "block/flowering_azalea"
   }
 }

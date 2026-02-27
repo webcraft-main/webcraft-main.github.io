@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/large_amethyst_bud"
+    "type": "model",
+    "model": "item/large_amethyst_bud"
   }
 }

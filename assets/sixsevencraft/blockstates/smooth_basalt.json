@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/smooth_basalt"
+      "model": "block/smooth_basalt"
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/ink_sac"
+    "type": "model",
+    "model": "item/ink_sac"
   }
 }

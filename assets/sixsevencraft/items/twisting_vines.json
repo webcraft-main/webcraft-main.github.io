@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/twisting_vines"
+    "type": "model",
+    "model": "item/twisting_vines"
   }
 }

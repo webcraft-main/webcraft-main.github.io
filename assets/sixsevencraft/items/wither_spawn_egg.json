@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/wither_spawn_egg"
+    "type": "model",
+    "model": "item/wither_spawn_egg"
   }
 }

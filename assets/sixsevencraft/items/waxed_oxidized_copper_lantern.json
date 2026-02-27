@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/oxidized_copper_lantern"
+    "type": "model",
+    "model": "item/oxidized_copper_lantern"
   }
 }

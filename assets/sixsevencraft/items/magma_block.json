@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/magma_block"
+    "type": "model",
+    "model": "block/magma_block"
   }
 }

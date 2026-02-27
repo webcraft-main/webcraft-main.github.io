@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/soul_torch"
+      "model": "block/soul_torch"
     }
   }
 }

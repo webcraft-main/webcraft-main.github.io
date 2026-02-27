@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/crimson_door"
+    "type": "model",
+    "model": "item/crimson_door"
   }
 }

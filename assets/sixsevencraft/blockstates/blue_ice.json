@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/blue_ice"
+      "model": "block/blue_ice"
     }
   }
 }

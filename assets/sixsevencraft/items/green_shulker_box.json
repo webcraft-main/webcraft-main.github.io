@@ -1,10 +1,10 @@
 {
   "model": {
-    "type": "minecraft:special",
-    "base": "minecraft:item/green_shulker_box",
+    "type": "special",
+    "base": "item/green_shulker_box",
     "model": {
-      "type": "minecraft:shulker_box",
-      "texture": "minecraft:shulker_green"
+      "type": "shulker_box",
+      "texture": "shulker_green"
     }
   }
 }

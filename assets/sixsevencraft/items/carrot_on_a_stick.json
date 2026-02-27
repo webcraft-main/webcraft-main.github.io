@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/carrot_on_a_stick"
+    "type": "model",
+    "model": "item/carrot_on_a_stick"
   }
 }

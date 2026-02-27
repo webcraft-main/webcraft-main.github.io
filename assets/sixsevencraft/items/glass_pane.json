@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/glass_pane"
+    "type": "model",
+    "model": "item/glass_pane"
   }
 }

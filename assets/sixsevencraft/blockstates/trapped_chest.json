@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/trapped_chest"
+      "model": "block/trapped_chest"
     }
   }
 }

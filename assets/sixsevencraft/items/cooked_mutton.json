@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/cooked_mutton"
+    "type": "model",
+    "model": "item/cooked_mutton"
   }
 }

@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "block/cube_all",
   "textures": {
-    "all": "minecraft:block/resin_bricks"
+    "all": "block/resin_bricks"
   }
 }

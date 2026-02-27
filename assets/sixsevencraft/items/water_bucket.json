@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/water_bucket"
+    "type": "model",
+    "model": "item/water_bucket"
   }
 }

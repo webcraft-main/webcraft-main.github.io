@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:item/cocoa_beans"
+    "layer0": "item/cocoa_beans"
   }
 }

@@ -1,16 +1,16 @@
 {
   "textures": [
-    "minecraft:leaf_0",
-    "minecraft:leaf_1",
-    "minecraft:leaf_2",
-    "minecraft:leaf_3",
-    "minecraft:leaf_4",
-    "minecraft:leaf_5",
-    "minecraft:leaf_6",
-    "minecraft:leaf_7",
-    "minecraft:leaf_8",
-    "minecraft:leaf_9",
-    "minecraft:leaf_10",
-    "minecraft:leaf_11"
+    "leaf_0",
+    "leaf_1",
+    "leaf_2",
+    "leaf_3",
+    "leaf_4",
+    "leaf_5",
+    "leaf_6",
+    "leaf_7",
+    "leaf_8",
+    "leaf_9",
+    "leaf_10",
+    "leaf_11"
   ]
 }

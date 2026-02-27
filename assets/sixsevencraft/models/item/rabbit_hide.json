@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:item/rabbit_hide"
+    "layer0": "item/rabbit_hide"
   }
 }

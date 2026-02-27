@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/weathered_lightning_rod"
+    "type": "model",
+    "model": "block/weathered_lightning_rod"
   }
 }

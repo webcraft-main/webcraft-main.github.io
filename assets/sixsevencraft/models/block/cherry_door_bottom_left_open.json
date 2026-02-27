@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:block/door_bottom_left_open",
+  "parent": "block/door_bottom_left_open",
   "textures": {
-    "bottom": "minecraft:block/cherry_door_bottom",
-    "top": "minecraft:block/cherry_door_top"
+    "bottom": "block/cherry_door_bottom",
+    "top": "block/cherry_door_top"
   }
 }

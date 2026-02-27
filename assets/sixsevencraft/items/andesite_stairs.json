@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/andesite_stairs"
+    "type": "model",
+    "model": "block/andesite_stairs"
   }
 }

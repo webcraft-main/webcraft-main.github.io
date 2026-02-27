@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/white_dye"
+    "type": "model",
+    "model": "item/white_dye"
   }
 }

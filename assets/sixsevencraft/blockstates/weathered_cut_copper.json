@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/weathered_cut_copper"
+      "model": "block/weathered_cut_copper"
     }
   }
 }

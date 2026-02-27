@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/potted_flowering_azalea_bush"
+      "model": "block/potted_flowering_azalea_bush"
     }
   }
 }

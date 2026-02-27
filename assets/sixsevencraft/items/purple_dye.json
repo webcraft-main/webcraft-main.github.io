@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/purple_dye"
+    "type": "model",
+    "model": "item/purple_dye"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/big_dripleaf"
+    "type": "model",
+    "model": "item/big_dripleaf"
   }
 }

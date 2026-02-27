@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/armadillo_spawn_egg"
+    "type": "model",
+    "model": "item/armadillo_spawn_egg"
   }
 }

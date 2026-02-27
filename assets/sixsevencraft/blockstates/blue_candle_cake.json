@@ -1,10 +1,10 @@
 {
   "variants": {
     "lit=false": {
-      "model": "minecraft:block/blue_candle_cake"
+      "model": "block/blue_candle_cake"
     },
     "lit=true": {
-      "model": "minecraft:block/blue_candle_cake_lit"
+      "model": "block/blue_candle_cake_lit"
     }
   }
 }

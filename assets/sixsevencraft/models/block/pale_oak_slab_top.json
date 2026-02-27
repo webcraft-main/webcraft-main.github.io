@@ -1,8 +1,8 @@
 {
-  "parent": "minecraft:block/slab_top",
+  "parent": "block/slab_top",
   "textures": {
-    "bottom": "minecraft:block/pale_oak_planks",
-    "side": "minecraft:block/pale_oak_planks",
-    "top": "minecraft:block/pale_oak_planks"
+    "bottom": "block/pale_oak_planks",
+    "side": "block/pale_oak_planks",
+    "top": "block/pale_oak_planks"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/lectern"
+    "type": "model",
+    "model": "block/lectern"
   }
 }

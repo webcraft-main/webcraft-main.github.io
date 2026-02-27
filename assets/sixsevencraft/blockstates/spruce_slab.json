@@ -1,13 +1,13 @@
 {
   "variants": {
     "type=bottom": {
-      "model": "minecraft:block/spruce_slab"
+      "model": "block/spruce_slab"
     },
     "type=double": {
-      "model": "minecraft:block/spruce_planks"
+      "model": "block/spruce_planks"
     },
     "type=top": {
-      "model": "minecraft:block/spruce_slab_top"
+      "model": "block/spruce_slab_top"
     }
   }
 }

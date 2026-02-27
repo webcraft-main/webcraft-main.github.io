@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/deepslate_iron_ore"
+      "model": "block/deepslate_iron_ore"
     }
   }
 }

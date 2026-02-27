@@ -2,22 +2,22 @@
   "layers": {
     "horse_body": [
       {
-        "texture": "minecraft:gold"
+        "texture": "gold"
       }
     ],
     "humanoid": [
       {
-        "texture": "minecraft:gold"
+        "texture": "gold"
       }
     ],
     "humanoid_leggings": [
       {
-        "texture": "minecraft:gold"
+        "texture": "gold"
       }
     ],
     "nautilus_body": [
       {
-        "texture": "minecraft:gold"
+        "texture": "gold"
       }
     ]
   }

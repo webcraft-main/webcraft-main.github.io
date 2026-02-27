@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/red_sandstone"
+      "model": "block/red_sandstone"
     }
   }
 }

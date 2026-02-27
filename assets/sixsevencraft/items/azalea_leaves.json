@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/azalea_leaves"
+    "type": "model",
+    "model": "block/azalea_leaves"
   }
 }

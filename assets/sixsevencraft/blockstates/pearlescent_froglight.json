@@ -1,15 +1,15 @@
 {
   "variants": {
     "axis=x": {
-      "model": "minecraft:block/pearlescent_froglight_horizontal",
+      "model": "block/pearlescent_froglight_horizontal",
       "x": 90,
       "y": 90
     },
     "axis=y": {
-      "model": "minecraft:block/pearlescent_froglight"
+      "model": "block/pearlescent_froglight"
     },
     "axis=z": {
-      "model": "minecraft:block/pearlescent_froglight_horizontal",
+      "model": "block/pearlescent_froglight_horizontal",
       "x": 90
     }
   }

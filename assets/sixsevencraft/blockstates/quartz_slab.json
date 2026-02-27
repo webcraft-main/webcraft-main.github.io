@@ -1,13 +1,13 @@
 {
   "variants": {
     "type=bottom": {
-      "model": "minecraft:block/quartz_slab"
+      "model": "block/quartz_slab"
     },
     "type=double": {
-      "model": "minecraft:block/quartz_block"
+      "model": "block/quartz_block"
     },
     "type=top": {
-      "model": "minecraft:block/quartz_slab_top"
+      "model": "block/quartz_slab_top"
     }
   }
 }

@@ -1,11 +1,11 @@
 {
   "model": {
-    "type": "minecraft:select",
+    "type": "select",
     "cases": [
       {
         "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/spyglass"
+          "type": "model",
+          "model": "item/spyglass"
         },
         "when": [
           "gui",
@@ -16,9 +16,9 @@
       }
     ],
     "fallback": {
-      "type": "minecraft:model",
-      "model": "minecraft:item/spyglass_in_hand"
+      "type": "model",
+      "model": "item/spyglass_in_hand"
     },
-    "property": "minecraft:display_context"
+    "property": "display_context"
   }
 }

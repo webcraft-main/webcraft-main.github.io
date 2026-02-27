@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/honey_block"
+      "model": "block/honey_block"
     }
   }
 }

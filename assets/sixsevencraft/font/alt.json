@@ -2,11 +2,11 @@
     "providers": [
         {
             "type": "reference",
-            "id": "minecraft:include/space"
+            "id": "include/space"
         },
         {
             "type": "bitmap",
-            "file": "minecraft:font/ascii_sga.png",
+            "file": "font/ascii_sga.png",
             "ascent": 7,
             "chars": [
                 "\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000",

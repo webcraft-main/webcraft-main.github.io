@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/cobblestone_slab"
+    "type": "model",
+    "model": "block/cobblestone_slab"
   }
 }

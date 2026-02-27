@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/tuff_bricks"
+      "model": "block/tuff_bricks"
     }
   }
 }

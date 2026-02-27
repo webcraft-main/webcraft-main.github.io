@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/bone"
+    "type": "model",
+    "model": "item/bone"
   }
 }

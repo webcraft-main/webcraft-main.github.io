@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/sculk_shrieker"
+    "type": "model",
+    "model": "block/sculk_shrieker"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/lilac"
+    "type": "model",
+    "model": "item/lilac"
   }
 }

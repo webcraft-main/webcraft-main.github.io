@@ -2,7 +2,7 @@
   "layers": {
     "humanoid": [
       {
-        "texture": "minecraft:turtle_scute"
+        "texture": "turtle_scute"
       }
     ]
   }

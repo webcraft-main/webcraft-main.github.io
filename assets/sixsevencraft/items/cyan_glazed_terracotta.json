@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/cyan_glazed_terracotta"
+    "type": "model",
+    "model": "block/cyan_glazed_terracotta"
   }
 }

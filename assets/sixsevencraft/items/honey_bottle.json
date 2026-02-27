@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/honey_bottle"
+    "type": "model",
+    "model": "item/honey_bottle"
   }
 }

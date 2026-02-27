@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/copper_horse_armor"
+    "type": "model",
+    "model": "item/copper_horse_armor"
   }
 }

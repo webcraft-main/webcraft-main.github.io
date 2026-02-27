@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/sniffer_egg"
+    "type": "model",
+    "model": "item/sniffer_egg"
   }
 }

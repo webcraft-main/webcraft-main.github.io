@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/golden_sword"
+    "type": "model",
+    "model": "item/golden_sword"
   }
 }

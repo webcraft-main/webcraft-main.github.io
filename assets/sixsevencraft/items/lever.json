@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/lever"
+    "type": "model",
+    "model": "item/lever"
   }
 }

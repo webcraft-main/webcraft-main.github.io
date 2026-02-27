@@ -1,8 +1,8 @@
 #version 330
 
-#moj_import <minecraft:fog.glsl>
-#moj_import <minecraft:globals.glsl>
-#moj_import <minecraft:chunksection.glsl>
+#moj_import <include/fog.glsl>
+#moj_import <include/globals.glsl>
+#moj_import <include/chunksection.glsl>
 
 uniform sampler2D Sampler0;
 

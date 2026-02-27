@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:block/pale_hanging_moss"
+    "layer0": "block/pale_hanging_moss"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/brown_carpet"
+    "type": "model",
+    "model": "block/brown_carpet"
   }
 }

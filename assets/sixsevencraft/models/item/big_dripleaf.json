@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/big_dripleaf",
+  "parent": "block/big_dripleaf",
   "display": {
     "gui": {
       "rotation": [ 30, 225, 0 ],

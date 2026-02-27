@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/white_tulip"
+    "type": "model",
+    "model": "item/white_tulip"
   }
 }

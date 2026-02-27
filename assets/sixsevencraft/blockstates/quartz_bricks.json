@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/quartz_bricks"
+      "model": "block/quartz_bricks"
     }
   }
 }

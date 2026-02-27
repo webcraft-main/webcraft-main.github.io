@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/closed_eyeblossom"
+    "type": "model",
+    "model": "item/closed_eyeblossom"
   }
 }

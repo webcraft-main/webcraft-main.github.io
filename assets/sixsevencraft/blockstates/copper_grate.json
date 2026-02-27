@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/copper_grate"
+      "model": "block/copper_grate"
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/rose_bush"
+    "type": "model",
+    "model": "item/rose_bush"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/soul_torch"
+    "type": "model",
+    "model": "item/soul_torch"
   }
 }

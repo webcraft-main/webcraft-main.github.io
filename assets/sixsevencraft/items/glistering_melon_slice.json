@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/glistering_melon_slice"
+    "type": "model",
+    "model": "item/glistering_melon_slice"
   }
 }

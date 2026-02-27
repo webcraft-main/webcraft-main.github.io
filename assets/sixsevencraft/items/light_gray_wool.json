@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/light_gray_wool"
+    "type": "model",
+    "model": "block/light_gray_wool"
   }
 }

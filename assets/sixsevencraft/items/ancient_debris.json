@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/ancient_debris"
+    "type": "model",
+    "model": "block/ancient_debris"
   }
 }

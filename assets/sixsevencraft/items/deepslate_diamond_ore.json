@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/deepslate_diamond_ore"
+    "type": "model",
+    "model": "block/deepslate_diamond_ore"
   }
 }

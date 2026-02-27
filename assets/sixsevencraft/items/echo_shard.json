@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/echo_shard"
+    "type": "model",
+    "model": "item/echo_shard"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/tropical_fish"
+    "type": "model",
+    "model": "item/tropical_fish"
   }
 }

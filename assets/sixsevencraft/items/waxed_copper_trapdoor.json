@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/copper_trapdoor_bottom"
+    "type": "model",
+    "model": "block/copper_trapdoor_bottom"
   }
 }

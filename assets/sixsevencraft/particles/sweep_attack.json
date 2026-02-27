@@ -1,12 +1,12 @@
 {
   "textures": [
-    "minecraft:sweep_0",
-    "minecraft:sweep_1",
-    "minecraft:sweep_2",
-    "minecraft:sweep_3",
-    "minecraft:sweep_4",
-    "minecraft:sweep_5",
-    "minecraft:sweep_6",
-    "minecraft:sweep_7"
+    "sweep_0",
+    "sweep_1",
+    "sweep_2",
+    "sweep_3",
+    "sweep_4",
+    "sweep_5",
+    "sweep_6",
+    "sweep_7"
   ]
 }

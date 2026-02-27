@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/copper_shovel"
+    "type": "model",
+    "model": "item/copper_shovel"
   }
 }

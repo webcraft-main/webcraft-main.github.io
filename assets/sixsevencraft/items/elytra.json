@@ -1,14 +1,14 @@
 {
   "model": {
-    "type": "minecraft:condition",
+    "type": "condition",
     "on_false": {
-      "type": "minecraft:model",
-      "model": "minecraft:item/elytra"
+      "type": "model",
+      "model": "item/elytra"
     },
     "on_true": {
-      "type": "minecraft:model",
-      "model": "minecraft:item/elytra_broken"
+      "type": "model",
+      "model": "item/elytra_broken"
     },
-    "property": "minecraft:broken"
+    "property": "broken"
   }
 }

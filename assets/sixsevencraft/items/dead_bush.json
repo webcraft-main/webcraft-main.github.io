@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/dead_bush"
+    "type": "model",
+    "model": "item/dead_bush"
   }
 }

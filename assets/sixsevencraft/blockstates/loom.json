@@ -1,18 +1,18 @@
 {
   "variants": {
     "facing=east": {
-      "model": "minecraft:block/loom",
+      "model": "block/loom",
       "y": 90
     },
     "facing=north": {
-      "model": "minecraft:block/loom"
+      "model": "block/loom"
     },
     "facing=south": {
-      "model": "minecraft:block/loom",
+      "model": "block/loom",
       "y": 180
     },
     "facing=west": {
-      "model": "minecraft:block/loom",
+      "model": "block/loom",
       "y": 270
     }
   }

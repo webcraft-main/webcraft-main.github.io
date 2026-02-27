@@ -1,13 +1,13 @@
 {
   "variants": {
     "type=bottom": {
-      "model": "minecraft:block/andesite_slab"
+      "model": "block/andesite_slab"
     },
     "type=double": {
-      "model": "minecraft:block/andesite"
+      "model": "block/andesite"
     },
     "type=top": {
-      "model": "minecraft:block/andesite_slab_top"
+      "model": "block/andesite_slab_top"
     }
   }
 }

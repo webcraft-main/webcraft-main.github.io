@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/smooth_basalt"
+    "type": "model",
+    "model": "block/smooth_basalt"
   }
 }

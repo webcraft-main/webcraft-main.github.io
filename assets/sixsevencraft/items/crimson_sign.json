@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/crimson_sign"
+    "type": "model",
+    "model": "item/crimson_sign"
   }
 }

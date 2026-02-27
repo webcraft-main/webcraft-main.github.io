@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/bamboo_door"
+    "type": "model",
+    "model": "item/bamboo_door"
   }
 }

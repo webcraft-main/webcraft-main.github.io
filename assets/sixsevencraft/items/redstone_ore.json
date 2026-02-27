@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/redstone_ore"
+    "type": "model",
+    "model": "block/redstone_ore"
   }
 }

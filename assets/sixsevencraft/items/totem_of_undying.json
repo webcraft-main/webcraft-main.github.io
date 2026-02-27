@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/totem_of_undying"
+    "type": "model",
+    "model": "item/totem_of_undying"
   }
 }

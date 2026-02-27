@@ -1,10 +1,10 @@
 {
     "parent": "block/block",
     "textures": {
-        "top": "minecraft:block/big_dripleaf_top",
-        "stem": "minecraft:block/big_dripleaf_stem",
-        "side": "minecraft:block/big_dripleaf_side",
-        "tip": "minecraft:block/big_dripleaf_tip",
+        "top": "block/big_dripleaf_top",
+        "stem": "block/big_dripleaf_stem",
+        "side": "block/big_dripleaf_side",
+        "tip": "block/big_dripleaf_tip",
         "particle": "block/big_dripleaf_top"
     },
     "elements": [

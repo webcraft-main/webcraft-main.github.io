@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/weathered_copper_chain"
+    "type": "model",
+    "model": "item/weathered_copper_chain"
   }
 }

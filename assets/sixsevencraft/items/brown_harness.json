@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/brown_harness"
+    "type": "model",
+    "model": "item/brown_harness"
   }
 }

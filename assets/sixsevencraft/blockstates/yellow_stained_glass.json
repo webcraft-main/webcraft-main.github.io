@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/yellow_stained_glass"
+      "model": "block/yellow_stained_glass"
     }
   }
 }

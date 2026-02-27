@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/prize_pottery_sherd"
+    "type": "model",
+    "model": "item/prize_pottery_sherd"
   }
 }

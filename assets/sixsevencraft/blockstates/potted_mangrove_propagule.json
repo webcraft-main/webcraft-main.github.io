@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/potted_mangrove_propagule"
+      "model": "block/potted_mangrove_propagule"
     }
   }
 }

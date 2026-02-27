@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/copper_ore"
+    "type": "model",
+    "model": "block/copper_ore"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/light_gray_concrete"
+    "type": "model",
+    "model": "block/light_gray_concrete"
   }
 }

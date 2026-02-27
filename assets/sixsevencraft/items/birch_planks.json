@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/birch_planks"
+    "type": "model",
+    "model": "block/birch_planks"
   }
 }

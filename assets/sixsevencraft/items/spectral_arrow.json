@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/spectral_arrow"
+    "type": "model",
+    "model": "item/spectral_arrow"
   }
 }

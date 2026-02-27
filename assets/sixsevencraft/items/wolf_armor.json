@@ -1,25 +1,25 @@
 {
   "model": {
-    "type": "minecraft:condition",
-    "component": "minecraft:dyed_color",
+    "type": "condition",
+    "component": "dyed_color",
     "on_false": {
-      "type": "minecraft:model",
-      "model": "minecraft:item/wolf_armor"
+      "type": "model",
+      "model": "item/wolf_armor"
     },
     "on_true": {
-      "type": "minecraft:model",
-      "model": "minecraft:item/wolf_armor_dyed",
+      "type": "model",
+      "model": "item/wolf_armor_dyed",
       "tints": [
         {
-          "type": "minecraft:constant",
+          "type": "constant",
           "value": -1
         },
         {
-          "type": "minecraft:dye",
+          "type": "dye",
           "default": 0
         }
       ]
     },
-    "property": "minecraft:has_component"
+    "property": "has_component"
   }
 }

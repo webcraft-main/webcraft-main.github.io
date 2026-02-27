@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/chiseled_nether_bricks"
+      "model": "block/chiseled_nether_bricks"
     }
   }
 }

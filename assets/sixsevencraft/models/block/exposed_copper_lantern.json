@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/template_lantern",
+  "parent": "block/template_lantern",
   "textures": {
-    "lantern": "minecraft:block/exposed_copper_lantern"
+    "lantern": "block/exposed_copper_lantern"
   }
 }

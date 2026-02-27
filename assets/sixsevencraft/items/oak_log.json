@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/oak_log"
+    "type": "model",
+    "model": "block/oak_log"
   }
 }

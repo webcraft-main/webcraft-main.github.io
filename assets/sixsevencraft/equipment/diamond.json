@@ -2,22 +2,22 @@
   "layers": {
     "horse_body": [
       {
-        "texture": "minecraft:diamond"
+        "texture": "diamond"
       }
     ],
     "humanoid": [
       {
-        "texture": "minecraft:diamond"
+        "texture": "diamond"
       }
     ],
     "humanoid_leggings": [
       {
-        "texture": "minecraft:diamond"
+        "texture": "diamond"
       }
     ],
     "nautilus_body": [
       {
-        "texture": "minecraft:diamond"
+        "texture": "diamond"
       }
     ]
   }

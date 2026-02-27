@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cross",
+  "parent": "block/cross",
   "textures": {
-    "cross": "minecraft:block/closed_eyeblossom"
+    "cross": "block/closed_eyeblossom"
   }
 }

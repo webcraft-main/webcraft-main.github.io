@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/smoker"
+    "type": "model",
+    "model": "block/smoker"
   }
 }

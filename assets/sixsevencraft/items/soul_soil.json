@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/soul_soil"
+    "type": "model",
+    "model": "block/soul_soil"
   }
 }

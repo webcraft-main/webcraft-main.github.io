@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/milk_bucket"
+    "type": "model",
+    "model": "item/milk_bucket"
   }
 }

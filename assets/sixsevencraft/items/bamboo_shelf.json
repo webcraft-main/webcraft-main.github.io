@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/bamboo_shelf_inventory"
+    "type": "model",
+    "model": "block/bamboo_shelf_inventory"
   }
 }

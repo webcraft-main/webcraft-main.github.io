@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/clay_ball"
+    "type": "model",
+    "model": "item/clay_ball"
   }
 }

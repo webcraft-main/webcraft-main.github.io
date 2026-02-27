@@ -1,7 +1,7 @@
 {
     "gui_light": "front",
     "textures": {
-        "particle": "minecraft:block/terracotta"
+        "particle": "block/terracotta"
     },
     "display": {
         "thirdperson_righthand": {

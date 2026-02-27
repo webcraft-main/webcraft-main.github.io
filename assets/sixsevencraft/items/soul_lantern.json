@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/soul_lantern"
+    "type": "model",
+    "model": "item/soul_lantern"
   }
 }

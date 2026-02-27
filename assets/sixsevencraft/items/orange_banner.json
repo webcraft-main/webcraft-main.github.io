@@ -1,9 +1,9 @@
 {
   "model": {
-    "type": "minecraft:special",
-    "base": "minecraft:item/template_banner",
+    "type": "special",
+    "base": "item/template_banner",
     "model": {
-      "type": "minecraft:banner",
+      "type": "banner",
       "color": "orange"
     }
   }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/wet_sponge"
+    "type": "model",
+    "model": "block/wet_sponge"
   }
 }

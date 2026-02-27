@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/weeping_vines"
+      "model": "block/weeping_vines"
     }
   }
 }

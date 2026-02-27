@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/damaged_anvil"
+    "type": "model",
+    "model": "block/damaged_anvil"
   }
 }

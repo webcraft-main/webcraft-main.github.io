@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/command_block_minecart"
+    "type": "model",
+    "model": "item/command_block_minecart"
   }
 }

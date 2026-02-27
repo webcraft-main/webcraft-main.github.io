@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/spruce_log"
+    "type": "model",
+    "model": "block/spruce_log"
   }
 }

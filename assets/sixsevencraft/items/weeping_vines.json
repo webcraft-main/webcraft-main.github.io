@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/weeping_vines"
+    "type": "model",
+    "model": "item/weeping_vines"
   }
 }

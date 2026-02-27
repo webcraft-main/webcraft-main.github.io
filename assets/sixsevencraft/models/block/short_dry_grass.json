@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cross",
+  "parent": "block/cross",
   "textures": {
-    "cross": "minecraft:block/short_dry_grass"
+    "cross": "block/short_dry_grass"
   }
 }

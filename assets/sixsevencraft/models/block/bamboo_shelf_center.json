@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:block/template_shelf_center",
+  "parent": "block/template_shelf_center",
   "textures": {
-    "all": "minecraft:block/bamboo_shelf",
-    "particle": "minecraft:block/stripped_bamboo_block"
+    "all": "block/bamboo_shelf",
+    "particle": "block/stripped_bamboo_block"
   }
 }

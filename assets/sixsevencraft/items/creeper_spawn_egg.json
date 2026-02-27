@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/creeper_spawn_egg"
+    "type": "model",
+    "model": "item/creeper_spawn_egg"
   }
 }

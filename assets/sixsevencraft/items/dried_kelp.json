@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/dried_kelp"
+    "type": "model",
+    "model": "item/dried_kelp"
   }
 }

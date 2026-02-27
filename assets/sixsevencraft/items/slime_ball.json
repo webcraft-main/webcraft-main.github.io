@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/slime_ball"
+    "type": "model",
+    "model": "item/slime_ball"
   }
 }

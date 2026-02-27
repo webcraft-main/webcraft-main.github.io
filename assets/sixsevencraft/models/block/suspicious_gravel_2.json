@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "block/cube_all",
   "textures": {
-    "all": "minecraft:block/suspicious_gravel_2"
+    "all": "block/suspicious_gravel_2"
   }
 }

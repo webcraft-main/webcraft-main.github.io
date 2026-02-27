@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "minecraft:block/chorus_plant_side"
+        "model": "block/chorus_plant_side"
       },
       "when": {
         "north": "true"
@@ -10,7 +10,7 @@
     },
     {
       "apply": {
-        "model": "minecraft:block/chorus_plant_side",
+        "model": "block/chorus_plant_side",
         "uvlock": true,
         "y": 90
       },
@@ -20,7 +20,7 @@
     },
     {
       "apply": {
-        "model": "minecraft:block/chorus_plant_side",
+        "model": "block/chorus_plant_side",
         "uvlock": true,
         "y": 180
       },
@@ -30,7 +30,7 @@
     },
     {
       "apply": {
-        "model": "minecraft:block/chorus_plant_side",
+        "model": "block/chorus_plant_side",
         "uvlock": true,
         "y": 270
       },
@@ -40,7 +40,7 @@
     },
     {
       "apply": {
-        "model": "minecraft:block/chorus_plant_side",
+        "model": "block/chorus_plant_side",
         "uvlock": true,
         "x": 270
       },
@@ -50,7 +50,7 @@
     },
     {
       "apply": {
-        "model": "minecraft:block/chorus_plant_side",
+        "model": "block/chorus_plant_side",
         "uvlock": true,
         "x": 90
       },
@@ -61,17 +61,17 @@
     {
       "apply": [
         {
-          "model": "minecraft:block/chorus_plant_noside",
+          "model": "block/chorus_plant_noside",
           "weight": 2
         },
         {
-          "model": "minecraft:block/chorus_plant_noside1"
+          "model": "block/chorus_plant_noside1"
         },
         {
-          "model": "minecraft:block/chorus_plant_noside2"
+          "model": "block/chorus_plant_noside2"
         },
         {
-          "model": "minecraft:block/chorus_plant_noside3"
+          "model": "block/chorus_plant_noside3"
         }
       ],
       "when": {
@@ -81,22 +81,22 @@
     {
       "apply": [
         {
-          "model": "minecraft:block/chorus_plant_noside1",
+          "model": "block/chorus_plant_noside1",
           "uvlock": true,
           "y": 90
         },
         {
-          "model": "minecraft:block/chorus_plant_noside2",
+          "model": "block/chorus_plant_noside2",
           "uvlock": true,
           "y": 90
         },
         {
-          "model": "minecraft:block/chorus_plant_noside3",
+          "model": "block/chorus_plant_noside3",
           "uvlock": true,
           "y": 90
         },
         {
-          "model": "minecraft:block/chorus_plant_noside",
+          "model": "block/chorus_plant_noside",
           "uvlock": true,
           "weight": 2,
           "y": 90
@@ -109,23 +109,23 @@
     {
       "apply": [
         {
-          "model": "minecraft:block/chorus_plant_noside2",
+          "model": "block/chorus_plant_noside2",
           "uvlock": true,
           "y": 180
         },
         {
-          "model": "minecraft:block/chorus_plant_noside3",
+          "model": "block/chorus_plant_noside3",
           "uvlock": true,
           "y": 180
         },
         {
-          "model": "minecraft:block/chorus_plant_noside",
+          "model": "block/chorus_plant_noside",
           "uvlock": true,
           "weight": 2,
           "y": 180
         },
         {
-          "model": "minecraft:block/chorus_plant_noside1",
+          "model": "block/chorus_plant_noside1",
           "uvlock": true,
           "y": 180
         }
@@ -137,23 +137,23 @@
     {
       "apply": [
         {
-          "model": "minecraft:block/chorus_plant_noside3",
+          "model": "block/chorus_plant_noside3",
           "uvlock": true,
           "y": 270
         },
         {
-          "model": "minecraft:block/chorus_plant_noside",
+          "model": "block/chorus_plant_noside",
           "uvlock": true,
           "weight": 2,
           "y": 270
         },
         {
-          "model": "minecraft:block/chorus_plant_noside1",
+          "model": "block/chorus_plant_noside1",
           "uvlock": true,
           "y": 270
         },
         {
-          "model": "minecraft:block/chorus_plant_noside2",
+          "model": "block/chorus_plant_noside2",
           "uvlock": true,
           "y": 270
         }
@@ -165,23 +165,23 @@
     {
       "apply": [
         {
-          "model": "minecraft:block/chorus_plant_noside",
+          "model": "block/chorus_plant_noside",
           "uvlock": true,
           "weight": 2,
           "x": 270
         },
         {
-          "model": "minecraft:block/chorus_plant_noside3",
+          "model": "block/chorus_plant_noside3",
           "uvlock": true,
           "x": 270
         },
         {
-          "model": "minecraft:block/chorus_plant_noside1",
+          "model": "block/chorus_plant_noside1",
           "uvlock": true,
           "x": 270
         },
         {
-          "model": "minecraft:block/chorus_plant_noside2",
+          "model": "block/chorus_plant_noside2",
           "uvlock": true,
           "x": 270
         }
@@ -193,22 +193,22 @@
     {
       "apply": [
         {
-          "model": "minecraft:block/chorus_plant_noside3",
+          "model": "block/chorus_plant_noside3",
           "uvlock": true,
           "x": 90
         },
         {
-          "model": "minecraft:block/chorus_plant_noside2",
+          "model": "block/chorus_plant_noside2",
           "uvlock": true,
           "x": 90
         },
         {
-          "model": "minecraft:block/chorus_plant_noside1",
+          "model": "block/chorus_plant_noside1",
           "uvlock": true,
           "x": 90
         },
         {
-          "model": "minecraft:block/chorus_plant_noside",
+          "model": "block/chorus_plant_noside",
           "uvlock": true,
           "weight": 2,
           "x": 90

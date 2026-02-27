@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/red_sandstone_slab"
+    "type": "model",
+    "model": "block/red_sandstone_slab"
   }
 }

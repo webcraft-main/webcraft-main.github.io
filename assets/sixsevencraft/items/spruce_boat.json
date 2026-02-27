@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/spruce_boat"
+    "type": "model",
+    "model": "item/spruce_boat"
   }
 }

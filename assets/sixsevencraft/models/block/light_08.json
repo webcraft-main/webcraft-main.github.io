@@ -1,5 +1,5 @@
 {
   "textures": {
-    "particle": "minecraft:item/light_08"
+    "particle": "item/light_08"
   }
 }

@@ -1,6 +1,6 @@
 #version 330
 
-#moj_import <minecraft:fog.glsl>
+#moj_import <include/fog.glsl>
 
 
 in float sphericalVertexDistance;

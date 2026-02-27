@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/wheat_seeds"
+    "type": "model",
+    "model": "item/wheat_seeds"
   }
 }

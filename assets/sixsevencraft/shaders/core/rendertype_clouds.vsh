@@ -1,8 +1,8 @@
 #version 330
 
-#moj_import <minecraft:fog.glsl>
-#moj_import <minecraft:dynamictransforms.glsl>
-#moj_import <minecraft:projection.glsl>
+#moj_import <include/fog.glsl>
+#moj_import <include/dynamictransforms.glsl>
+#moj_import <include/projection.glsl>
 
 const int FLAG_MASK_DIR = 7;
 const int FLAG_INSIDE_FACE = 1 << 4;

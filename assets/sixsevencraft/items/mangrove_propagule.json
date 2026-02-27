@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/mangrove_propagule"
+    "type": "model",
+    "model": "item/mangrove_propagule"
   }
 }

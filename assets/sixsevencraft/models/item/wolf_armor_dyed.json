@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:item/wolf_armor",
-    "layer1": "minecraft:item/wolf_armor_overlay"
+    "layer0": "item/wolf_armor",
+    "layer1": "item/wolf_armor_overlay"
   }
 }

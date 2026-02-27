@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cross",
+  "parent": "block/cross",
   "textures": {
-    "cross": "minecraft:block/nether_sprouts"
+    "cross": "block/nether_sprouts"
   }
 }

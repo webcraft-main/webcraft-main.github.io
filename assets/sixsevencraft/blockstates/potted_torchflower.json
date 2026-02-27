@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/potted_torchflower"
+      "model": "block/potted_torchflower"
     }
   }
 }

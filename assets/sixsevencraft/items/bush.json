@@ -1,10 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/bush",
+    "type": "model",
+    "model": "item/bush",
     "tints": [
       {
-        "type": "minecraft:grass",
+        "type": "grass",
         "downfall": 1.0,
         "temperature": 0.5
       }

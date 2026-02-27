@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/firefly_bush"
+    "type": "model",
+    "model": "item/firefly_bush"
   }
 }

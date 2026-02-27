@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/packed_ice"
+    "type": "model",
+    "model": "block/packed_ice"
   }
 }

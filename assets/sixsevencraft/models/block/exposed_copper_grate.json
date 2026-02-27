@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "block/cube_all",
   "textures": {
-    "all": "minecraft:block/exposed_copper_grate"
+    "all": "block/exposed_copper_grate"
   }
 }

@@ -1,7 +1,7 @@
   {
   "parent": "item/amethyst_bud",
   "textures": {
-    "layer0": "minecraft:block/large_amethyst_bud"
+    "layer0": "block/large_amethyst_bud"
   },
   "display": {
     "fixed": {

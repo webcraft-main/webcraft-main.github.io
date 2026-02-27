@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/calibrated_sculk_sensor_inactive"
+    "type": "model",
+    "model": "block/calibrated_sculk_sensor_inactive"
   }
 }

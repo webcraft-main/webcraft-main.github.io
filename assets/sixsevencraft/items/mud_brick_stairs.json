@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/mud_brick_stairs"
+    "type": "model",
+    "model": "block/mud_brick_stairs"
   }
 }

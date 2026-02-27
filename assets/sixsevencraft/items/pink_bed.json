@@ -1,10 +1,10 @@
 {
   "model": {
-    "type": "minecraft:special",
-    "base": "minecraft:item/pink_bed",
+    "type": "special",
+    "base": "item/pink_bed",
     "model": {
-      "type": "minecraft:bed",
-      "texture": "minecraft:pink"
+      "type": "bed",
+      "texture": "pink"
     }
   }
 }

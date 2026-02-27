@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/friend_pottery_sherd"
+    "type": "model",
+    "model": "item/friend_pottery_sherd"
   }
 }

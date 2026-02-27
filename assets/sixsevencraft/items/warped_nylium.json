@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/warped_nylium"
+    "type": "model",
+    "model": "block/warped_nylium"
   }
 }

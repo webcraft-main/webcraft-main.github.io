@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/mangrove_leaves"
+      "model": "block/mangrove_leaves"
     }
   }
 }

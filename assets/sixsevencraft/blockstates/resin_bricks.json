@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/resin_bricks"
+      "model": "block/resin_bricks"
     }
   }
 }

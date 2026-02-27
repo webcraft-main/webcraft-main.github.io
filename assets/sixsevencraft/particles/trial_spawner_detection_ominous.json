@@ -1,9 +1,9 @@
 {
   "textures": [
-    "minecraft:trial_spawner_detection_ominous_0",
-    "minecraft:trial_spawner_detection_ominous_1",
-    "minecraft:trial_spawner_detection_ominous_2",
-    "minecraft:trial_spawner_detection_ominous_3",
-    "minecraft:trial_spawner_detection_ominous_4"
+    "trial_spawner_detection_ominous_0",
+    "trial_spawner_detection_ominous_1",
+    "trial_spawner_detection_ominous_2",
+    "trial_spawner_detection_ominous_3",
+    "trial_spawner_detection_ominous_4"
   ]
 }

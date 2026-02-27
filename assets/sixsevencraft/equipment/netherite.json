@@ -2,22 +2,22 @@
   "layers": {
     "horse_body": [
       {
-        "texture": "minecraft:netherite"
+        "texture": "netherite"
       }
     ],
     "humanoid": [
       {
-        "texture": "minecraft:netherite"
+        "texture": "netherite"
       }
     ],
     "humanoid_leggings": [
       {
-        "texture": "minecraft:netherite"
+        "texture": "netherite"
       }
     ],
     "nautilus_body": [
       {
-        "texture": "minecraft:netherite"
+        "texture": "netherite"
       }
     ]
   }

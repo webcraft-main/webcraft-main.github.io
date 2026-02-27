@@ -1,10 +1,10 @@
 {
   "model": {
-    "type": "minecraft:special",
-    "base": "minecraft:item/black_shulker_box",
+    "type": "special",
+    "base": "item/black_shulker_box",
     "model": {
-      "type": "minecraft:shulker_box",
-      "texture": "minecraft:shulker_black"
+      "type": "shulker_box",
+      "texture": "shulker_black"
     }
   }
 }

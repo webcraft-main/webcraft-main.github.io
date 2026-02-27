@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:item/spruce_chest_boat"
+    "layer0": "item/spruce_chest_boat"
   }
 }

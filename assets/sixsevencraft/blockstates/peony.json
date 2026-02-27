@@ -1,10 +1,10 @@
 {
   "variants": {
     "half=lower": {
-      "model": "minecraft:block/peony_bottom"
+      "model": "block/peony_bottom"
     },
     "half=upper": {
-      "model": "minecraft:block/peony_top"
+      "model": "block/peony_top"
     }
   }
 }

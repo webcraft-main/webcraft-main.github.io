@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/emerald_block"
+      "model": "block/emerald_block"
     }
   }
 }

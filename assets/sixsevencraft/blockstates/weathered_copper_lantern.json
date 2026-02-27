@@ -1,10 +1,10 @@
 {
   "variants": {
     "hanging=false": {
-      "model": "minecraft:block/weathered_copper_lantern"
+      "model": "block/weathered_copper_lantern"
     },
     "hanging=true": {
-      "model": "minecraft:block/weathered_copper_lantern_hanging"
+      "model": "block/weathered_copper_lantern_hanging"
     }
   }
 }

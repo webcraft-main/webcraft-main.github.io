@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/spruce_hanging_sign"
+    "type": "model",
+    "model": "item/spruce_hanging_sign"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/golden_shovel"
+    "type": "model",
+    "model": "item/golden_shovel"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/resin_clump"
+    "type": "model",
+    "model": "item/resin_clump"
   }
 }

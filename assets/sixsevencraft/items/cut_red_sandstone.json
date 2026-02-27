@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/cut_red_sandstone"
+    "type": "model",
+    "model": "block/cut_red_sandstone"
   }
 }

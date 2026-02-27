@@ -1,7 +1,7 @@
 #version 330
 
-#moj_import <minecraft:fog.glsl>
-#moj_import <minecraft:dynamictransforms.glsl>
+#moj_import <include/fog.glsl>
+#moj_import <include/dynamictransforms.glsl>
 
 in float sphericalVertexDistance;
 in float cylindricalVertexDistance;

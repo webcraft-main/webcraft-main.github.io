@@ -2,18 +2,18 @@
   "variants": {
     "": [
       {
-        "model": "minecraft:block/dirt"
+        "model": "block/dirt"
       },
       {
-        "model": "minecraft:block/dirt",
+        "model": "block/dirt",
         "y": 90
       },
       {
-        "model": "minecraft:block/dirt",
+        "model": "block/dirt",
         "y": 180
       },
       {
-        "model": "minecraft:block/dirt",
+        "model": "block/dirt",
         "y": 270
       }
     ]

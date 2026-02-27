@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/map"
+    "type": "model",
+    "model": "item/map"
   }
 }

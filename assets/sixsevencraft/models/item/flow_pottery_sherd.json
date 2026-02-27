@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:item/flow_pottery_sherd"
+    "layer0": "item/flow_pottery_sherd"
   }
 }

@@ -1,15 +1,15 @@
 {
   "variants": {
     "axis=x": {
-      "model": "minecraft:block/dark_oak_wood",
+      "model": "block/dark_oak_wood",
       "x": 90,
       "y": 90
     },
     "axis=y": {
-      "model": "minecraft:block/dark_oak_wood"
+      "model": "block/dark_oak_wood"
     },
     "axis=z": {
-      "model": "minecraft:block/dark_oak_wood",
+      "model": "block/dark_oak_wood",
       "x": 90
     }
   }

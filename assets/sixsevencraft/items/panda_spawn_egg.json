@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/panda_spawn_egg"
+    "type": "model",
+    "model": "item/panda_spawn_egg"
   }
 }

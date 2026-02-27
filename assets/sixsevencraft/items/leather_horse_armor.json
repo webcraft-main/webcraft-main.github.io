@@ -1,10 +1,10 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/leather_horse_armor",
+    "type": "model",
+    "model": "item/leather_horse_armor",
     "tints": [
       {
-        "type": "minecraft:dye",
+        "type": "dye",
         "default": -6265536
       }
     ]

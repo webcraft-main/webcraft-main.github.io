@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/budding_amethyst"
+      "model": "block/budding_amethyst"
     }
   }
 }

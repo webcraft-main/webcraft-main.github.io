@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/polished_granite"
+      "model": "block/polished_granite"
     }
   }
 }

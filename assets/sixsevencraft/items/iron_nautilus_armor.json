@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/iron_nautilus_armor"
+    "type": "model",
+    "model": "item/iron_nautilus_armor"
   }
 }

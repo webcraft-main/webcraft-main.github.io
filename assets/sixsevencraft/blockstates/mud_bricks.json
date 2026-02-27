@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/mud_bricks_north_west_mirrored"
+      "model": "block/mud_bricks_north_west_mirrored"
     }
   }
 }

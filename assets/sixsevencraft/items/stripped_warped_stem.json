@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/stripped_warped_stem"
+    "type": "model",
+    "model": "block/stripped_warped_stem"
   }
 }

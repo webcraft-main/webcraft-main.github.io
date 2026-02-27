@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/creaking_heart"
+    "type": "model",
+    "model": "block/creaking_heart"
   }
 }

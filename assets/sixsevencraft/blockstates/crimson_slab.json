@@ -1,13 +1,13 @@
 {
   "variants": {
     "type=bottom": {
-      "model": "minecraft:block/crimson_slab"
+      "model": "block/crimson_slab"
     },
     "type=double": {
-      "model": "minecraft:block/crimson_planks"
+      "model": "block/crimson_planks"
     },
     "type=top": {
-      "model": "minecraft:block/crimson_slab_top"
+      "model": "block/crimson_slab_top"
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/raw_gold"
+    "type": "model",
+    "model": "item/raw_gold"
   }
 }

@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/dark_oak_planks"
+      "model": "block/dark_oak_planks"
     }
   }
 }

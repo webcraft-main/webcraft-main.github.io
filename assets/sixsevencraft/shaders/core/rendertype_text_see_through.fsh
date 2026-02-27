@@ -1,6 +1,6 @@
 #version 330
 
-#moj_import <minecraft:dynamictransforms.glsl>
+#moj_import <include/dynamictransforms.glsl>
 
 uniform sampler2D Sampler0;
 

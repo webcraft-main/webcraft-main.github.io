@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:block/cube_column",
+  "parent": "block/cube_column",
   "textures": {
-    "end": "minecraft:block/creaking_heart_top",
-    "side": "minecraft:block/creaking_heart"
+    "end": "block/creaking_heart_top",
+    "side": "block/creaking_heart"
   }
 }

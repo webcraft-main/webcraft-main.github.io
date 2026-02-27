@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/chiseled_stone_bricks"
+    "type": "model",
+    "model": "block/chiseled_stone_bricks"
   }
 }

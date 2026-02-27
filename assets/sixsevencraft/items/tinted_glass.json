@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/tinted_glass"
+    "type": "model",
+    "model": "block/tinted_glass"
   }
 }

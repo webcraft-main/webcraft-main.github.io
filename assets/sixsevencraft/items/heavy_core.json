@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/heavy_core"
+    "type": "model",
+    "model": "block/heavy_core"
   }
 }

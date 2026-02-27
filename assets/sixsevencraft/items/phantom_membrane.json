@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/phantom_membrane"
+    "type": "model",
+    "model": "item/phantom_membrane"
   }
 }

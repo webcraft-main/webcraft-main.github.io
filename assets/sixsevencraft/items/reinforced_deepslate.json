@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/reinforced_deepslate"
+    "type": "model",
+    "model": "block/reinforced_deepslate"
   }
 }

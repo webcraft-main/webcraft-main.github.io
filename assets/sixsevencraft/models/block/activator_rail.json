@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/rail_flat",
+  "parent": "block/rail_flat",
   "textures": {
-    "rail": "minecraft:block/activator_rail"
+    "rail": "block/activator_rail"
   }
 }

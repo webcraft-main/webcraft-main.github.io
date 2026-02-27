@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/bone_meal"
+    "type": "model",
+    "model": "item/bone_meal"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/bamboo_chest_raft"
+    "type": "model",
+    "model": "item/bamboo_chest_raft"
   }
 }

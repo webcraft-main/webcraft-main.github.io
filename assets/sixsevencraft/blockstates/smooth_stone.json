@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/smooth_stone"
+      "model": "block/smooth_stone"
     }
   }
 }

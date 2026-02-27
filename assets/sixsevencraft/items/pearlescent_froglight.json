@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/pearlescent_froglight"
+    "type": "model",
+    "model": "block/pearlescent_froglight"
   }
 }

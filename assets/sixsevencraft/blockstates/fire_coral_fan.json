@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/fire_coral_fan"
+      "model": "block/fire_coral_fan"
     }
   }
 }

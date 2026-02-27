@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:block/horn_coral_fan"
+    "layer0": "block/horn_coral_fan"
   }
 }

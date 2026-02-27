@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/armor_stand"
+    "type": "model",
+    "model": "item/armor_stand"
   }
 }

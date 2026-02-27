@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:item/prismarine_crystals"
+    "layer0": "item/prismarine_crystals"
   }
 }

@@ -1,12 +1,12 @@
 {
   "textures": [
-    "minecraft:spark_7",
-    "minecraft:spark_6",
-    "minecraft:spark_5",
-    "minecraft:spark_4",
-    "minecraft:spark_3",
-    "minecraft:spark_2",
-    "minecraft:spark_1",
-    "minecraft:spark_0"
+    "spark_7",
+    "spark_6",
+    "spark_5",
+    "spark_4",
+    "spark_3",
+    "spark_2",
+    "spark_1",
+    "spark_0"
   ]
 }

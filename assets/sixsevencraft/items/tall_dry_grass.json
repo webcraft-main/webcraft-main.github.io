@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/tall_dry_grass"
+    "type": "model",
+    "model": "item/tall_dry_grass"
   }
 }

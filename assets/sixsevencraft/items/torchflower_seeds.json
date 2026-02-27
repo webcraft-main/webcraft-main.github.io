@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/torchflower_seeds"
+    "type": "model",
+    "model": "item/torchflower_seeds"
   }
 }

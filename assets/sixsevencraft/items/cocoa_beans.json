@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/cocoa_beans"
+    "type": "model",
+    "model": "item/cocoa_beans"
   }
 }

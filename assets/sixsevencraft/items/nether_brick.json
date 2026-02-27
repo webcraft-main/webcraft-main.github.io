@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/nether_brick"
+    "type": "model",
+    "model": "item/nether_brick"
   }
 }

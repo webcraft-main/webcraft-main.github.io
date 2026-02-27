@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/smooth_stone"
+    "type": "model",
+    "model": "block/smooth_stone"
   }
 }

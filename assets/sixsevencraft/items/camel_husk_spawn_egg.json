@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/camel_husk_spawn_egg"
+    "type": "model",
+    "model": "item/camel_husk_spawn_egg"
   }
 }

@@ -2,7 +2,7 @@
   "layers": {
     "llama_body": [
       {
-        "texture": "minecraft:light_gray"
+        "texture": "light_gray"
       }
     ]
   }

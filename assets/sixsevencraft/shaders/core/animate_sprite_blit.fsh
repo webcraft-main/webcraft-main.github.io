@@ -1,6 +1,6 @@
 #version 330
 
-#moj_import <minecraft:animation_sprite.glsl>
+#moj_import <include/animation_sprite.glsl>
 
 uniform sampler2D Sprite;
 

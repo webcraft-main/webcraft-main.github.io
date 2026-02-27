@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "block/cube_all",
   "textures": {
-    "all": "minecraft:block/deepslate_bricks"
+    "all": "block/deepslate_bricks"
   }
 }

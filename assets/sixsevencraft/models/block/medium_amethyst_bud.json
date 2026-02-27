@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/cross",
+  "parent": "block/cross",
   "textures": {
-    "cross": "minecraft:block/medium_amethyst_bud"
+    "cross": "block/medium_amethyst_bud"
   }
 }

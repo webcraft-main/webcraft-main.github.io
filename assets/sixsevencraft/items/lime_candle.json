@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/lime_candle"
+    "type": "model",
+    "model": "item/lime_candle"
   }
 }

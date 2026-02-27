@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/bubble_coral"
+      "model": "block/bubble_coral"
     }
   }
 }

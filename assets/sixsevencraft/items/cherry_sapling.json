@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/cherry_sapling"
+    "type": "model",
+    "model": "item/cherry_sapling"
   }
 }

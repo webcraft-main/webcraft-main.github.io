@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/snow_block"
+      "model": "block/snow_block"
     }
   }
 }

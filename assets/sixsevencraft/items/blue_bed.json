@@ -1,10 +1,10 @@
 {
   "model": {
-    "type": "minecraft:special",
-    "base": "minecraft:item/blue_bed",
+    "type": "special",
+    "base": "item/blue_bed",
     "model": {
-      "type": "minecraft:bed",
-      "texture": "minecraft:blue"
+      "type": "bed",
+      "texture": "blue"
     }
   }
 }

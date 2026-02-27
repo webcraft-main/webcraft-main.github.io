@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/happy_ghast_spawn_egg"
+    "type": "model",
+    "model": "item/happy_ghast_spawn_egg"
   }
 }

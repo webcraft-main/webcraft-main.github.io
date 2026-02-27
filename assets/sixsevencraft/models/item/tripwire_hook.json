@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:block/tripwire_hook"
+    "layer0": "block/tripwire_hook"
   }
 }

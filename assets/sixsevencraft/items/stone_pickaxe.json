@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/stone_pickaxe"
+    "type": "model",
+    "model": "item/stone_pickaxe"
   }
 }

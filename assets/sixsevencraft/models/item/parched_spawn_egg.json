@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:item/parched_spawn_egg"
+    "layer0": "item/parched_spawn_egg"
   }
 }

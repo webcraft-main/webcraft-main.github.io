@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/small_dripleaf_top",
+  "parent": "block/small_dripleaf_top",
   "display": {
     "thirdperson_righthand": {
       "rotation": [ 0, 0, 0 ],

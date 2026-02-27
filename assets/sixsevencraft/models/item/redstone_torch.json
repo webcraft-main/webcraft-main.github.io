@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:block/redstone_torch"
+    "layer0": "block/redstone_torch"
   }
 }

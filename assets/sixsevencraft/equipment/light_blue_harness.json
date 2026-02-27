@@ -2,7 +2,7 @@
   "layers": {
     "happy_ghast_body": [
       {
-        "texture": "minecraft:light_blue_harness"
+        "texture": "light_blue_harness"
       }
     ]
   }

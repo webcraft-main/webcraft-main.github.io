@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "item/generated",
   "textures": {
-    "layer0": "minecraft:item/flow_armor_trim_smithing_template"
+    "layer0": "item/flow_armor_trim_smithing_template"
   }
 }

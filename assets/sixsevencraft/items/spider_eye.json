@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/spider_eye"
+    "type": "model",
+    "model": "item/spider_eye"
   }
 }

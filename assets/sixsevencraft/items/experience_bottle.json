@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/experience_bottle"
+    "type": "model",
+    "model": "item/experience_bottle"
   }
 }

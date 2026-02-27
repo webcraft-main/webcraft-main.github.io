@@ -1,13 +1,13 @@
 {
   "variants": {
     "type=bottom": {
-      "model": "minecraft:block/resin_brick_slab"
+      "model": "block/resin_brick_slab"
     },
     "type=double": {
-      "model": "minecraft:block/resin_bricks"
+      "model": "block/resin_bricks"
     },
     "type=top": {
-      "model": "minecraft:block/resin_brick_slab_top"
+      "model": "block/resin_brick_slab_top"
     }
   }
 }

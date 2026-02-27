@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/coarse_dirt"
+    "type": "model",
+    "model": "block/coarse_dirt"
   }
 }

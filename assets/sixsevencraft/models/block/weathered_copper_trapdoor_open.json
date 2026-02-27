@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/template_trapdoor_open",
+  "parent": "block/template_trapdoor_open",
   "textures": {
-    "texture": "minecraft:block/weathered_copper_trapdoor"
+    "texture": "block/weathered_copper_trapdoor"
   }
 }

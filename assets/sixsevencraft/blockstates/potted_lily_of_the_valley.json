@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/potted_lily_of_the_valley"
+      "model": "block/potted_lily_of_the_valley"
     }
   }
 }

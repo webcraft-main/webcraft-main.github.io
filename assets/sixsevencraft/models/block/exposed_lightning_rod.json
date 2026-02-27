@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:block/template_lightning_rod",
+  "parent": "block/template_lightning_rod",
   "textures": {
-    "texture": "minecraft:block/exposed_lightning_rod"
+    "texture": "block/exposed_lightning_rod"
   }
 }

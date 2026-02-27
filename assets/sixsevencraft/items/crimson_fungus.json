@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/crimson_fungus"
+    "type": "model",
+    "model": "item/crimson_fungus"
   }
 }

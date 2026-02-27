@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/crimson_hanging_sign"
+      "model": "block/crimson_hanging_sign"
     }
   }
 }

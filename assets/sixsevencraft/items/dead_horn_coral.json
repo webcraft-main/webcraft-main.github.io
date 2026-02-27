@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/dead_horn_coral"
+    "type": "model",
+    "model": "item/dead_horn_coral"
   }
 }

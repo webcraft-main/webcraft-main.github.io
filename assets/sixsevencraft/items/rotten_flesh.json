@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/rotten_flesh"
+    "type": "model",
+    "model": "item/rotten_flesh"
   }
 }

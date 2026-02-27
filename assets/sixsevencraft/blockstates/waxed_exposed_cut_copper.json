@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/exposed_cut_copper"
+      "model": "block/exposed_cut_copper"
     }
   }
 }

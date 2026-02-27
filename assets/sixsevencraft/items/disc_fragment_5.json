@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/disc_fragment_5"
+    "type": "model",
+    "model": "item/disc_fragment_5"
   }
 }

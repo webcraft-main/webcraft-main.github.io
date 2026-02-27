@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/dead_brain_coral"
+      "model": "block/dead_brain_coral"
     }
   }
 }

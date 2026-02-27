@@ -2,11 +2,11 @@
     "providers": [
         {
             "type": "reference",
-            "id": "minecraft:include/space"
+            "id": "include/space"
         },
         {
             "type": "reference",
-            "id": "minecraft:include/unifont"
+            "id": "include/unifont"
         }
     ]
 }

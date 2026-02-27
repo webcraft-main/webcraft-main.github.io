@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/kelp"
+    "type": "model",
+    "model": "item/kelp"
   }
 }

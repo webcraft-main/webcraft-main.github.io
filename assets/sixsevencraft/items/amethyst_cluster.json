@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/amethyst_cluster"
+    "type": "model",
+    "model": "item/amethyst_cluster"
   }
 }

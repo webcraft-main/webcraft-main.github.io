@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/debug_stick"
+    "type": "model",
+    "model": "item/debug_stick"
   }
 }

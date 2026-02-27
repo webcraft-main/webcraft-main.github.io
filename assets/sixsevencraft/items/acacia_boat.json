@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/acacia_boat"
+    "type": "model",
+    "model": "item/acacia_boat"
   }
 }

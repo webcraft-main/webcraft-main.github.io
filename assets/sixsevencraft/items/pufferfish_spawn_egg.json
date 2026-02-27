@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/pufferfish_spawn_egg"
+    "type": "model",
+    "model": "item/pufferfish_spawn_egg"
   }
 }

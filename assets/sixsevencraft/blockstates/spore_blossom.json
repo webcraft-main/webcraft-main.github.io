@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/spore_blossom"
+      "model": "block/spore_blossom"
     }
   }
 }

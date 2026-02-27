@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/dried_ghast_hydration_0"
+    "type": "model",
+    "model": "block/dried_ghast_hydration_0"
   }
 }

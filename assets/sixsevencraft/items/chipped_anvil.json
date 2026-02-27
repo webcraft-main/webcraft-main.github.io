@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/chipped_anvil"
+    "type": "model",
+    "model": "block/chipped_anvil"
   }
 }

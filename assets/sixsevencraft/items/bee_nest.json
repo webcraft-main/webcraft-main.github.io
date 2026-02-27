@@ -1,20 +1,20 @@
 {
   "model": {
-    "type": "minecraft:select",
+    "type": "select",
     "block_state_property": "honey_level",
     "cases": [
       {
         "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:block/bee_nest_honey"
+          "type": "model",
+          "model": "block/bee_nest_honey"
         },
         "when": "5"
       }
     ],
     "fallback": {
-      "type": "minecraft:model",
-      "model": "minecraft:block/bee_nest_empty"
+      "type": "model",
+      "model": "block/bee_nest_empty"
     },
-    "property": "minecraft:block_state"
+    "property": "block_state"
   }
 }

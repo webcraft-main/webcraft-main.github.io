@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/salmon_bucket"
+    "type": "model",
+    "model": "item/salmon_bucket"
   }
 }

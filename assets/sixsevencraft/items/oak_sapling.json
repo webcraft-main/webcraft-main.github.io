@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/oak_sapling"
+    "type": "model",
+    "model": "item/oak_sapling"
   }
 }

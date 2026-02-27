@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/tube_coral_fan"
+    "type": "model",
+    "model": "item/tube_coral_fan"
   }
 }

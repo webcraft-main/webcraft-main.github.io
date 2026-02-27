@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/daylight_detector"
+    "type": "model",
+    "model": "block/daylight_detector"
   }
 }

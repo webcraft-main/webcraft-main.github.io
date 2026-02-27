@@ -1,16 +1,16 @@
 {
   "textures": [
-    "minecraft:gust_0",
-    "minecraft:gust_1",
-    "minecraft:gust_2",
-    "minecraft:gust_3",
-    "minecraft:gust_4",
-    "minecraft:gust_5",
-    "minecraft:gust_6",
-    "minecraft:gust_7",
-    "minecraft:gust_8",
-    "minecraft:gust_9",
-    "minecraft:gust_10",
-    "minecraft:gust_11"
+    "gust_0",
+    "gust_1",
+    "gust_2",
+    "gust_3",
+    "gust_4",
+    "gust_5",
+    "gust_6",
+    "gust_7",
+    "gust_8",
+    "gust_9",
+    "gust_10",
+    "gust_11"
   ]
 }

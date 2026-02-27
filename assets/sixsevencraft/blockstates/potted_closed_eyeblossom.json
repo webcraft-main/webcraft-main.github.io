@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/potted_closed_eyeblossom"
+      "model": "block/potted_closed_eyeblossom"
     }
   }
 }

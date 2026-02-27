@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/exposed_copper_bars"
+    "type": "model",
+    "model": "item/exposed_copper_bars"
   }
 }

@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/orange_wool"
+    "type": "model",
+    "model": "block/orange_wool"
   }
 }

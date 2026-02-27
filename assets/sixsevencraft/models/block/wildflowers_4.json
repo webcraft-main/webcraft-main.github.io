@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:block/flowerbed_4",
+  "parent": "block/flowerbed_4",
   "textures": {
-    "flowerbed": "minecraft:block/wildflowers",
-    "stem": "minecraft:block/wildflowers_stem"
+    "flowerbed": "block/wildflowers",
+    "stem": "block/wildflowers_stem"
   }
 }

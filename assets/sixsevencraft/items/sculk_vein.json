@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/sculk_vein"
+    "type": "model",
+    "model": "item/sculk_vein"
   }
 }

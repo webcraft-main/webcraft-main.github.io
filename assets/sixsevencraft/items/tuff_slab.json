@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/tuff_slab"
+    "type": "model",
+    "model": "block/tuff_slab"
   }
 }

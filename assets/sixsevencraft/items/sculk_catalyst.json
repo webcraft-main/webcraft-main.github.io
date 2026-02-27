@@ -1,6 +1,6 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/sculk_catalyst"
+    "type": "model",
+    "model": "block/sculk_catalyst"
   }
 }
