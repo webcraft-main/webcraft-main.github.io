@@ -1,8 +1,0 @@
-{
-  "parent": "block/template_potted_azalea_bush",
-  "textures": {
-    "plant": "block/potted_flowering_azalea_bush_plant",
-    "side": "block/potted_flowering_azalea_bush_side",
-    "top": "block/potted_flowering_azalea_bush_top"
-  }
-}

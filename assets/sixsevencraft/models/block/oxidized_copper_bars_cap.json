@@ -1,7 +1,0 @@
-{
-  "parent": "block/template_bars_cap",
-  "textures": {
-    "bars": "block/oxidized_copper_bars",
-    "edge": "block/oxidized_copper_bars"
-  }
-}

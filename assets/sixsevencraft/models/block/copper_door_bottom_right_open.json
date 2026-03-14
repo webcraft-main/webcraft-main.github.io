@@ -1,7 +1,0 @@
-{
-  "parent": "block/door_bottom_right_open",
-  "textures": {
-    "bottom": "block/copper_door_bottom",
-    "top": "block/copper_door_top"
-  }
-}

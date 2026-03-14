@@ -1,6 +1,0 @@
-{
-  "parent": "block/pointed_dripstone",
-  "textures": {
-    "cross": "block/pointed_dripstone_down_middle"
-  }
-}

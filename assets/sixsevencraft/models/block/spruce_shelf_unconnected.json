@@ -1,7 +1,0 @@
-{
-  "parent": "block/template_shelf_unconnected",
-  "textures": {
-    "all": "block/spruce_shelf",
-    "particle": "block/stripped_spruce_log"
-  }
-}

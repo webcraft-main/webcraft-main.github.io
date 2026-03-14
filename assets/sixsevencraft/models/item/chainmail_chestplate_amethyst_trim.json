@@ -1,7 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "item/chainmail_chestplate",
-    "layer1": "trims/items/chestplate_trim_amethyst"
-  }
-}

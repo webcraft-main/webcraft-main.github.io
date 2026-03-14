@@ -1,6 +1,0 @@
-{
-  "parent": "block/template_chain",
-  "textures": {
-    "texture": "block/copper_chain"
-  }
-}
